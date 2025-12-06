@@ -1,0 +1,47 @@
+body {
+    background-color: #000000;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* View Transitions */
+.page-view {
+    display: none;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.page-view.active {
+    display: block;
+}
+
+/* Liquid Background specific */
+.will-change-transform {
+    will-change: transform;
+}
