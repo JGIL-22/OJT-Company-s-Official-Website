@@ -696,14 +696,14 @@ function initMouseSpotlight() {
 
 function initChatWidget() {
     const btn = document.getElementById('toggle-chat-btn');
-    const window = document.getElementById('chat-window');
+    const chatWindow = document.getElementById('chat-window');
     const closeBtn = document.getElementById('close-chat-btn');
     const iconOpen = document.getElementById('chat-icon-open');
     const iconClose = document.getElementById('chat-icon-close');
     const tooltip = document.getElementById('chat-tooltip');
 
     // Safety check in case chat widget elements are missing
-    if (!btn || !window || !closeBtn || !iconOpen || !iconClose) return;
+    if (!btn || !chatWindow || !closeBtn || !iconOpen || !iconClose) return;
 
     // --- MESSAGES LOGIC ---
     const messagesContainer = document.getElementById('chat-messages');
@@ -857,9 +857,9 @@ function initChatWidget() {
 
     // --- TOGGLE LOGIC ---
     function toggleChat() {
-        const isClosed = window.classList.contains('hidden');
+        const isClosed = chatWindow.classList.contains('hidden');
         if (isClosed) {
-            window.classList.remove('hidden');
+            chatWindow.classList.remove('hidden');
             if (tooltip) tooltip.classList.add('opacity-0');
             iconOpen.classList.add('hidden');
             iconClose.classList.remove('hidden');
@@ -869,7 +869,7 @@ function initChatWidget() {
             // Force scroll to bottom when opening to ensure latest messages are seen
             setTimeout(forceScrollToBottom, 50);
         } else {
-            window.classList.add('hidden');
+            chatWindow.classList.add('hidden');
             if (tooltip) tooltip.classList.remove('opacity-0');
             iconOpen.classList.remove('hidden');
             iconClose.classList.add('hidden');
