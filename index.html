@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Aura Creatives</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        aura: {
+                            black: '#000000',
+                            dark: '#0a0a0a',
+                            silver: '#a1a1aa', // Zinc-400
+                            white: '#ffffff'
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'marquee': 'marquee 60s linear infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000000;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* View Transitions */
+        .page-view {
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .page-view.active {
+            display: block;
+        }
+
+        /* Liquid Background specific */
+        .will-change-transform {
+            will-change: transform;
+        }
+    </style>
+</head>
+
+<body class="selection:bg-white selection:text-black">
+
+    <!-- ================= Background Elements ================= -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute inset-0 bg-black"></div>
+        <!-- Blobs -->
+        <div
+            class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-white/5 rounded-full mix-blend-screen filter blur-[80px] animate-blob will-change-transform">
+        </div>
+        <div
+            class="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-gray-600/10 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000 will-change-transform">
+        </div>
+        <div
+            class="absolute bottom-[-20%] left-[20%] w-[600px] h-[600px] bg-white/5 rounded-full mix-blend-screen filter blur-[120px] animate-blob animation-delay-4000 will-change-transform">
+        </div>
+        <!-- Noise -->
+        <div class="absolute inset-0 opacity-[0.05]"
+            style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
+    </div>
+
+    <!-- Mouse Spotlight -->
+    <div id="mouse-spotlight" class="pointer-events-none fixed inset-0 z-0"
+        style="background: radial-gradient(600px circle at 50% 50%, rgba(255,255,255,0.06), transparent 80%);"></div>
+
+    <!-- Particles -->
+    <canvas id="particle-canvas" class="fixed inset-0 z-0 pointer-events-none"></canvas>
+
+    <!-- ================= Navigation ================= -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500 py-8 bg-transparent">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="relative group cursor-pointer" onclick="navigateTo('home')">
+                <div class="flex flex-col items-center select-none">
+                    <div class="relative h-14 w-24 mb-3 flex items-center justify-center">
+                        <span
+                            class="font-serif text-[4rem] font-normal leading-none text-white absolute left-1/2 -translate-x-[60%] z-0">T</span>
+                        <span
+                            class="font-serif text-[4rem] font-normal leading-none text-white absolute left-1/2 -translate-x-[30%] z-10">A</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span
+                            class="font-serif text-lg tracking-[0.25em] font-normal text-white leading-none mb-1.5 whitespace-nowrap">THE
+                            AURA</span>
+                        <span
+                            class="font-sans text-[0.6rem] tracking-[0.4em] font-medium text-white/80 uppercase leading-none">CREATIVES</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-10">
+                <a href="#home"
+                    class="nav-link text-sm font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider"
+                    data-page="home">Home</a>
+                <a href="#services"
+                    class="nav-link text-sm font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider"
+                    data-page="services">Services</a>
+                <a href="#talents"
+                    class="nav-link text-sm font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider"
+                    data-page="talents">Talents</a>
+                <a href="#case-studies"
+                    class="nav-link text-sm font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider"
+                    data-page="case-studies">Case Studies</a>
+                <a href="#contact"
+                    class="px-8 py-3 bg-white text-black text-xs font-bold tracking-widest uppercase hover:bg-zinc-400 transition-colors duration-300">Let's
+                    Talk</a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden text-white z-50 relative">
+                <!-- Icon injected by JS -->
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu"
+            class="fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transition-transform duration-500 ease-in-out translate-x-full md:hidden flex flex-col justify-center items-center gap-8">
+            <a href="#home"
+                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Home</a>
+            <a href="#services"
+                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Services</a>
+            <a href="#talents"
+                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Talents</a>
+            <a href="#case-studies"
+                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Case
+                Studies</a>
+            <a href="#contact"
+                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Let's
+                Talk</a>
+        </div>
+    </nav>
+
+    <!-- ================= Main Content ================= -->
+    <main class="relative z-10 pt-40 min-h-screen">
+
+        <!-- HOME PAGE -->
+        <div id="view-home" class="page-view active">
+            <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+                <div class="container mx-auto px-6 text-center z-10 pt-10 animate-fade-in-up">
+                    <span
+                        class="inline-block px-4 py-1 border border-white/20 text-white/80 text-xs font-bold tracking-[0.3em] mb-10 backdrop-blur-sm uppercase">Est.
+                        April 2025</span>
+                    <h1
+                        class="font-serif text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-8 leading-[0.85]">
+                        THE HOME OF <br />
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50">BOLD
+                            IDEAS</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-16 font-light leading-relaxed">
+                        Turning attention into action. The premier agency for high-converting livestreams and viral
+                        short-form content.
+                    </p>
+                    <div class="flex flex-col md:flex-row gap-6 justify-center">
+                        <a href="#talents"
+                            class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 flex items-center justify-center gap-3">
+                            <span class="relative z-10 flex items-center gap-3">View Talents <svg width="16" height="16"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="group-hover:translate-x-1 transition-transform">
+                                    <path d="M5 12h14" />
+                                    <path d="m12 5 7 7-7 7" />
+                                </svg></span>
+                        </a>
+                        <a href="#services"
+                            class="px-8 py-4 border border-white/20 text-white text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all flex items-center justify-center">
+                            Explore Services
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ticker -->
+            <div class="w-full bg-black border-y border-white/10 py-10 overflow-hidden relative">
+                <div
+                    class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none">
+                </div>
+                <div
+                    class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none">
+                </div>
+                <div id="client-ticker"
+                    class="flex gap-20 animate-marquee whitespace-nowrap items-center w-max hover:[animation-play-state:paused]">
+                    <!-- Clients injected via JS -->
+                </div>
+            </div>
+
+            <!-- About Preview -->
+            <section class="py-32 container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+                    <div>
+                        <div class="mb-16">
+                            <span
+                                class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">Who
+                                We Are</span>
+                            <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Shaping the Future of
+                                Digital Marketing</h2>
+                            <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
+                        </div>
+                        <p class="text-white/60 text-lg leading-relaxed mb-10 font-light">
+                            The Aura is a dynamic multimedia marketing and talent management agency built for the
+                            digital age.
+                            Operating across multiple digital platforms—with TikTok at the forefront—we drive brand
+                            growth through storytelling that engages.
+                        </p>
+                        <ul class="space-y-6 mb-10">
+                            <li class="flex items-center gap-4 text-white/80 font-medium">
+                                <div class="w-1.5 h-1.5 rounded-full bg-white"></div>Access to Top Tier Talent
+                            </li>
+                            <li class="flex items-center gap-4 text-white/80 font-medium">
+                                <div class="w-1.5 h-1.5 rounded-full bg-white"></div>Data-Driven Campaign Strategies
+                            </li>
+                            <li class="flex items-center gap-4 text-white/80 font-medium">
+                                <div class="w-1.5 h-1.5 rounded-full bg-white"></div>High-Converting Livestreams
+                            </li>
+                            <li class="flex items-center gap-4 text-white/80 font-medium">
+                                <div class="w-1.5 h-1.5 rounded-full bg-white"></div>End-to-End Creative Direction
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="relative">
+                        <div class="aspect-[4/5] overflow-hidden border border-white/10 p-2">
+                            <div
+                                class="w-full h-full bg-gray-900 overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-1000">
+                                <img src="https://picsum.photos/seed/office/800/1000" alt="Team"
+                                    class="w-full h-full object-cover opacity-80" />
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/30 cursor-pointer hover:scale-110 transition-transform">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="ml-1">
+                                            <polygon points="5 3 19 12 5 21 5 3" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Preview -->
+            <section class="py-32 border-t border-white/5">
+                <div class="container mx-auto px-6">
+                    <div class="mb-16">
+                        <span
+                            class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">What
+                            We Do</span>
+                        <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Our Core Services</h2>
+                        <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
+                    </div>
+                    <div id="home-services-grid"
+                        class="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- SERVICES PAGE -->
+        <div id="view-services" class="page-view">
+            <div class="min-h-screen pb-20">
+                <div class="container mx-auto px-6">
+                    <div class="mb-16">
+                        <span
+                            class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">What
+                            We Offer</span>
+                        <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Digital Solutions</h2>
+                        <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
+                    </div>
+
+                    <div id="services-list" class="grid grid-cols-1 gap-px bg-white/10 border border-white/10">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVICE DETAIL PAGE -->
+        <div id="view-service-detail" class="page-view">
+            <!-- Content injected via JS -->
+        </div>
+
+        <!-- TALENTS PAGE -->
+        <div id="view-talents" class="page-view">
+            <div class="min-h-screen pb-20">
+                <div class="container mx-auto px-6">
+                    <div
+                        class="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-white/10 pb-10">
+                        <div>
+                            <span
+                                class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">Talents
+                                & Influencers</span>
+                            <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Our Roster</h2>
+                            <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
+                        </div>
+
+                        <div id="talent-filters" class="flex flex-wrap gap-4 mb-4 md:mb-0">
+                            <!-- Filters injected JS -->
+                        </div>
+                    </div>
+
+                    <div id="talents-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TALENT DETAIL PAGE -->
+        <div id="view-talent-detail" class="page-view">
+            <!-- Content injected via JS -->
+        </div>
+
+        <!-- CASE STUDIES PAGE -->
+        <div id="view-case-studies" class="page-view">
+            <div class="min-h-screen pb-20">
+                <div class="container mx-auto px-6">
+                    <div class="mb-16">
+                        <span
+                            class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">Case
+                            Studies</span>
+                        <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Proven Results</h2>
+                        <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
+                    </div>
+
+                    <div id="case-studies-list" class="space-y-32">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE -->
+        <div id="view-contact" class="page-view">
+            <div class="min-h-screen pb-20 flex items-center">
+                <div class="container mx-auto px-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+                        <div>
+                            <div class="mb-16">
+                                <span
+                                    class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">Get
+                                    In Touch</span>
+                                <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Let's Create
+                                    Something Bold</h2>
+                                <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
+                            </div>
+                            <p class="text-white/60 text-lg font-light mb-12 max-w-md leading-relaxed">
+                                Ready to take your brand to the next level? Whether you need a full livestream setup or
+                                a roster of top-tier influencers, The Aura is here to help.
+                            </p>
+                            <div class="space-y-6" id="contact-info">
+                                <!-- Injected JS -->
+                            </div>
+                        </div>
+
+                        <div class="border border-white/10 p-10 bg-black">
+                            <h3 class="font-serif text-3xl mb-8">Send a Message</h3>
+                            <form class="space-y-8" onsubmit="event.preventDefault(); alert('Message sent!');">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div>
+                                        <label
+                                            class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">First
+                                            Name</label>
+                                        <input type="text"
+                                            class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
+                                            placeholder="Jane" />
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Last
+                                            Name</label>
+                                        <input type="text"
+                                            class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
+                                            placeholder="Doe" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Email
+                                        Address</label>
+                                    <input type="email"
+                                        class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
+                                        placeholder="jane@company.com" />
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Message</label>
+                                    <textarea rows="4"
+                                        class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
+                                        placeholder="Tell us about your project..."></textarea>
+                                </div>
+                                <button type="submit"
+                                    class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 w-full justify-center">
+                                    <span class="relative z-10 flex items-center gap-3 justify-center">Send Inquiry <svg
+                                            width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="group-hover:translate-x-1 transition-transform">
+                                            <path d="M5 12h14" />
+                                            <path d="m12 5 7 7-7 7" />
+                                        </svg></span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ================= Footer ================= -->
+    <footer class="relative z-10 border-t border-white/5 bg-black/60 backdrop-blur-md pt-20 pb-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="mb-8">
+                        <div class="flex flex-col items-start select-none">
+                            <div class="relative h-14 w-24 mb-3 flex items-center justify-center">
+                                <span
+                                    class="font-serif text-[4rem] font-normal leading-none text-white absolute left-1/2 -translate-x-[60%] z-0">T</span>
+                                <span
+                                    class="font-serif text-[4rem] font-normal leading-none text-white absolute left-1/2 -translate-x-[30%] z-10">A</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span
+                                    class="font-serif text-lg tracking-[0.25em] font-normal text-white leading-none mb-1.5 whitespace-nowrap">THE
+                                    AURA</span>
+                                <span
+                                    class="font-sans text-[0.6rem] tracking-[0.4em] font-medium text-white/80 uppercase leading-none">CREATIVES</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-white/50 max-w-md mb-8 font-light" id="footer-description"></p>
+                    <div class="flex gap-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold">
+                            IG</div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold">
+                            FB</div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold">
+                            TK</div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-serif font-bold mb-6 text-white text-lg">Company</h4>
+                    <ul class="space-y-4 text-white/50 text-sm">
+                        <li><a href="#talents" class="hover:text-white transition-colors">Talents</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#case-studies" class="hover:text-white transition-colors">Case Studies</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif font-bold mb-6 text-white text-lg">Contact</h4>
+                    <ul class="space-y-4 text-white/50 text-sm" id="footer-contact">
+                        <!-- Injected JS -->
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 text-xs text-white/30 uppercase tracking-widest">
+                <p>&copy; 2025 The Aura Creatives. All rights reserved.</p>
+                <p>The Home of Bold Ideas.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= Chat Widget ================= -->
+    <div class="fixed bottom-8 left-8 z-[100] flex flex-col items-start gap-4 font-sans">
+        <div id="chat-window"
+            class="hidden w-[360px] h-[550px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.5)] flex-col overflow-hidden mb-4 relative transition-all duration-300 origin-bottom-left">
+            <div class="absolute inset-0 opacity-[0.03] pointer-events-none z-0"
+                style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
+
+            <!-- Header -->
+            <div class="relative z-10 p-5 border-b border-white/10 bg-white/5 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse relative z-10"></div>
+                        <div class="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-50"></div>
+                    </div>
+                    <div>
+                        <h4 class="font-serif text-white tracking-wider text-sm font-bold">Aura Assistant</h4>
+                        <p class="text-[10px] text-white/40 uppercase tracking-widest">Online</p>
+                    </div>
+                </div>
+                <button id="close-chat-btn"
+                    class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Messages -->
+            <div id="chat-messages" class="relative z-10 flex-1 overflow-y-auto p-5 space-y-6 hide-scrollbar">
+                <!-- Messages injected here -->
+            </div>
+
+            <!-- Typing Indicator -->
+            <div id="typing-indicator" class="hidden px-5 pb-2 relative z-10">
+                <div class="flex items-end gap-3">
+                    <div
+                        class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2v0a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" />
+                            <path d="M12 22v-8" />
+                            <path d="M16 10a4 4 0 0 1 4 4v4" />
+                            <path d="M8 10a4 4 0 0 0-4 4v4" />
+                        </svg>
+                    </div>
+                    <div
+                        class="bg-white/5 border border-white/10 p-4 rounded-2xl rounded-bl-none flex gap-1.5 w-16 items-center justify-center h-10">
+                        <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce"
+                            style="animation-delay: 0ms"></span>
+                        <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce"
+                            style="animation-delay: 150ms"></span>
+                        <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce"
+                            style="animation-delay: 300ms"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Replies -->
+            <div id="quick-replies" class="relative z-10 px-5 pb-2 flex gap-2 overflow-x-auto hide-scrollbar">
+                <!-- Injected JS -->
+            </div>
+
+            <!-- Input -->
+            <div class="relative z-10 p-4 border-t border-white/10 bg-white/[0.02]">
+                <div class="flex gap-3 relative">
+                    <input type="text" id="chat-input" placeholder="Type a message..."
+                        class="flex-1 bg-black/30 border border-white/10 rounded-full px-5 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-black/50 transition-all">
+                    <button id="send-btn"
+                        class="w-11 h-11 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative group">
+            <div id="chat-tooltip"
+                class="absolute left-16 top-1/2 -translate-y-1/2 ml-2 whitespace-nowrap bg-white text-black px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-xl transition-opacity duration-300">
+                Need help? Chat with us!
+                <div class="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
+            </div>
+
+            <button id="toggle-chat-btn"
+                class="w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 bg-white text-black hover:scale-110">
+                <svg id="chat-icon-open" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="none"
+                    class="block">
+                    <path
+                        d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                    </path>
+                </svg>
+                <svg id="chat-icon-close" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= Logic ================= -->
+    <script>
+        // --- DATA ---
+        const COMPANY_INFO = {
+            name: "THE AURA CREATIVES",
+            description: "Founded in April 2025, The Aura is a dynamic multimedia marketing and talent management agency built for the digital age. We specialize in short-form video content and high-converting livestreaming.",
+            contactEmail: "business@theauracreatives.co",
+            contactPhone: "09219715546",
+            website: "www.theauracreatives.co"
+        };
+
+        const SERVICES = [
+            { id: "kol-artist-livestreaming", title: "KOL & Artist Livestreaming", description: "Full studio setup, technical support, and livestream management to boost sales and engagement.", longDescription: "Maximize your brand's reach and sales potential with our premium livestreaming services. We combine professional broadcast technology with the influence of top KOLs and artists to create engaging, high-converting live events.", features: ["5 Hours Livestream Duration", "2 to 3 Teaser Videos", "Full Studio Setup (Camera, Mic, TV, Computer)", "Co-Host & Admin Support", "Dedicated Livestream Manager", "Background Design & Set Styling", "Professional OBS Linking"], images: ["https://picsum.photos/seed/stream1/800/600", "https://picsum.photos/seed/stream2/800/600"], icon: "Radio" },
+            { id: "short-form-video-production", title: "Short-Form Video Production", description: "High-quality 15-45s vertical videos optimized for TikTok and Reels with strategic storytelling.", longDescription: "Capture attention in seconds. Our team specializes in producing high-impact vertical videos tailored for TikTok, Reels, and Shorts. We manage the entire process from ideation to final edit.", features: ["15 to 45 Seconds Video Duration", "Direct KOL Communication", "KOL Content Production & Direction", "KOL Draft Tracker & Feedback Loop", "Trend Analysis & Adaptation", "Strategic Storytelling & Scripting"], images: ["https://picsum.photos/seed/vid1/800/600", "https://picsum.photos/seed/vid2/800/600"], icon: "Video" },
+            { id: "studio-rental", title: "Studio Rental", description: "Professional space equipped for livestreams, photoshoots, and video production.", longDescription: "Step into a space designed for creators. Our studio is fully equipped with industry-standard lighting, audio, and video gear.", features: ["Professional Lighting Grid", "High-Fidelity Audio Equipment", "Customizable Sets & Backdrops", "High-Speed Internet for Streaming", "Dressing & Makeup Area", "On-Site Technical Assistance"], images: ["https://picsum.photos/seed/studio1/800/600", "https://picsum.photos/seed/studio2/800/600"], icon: "Camera" },
+            { id: "artist-management", title: "Artist Management", description: "End-to-end support for influencers, creators, and celebrities to maximize their brand potential.", longDescription: "We empower talent. Our artist management division is dedicated to nurturing careers, negotiating high-value brand partnerships.", features: ["Career Strategy & Planning", "Brand Partnership Negotiation", "Public Relations & Crisis Management", "Content Strategy Consultation", "Exclusive Event Access", "Legal & Contract Support"], images: ["https://picsum.photos/seed/mgmt1/800/600", "https://picsum.photos/seed/mgmt2/800/600"], icon: "Users" },
+            { id: "shoppable-pictures", title: "Shoppable Pictures", description: "High-quality product photography designed specifically for e-commerce conversion.", longDescription: "Visuals that sell. We create high-definition, commercially optimized product photography that highlights features and drives conversion.", features: ["High-Quality Product Images", "Lifestyle & Studio Settings", "Post-Production Editing & Retouching", "Full Suite of Creative & Technical Steps", "E-commerce Platform Optimization", "Production Execution"], images: ["https://picsum.photos/seed/shop1/800/600", "https://picsum.photos/seed/shop2/800/600"], icon: "ShoppingBag" }
+        ];
+
+        const ARTISTS = [
+            { id: "igiboy", name: "IGIBOY", role: "Artist | Content Creator", categories: ["Fashion", "Electronics", "Lifestyle"], followers: [{ platform: "TikTok", count: "19,000+", handle: "@igiboyflores31" }, { platform: "Instagram", count: "93,600+", handle: "@igiboyflores" }, { platform: "Facebook", count: "57,100+", handle: "@igiboyflores31" }], ratePerLive: "50,000", packageRate: "120,000 (3 Live)", image: "https://placehold.co/400x500/111/444?text=IGIBOY", about: "Igiboy is a versatile artist and content creator known for his engaging lifestyle content.", gallery: ["https://picsum.photos/seed/igiboy1/400/500", "https://picsum.photos/seed/igiboy2/400/500"] },
+            { id: "sofi", name: "SOFI", role: "Content Creator | KOL", categories: ["Beauty", "Fashion", "Electronics"], followers: [{ platform: "TikTok", count: "144,600", handle: "@sofifermazi" }, { platform: "Instagram", count: "13,900+", handle: "@sofifermazi" }], ratePerLive: "35,000", packageRate: "100,000 (3 Live)", image: "https://placehold.co/400x500/111/444?text=SOFI", about: "Sofi brings a fresh perspective to beauty and fashion content.", gallery: ["https://picsum.photos/seed/sofi1/400/500", "https://picsum.photos/seed/sofi2/400/500"] },
+            { id: "miro", name: "MIRO", role: "Model | KOL | Influencer", categories: ["Fashion", "Skincare", "Electronics"], followers: [{ platform: "TikTok", count: "309,400", handle: "@miromacs" }, { platform: "Instagram", count: "181,000", handle: "@miromacs" }], ratePerLive: "50,000", packageRate: "80,000 (2 Live)", image: "https://placehold.co/400x500/111/444?text=MIRO", gallery: ["https://picsum.photos/seed/miro1/400/500", "https://picsum.photos/seed/miro2/400/500"] },
+            { id: "jaja", name: "JAJA", role: "Artist | Content Creator", categories: ["Fashion", "Skincare", "Electronics"], followers: [{ platform: "TikTok", count: "3,100,000+", handle: "@vladiaxdisuanco" }, { platform: "Instagram", count: "227,000+", handle: "@vladiaxdisuanco" }], ratePerLive: "100,000", packageRate: "170,000 (2 Live)", image: "https://placehold.co/400x500/111/444?text=JAJA", gallery: ["https://picsum.photos/seed/jaja1/400/500", "https://picsum.photos/seed/jaja2/400/500"] },
+            { id: "criselda", name: "CRISELDA", role: "Influencer | KOL", categories: ["Fashion", "Fitness", "Lifestyle"], followers: [{ platform: "TikTok", count: "10,400,000+", handle: "@chickennuggetsop" }, { platform: "Facebook", count: "2,400,000+", handle: "@alvarezcriselda" }], ratePerLive: "200,000", packageRate: "350,000 (2 Live)", image: "https://placehold.co/400x500/111/444?text=CRISELDA", gallery: ["https://picsum.photos/seed/cris1/400/500", "https://picsum.photos/seed/cris2/400/500"] }
+        ];
+
+        const CASE_STUDIES = [
+            { title: "Bingo Plus Music Festival", date: "October 2025", description: "A vibrant celebration of music where sound meets soul. We managed influencer relations and live coverage.", image: "https://picsum.photos/seed/festival/800/600", metrics: [{ label: "Total Reach", value: "9,058,615" }, { label: "Total Views", value: "5,578,439" }, { label: "Engagement", value: "45,635" }, { label: "Influencers", value: "30+" }] }
+        ];
+
+        const CLIENTS = ["Oppo", "Infinix", "Honor", "BingoPlus", "Canon", "Anker", "Insta360"];
+
+        // --- ICONS ---
+        const ICONS = {
+            Radio: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>',
+            Video: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>',
+            Camera: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>',
+            Users: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+            ShoppingBag: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+            CheckCircle2: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
+            ArrowRight: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>',
+            ArrowUpRight: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>',
+            Instagram: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>',
+            Facebook: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>',
+            TikTok: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>',
+            Menu: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>',
+            X: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
+            ArrowLeft: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>',
+            Mail: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+            Phone: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+            MapPin: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>'
+        };
+
+        // --- APP STATE ---
+        let currentFilter = 'All';
+
+        // --- DOM ELEMENTS ---
+        const navbar = document.getElementById('navbar');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            initMouseSpotlight();
+            populateData();
+            initRouter();
+            initScrollEffects();
+            initChatWidget();
+        });
+
+        // --- ROUTING ---
+        function initRouter() {
+            window.addEventListener('hashchange', handleHashChange);
+            handleHashChange(); // Handle initial load
+        }
+
+        function handleHashChange() {
+            const hash = window.location.hash.substring(1) || 'home';
+            const views = document.querySelectorAll('.page-view');
+
+            // Hide all views
+            views.forEach(view => view.classList.remove('active'));
+            window.scrollTo(0, 0);
+
+            // Close mobile menu if open
+            if (!mobileMenu.classList.contains('translate-x-full')) {
+                toggleMobileMenu();
+            }
+
+            // Route matching
+            if (hash === 'home') {
+                document.getElementById('view-home').classList.add('active');
+            } else if (hash === 'services') {
+                renderServicesPage();
+                document.getElementById('view-services').classList.add('active');
+            } else if (hash.startsWith('services/')) {
+                const id = hash.split('/')[1];
+                renderServiceDetail(id);
+                document.getElementById('view-service-detail').classList.add('active');
+            } else if (hash === 'talents') {
+                renderTalentsPage();
+                document.getElementById('view-talents').classList.add('active');
+            } else if (hash.startsWith('talents/')) {
+                const id = hash.split('/')[1];
+                renderTalentDetail(id);
+                document.getElementById('view-talent-detail').classList.add('active');
+            } else if (hash === 'case-studies') {
+                renderCaseStudies();
+                document.getElementById('view-case-studies').classList.add('active');
+            } else if (hash === 'contact') {
+                document.getElementById('view-contact').classList.add('active');
+            } else {
+                document.getElementById('view-home').classList.add('active'); // Default
+            }
+
+            // Update Nav Active State
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-white', 'border-b', 'border-white');
+                link.classList.add('text-white/50');
+                if (link.getAttribute('href') === '#' + hash) {
+                    link.classList.add('text-white', 'border-b', 'border-white');
+                    link.classList.remove('text-white/50');
+                }
+            });
+        }
+
+        function navigateTo(page) {
+            window.location.hash = page;
+        }
+
+        // --- RENDERERS ---
+
+        function populateData() {
+            // Footer
+            document.getElementById('footer-description').textContent = COMPANY_INFO.description;
+            const footerContactHTML = `
+                <li>${COMPANY_INFO.contactEmail}</li>
+                <li>${COMPANY_INFO.contactPhone}</li>
+                <li>Manila, Philippines</li>
+            `;
+            document.getElementById('footer-contact').innerHTML = footerContactHTML;
+
+            // Client Ticker
+            const tickerContainer = document.getElementById('client-ticker');
+            const clientList = [...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS];
+            tickerContainer.innerHTML = clientList.map(client => `
+                <span class="text-xl font-sans font-bold text-white/40 uppercase tracking-widest hover:text-white transition-colors cursor-default">${client}</span>
+            `).join('');
+
+            // Home Services Grid
+            const homeServicesGrid = document.getElementById('home-services-grid');
+            homeServicesGrid.innerHTML = SERVICES.slice(0, 3).map(service => `
+                <a href="#services/${service.id}" class="group bg-black p-12 hover:bg-neutral-900 transition-colors duration-500 block relative">
+                    <div class="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -rotate-45">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </div>
+                    <div class="w-12 h-12 border border-white/20 flex items-center justify-center mb-8 group-hover:border-white transition-colors text-white">
+                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-serif mb-4 text-white">${service.title}</h3>
+                    <p class="text-white/50 mb-8 font-light leading-relaxed">${service.description}</p>
+                    <span class="text-white text-xs font-bold uppercase tracking-widest hover:text-zinc-400 transition-colors flex items-center gap-2">
+                      Learn More ${ICONS.ArrowRight}
+                    </span>
+                </a>
+            `).join('');
+
+            // Contact Page Info
+            const contactInfoDiv = document.getElementById('contact-info');
+            contactInfoDiv.innerHTML = `
+                <div class="flex items-center gap-8 p-8 border border-white/10 bg-white/[0.02]">
+                    <div class="w-12 h-12 flex items-center justify-center text-white border border-white/20">${ICONS.Mail}</div>
+                    <div>
+                        <div class="text-xs uppercase text-white/40 tracking-[0.2em] font-bold mb-1">Email Us</div>
+                        <div class="text-xl font-serif">${COMPANY_INFO.contactEmail}</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-8 p-8 border border-white/10 bg-white/[0.02]">
+                    <div class="w-12 h-12 flex items-center justify-center text-white border border-white/20">${ICONS.Phone}</div>
+                    <div>
+                        <div class="text-xs uppercase text-white/40 tracking-[0.2em] font-bold mb-1">Call Us</div>
+                        <div class="text-xl font-serif">${COMPANY_INFO.contactPhone}</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-8 p-8 border border-white/10 bg-white/[0.02]">
+                    <div class="w-12 h-12 flex items-center justify-center text-white border border-white/20">${ICONS.MapPin}</div>
+                    <div>
+                        <div class="text-xs uppercase text-white/40 tracking-[0.2em] font-bold mb-1">Visit Us</div>
+                        <div class="text-xl font-serif">Manila, Philippines</div>
+                    </div>
+                </div>
+             `;
+
+            // Mobile Menu Icon
+            mobileMenuBtn.innerHTML = ICONS.Menu;
+            mobileMenuBtn.onclick = toggleMobileMenu;
+        }
+
+        function toggleMobileMenu() {
+            const isOpen = !mobileMenu.classList.contains('translate-x-full');
+            if (isOpen) {
+                mobileMenu.classList.add('translate-x-full');
+                mobileMenu.classList.remove('translate-x-0');
+                mobileMenuBtn.innerHTML = ICONS.Menu;
+            } else {
+                mobileMenu.classList.remove('translate-x-full');
+                mobileMenu.classList.add('translate-x-0');
+                mobileMenuBtn.innerHTML = ICONS.X;
+            }
+        }
+
+        function renderServicesPage() {
+            const list = document.getElementById('services-list');
+            list.innerHTML = SERVICES.map(service => `
+                 <a href="#services/${service.id}" class="flex flex-col md:flex-row gap-12 items-start p-10 md:p-16 bg-black hover:bg-neutral-900 transition-all duration-500 group relative overflow-hidden text-white">
+                    <div class="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        ${ICONS.ArrowUpRight}
+                    </div>
+                    <div class="w-16 h-16 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-white group-hover:text-black transition-all duration-500">
+                        ${ICONS[service.icon] || ICONS.Radio}
+                    </div>
+                    <div class="flex-grow">
+                        <h3 class="text-3xl font-serif mb-6 flex items-center gap-4">${service.title}</h3>
+                        <p class="text-white/60 text-lg leading-relaxed mb-8 font-light max-w-2xl">${service.description}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+                            ${service.features.slice(0, 4).map(feature => `
+                                <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-white/40 group-hover:text-white/60 transition-colors">
+                                    ${ICONS.CheckCircle2} ${feature}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                 </a>
+            `).join('');
+        }
+
+        function renderServiceDetail(id) {
+            const service = SERVICES.find(s => s.id === id);
+            if (!service) { navigateTo('services'); return; }
+
+            const container = document.getElementById('view-service-detail');
+            container.innerHTML = `
+                <div class="relative h-[50vh] flex items-center border-b border-white/10 mb-20 overflow-hidden">
+                    <div class="absolute inset-0 z-0">
+                        <img src="${service.images[0]}" class="w-full h-full object-cover opacity-30 grayscale" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                    </div>
+                    <div class="container mx-auto px-6 relative z-10 pt-20">
+                        <a href="#services" class="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-8 uppercase text-xs font-bold tracking-widest">
+                            ${ICONS.ArrowLeft} Back to Services
+                        </a>
+                        <div class="animate-fade-in-up">
+                            <h1 class="font-serif text-5xl md:text-7xl text-white mb-6 leading-tight">${service.title}</h1>
+                            <p class="text-xl text-white/60 font-light max-w-2xl">${service.description}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container mx-auto px-6 pb-20">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                        <div class="lg:col-span-7">
+                            <div class="mb-16">
+                                <h3 class="font-serif text-3xl mb-6">Overview</h3>
+                                <p class="text-white/70 text-lg leading-relaxed font-light mb-8">${service.longDescription}</p>
+                                <div class="border border-white/10 p-8 bg-white/[0.02]">
+                                    <h4 class="font-sans text-sm font-bold uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Inclusions & Features</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        ${service.features.map(f => `<div class="flex items-start gap-3"><span class="text-white shrink-0 mt-0.5">${ICONS.CheckCircle2}</span><span class="text-white/80 text-sm">${f}</span></div>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="mb-16">
+                                <h3 class="font-serif text-3xl mb-8">Gallery</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    ${service.images.map(img => `<div class="aspect-video bg-neutral-900 overflow-hidden border border-white/10 group"><img src="${img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" /></div>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                         <div class="lg:col-span-5 relative">
+                            <div class="sticky top-40 border border-white/10 p-8 bg-black/50 backdrop-blur-md">
+                                <h3 class="font-serif text-3xl mb-4">Ready to Start?</h3>
+                                <p class="text-white/50 mb-8 text-sm">Let's discuss how our ${service.title} services can help achieve your brand goals.</p>
+                                <a href="#contact" class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 w-full flex justify-center"><span class="relative z-10 flex items-center gap-3">Inquire Now ${ICONS.ArrowRight}</span></a>
+                                <div class="mt-8 pt-8 border-t border-white/10 space-y-4">
+                                    <div class="flex justify-between text-sm"><span class="text-white/40 uppercase font-bold text-xs tracking-widest">Availability</span><span class="text-green-400">Open for Booking</span></div>
+                                    <div class="flex justify-between text-sm"><span class="text-white/40 uppercase font-bold text-xs tracking-widest">Location</span><span>Metro Manila & Nearby</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTalentsPage() {
+            const categories = ['All', 'Fashion', 'Beauty', 'Electronics', 'Lifestyle'];
+            // Render Filters
+            document.getElementById('talent-filters').innerHTML = categories.map(cat => `
+                <button onclick="filterTalents('${cat}')" class="px-6 py-2 border text-xs font-bold uppercase tracking-widest transition-all ${currentFilter === cat ? 'bg-white text-black border-white' : 'bg-transparent text-white/50 border-white/10 hover:border-white/50 hover:text-white'}">${cat}</button>
+            `).join('');
+
+            // Render Grid
+            const filtered = currentFilter === 'All' ? ARTISTS : ARTISTS.filter(a => a.categories.includes(currentFilter));
+            document.getElementById('talents-grid').innerHTML = filtered.map(artist => `
+                <div class="h-full flex flex-col group cursor-pointer relative animate-fade-in-up">
+                    <a href="#talents/${artist.id}" class="block h-full">
+                        <div class="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black">${ICONS.ArrowUpRight}</div>
+                        </div>
+                         <div class="aspect-[3/4] w-full overflow-hidden relative bg-neutral-900 border border-white/10">
+                            <img src="${artist.image}" class="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105 grayscale group-hover:grayscale-0" onerror="this.src='https://placehold.co/400x500/111/444?text=${encodeURIComponent(artist.name)}'" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60"></div>
+                            <div class="absolute bottom-0 left-0 w-full p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                                <h3 class="font-serif text-3xl font-bold italic tracking-tighter text-white mb-2">${artist.name}</h3>
+                                <p class="text-white/60 text-[10px] font-bold tracking-[0.2em] uppercase border-t border-white/20 pt-2 inline-block">${artist.role}</p>
+                            </div>
+                        </div>
+                         <div class="pt-6 flex flex-col">
+                            <div class="flex gap-2 flex-wrap mb-4">
+                                ${artist.categories.map(c => `<span class="text-[10px] uppercase tracking-wider px-2 py-1 border border-white/10 text-white/60">${c}</span>`).join('')}
+                            </div>
+                            <div class="space-y-3 mb-4">
+                                ${artist.followers.map(f => `
+                                    <div class="flex items-center justify-between text-xs tracking-wide">
+                                        <div class="flex items-center gap-2 text-white/40">
+                                            ${f.platform === 'Instagram' ? ICONS.Instagram : f.platform === 'TikTok' ? ICONS.TikTok : ICONS.Facebook} <span class="uppercase">${f.platform}</span>
+                                        </div>
+                                        <span class="font-bold text-white">${f.count}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function filterTalents(cat) {
+            currentFilter = cat;
+            renderTalentsPage();
+        }
+
+        function renderTalentDetail(id) {
+            const artist = ARTISTS.find(a => a.id === id);
+            if (!artist) { navigateTo('talents'); return; }
+
+            const container = document.getElementById('view-talent-detail');
+            container.innerHTML = `
+                <div class="min-h-screen pb-20 pt-10 container mx-auto px-6">
+                    <a href="#talents" class="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-12 uppercase text-xs font-bold tracking-widest">${ICONS.ArrowLeft} Back to Roster</a>
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                        <div class="lg:col-span-5">
+                            <div class="sticky top-40 animate-fade-in-up">
+                                <div class="aspect-[3/4] w-full overflow-hidden border border-white/10 mb-8 relative">
+                                    <img src="${artist.image}" class="w-full h-full object-cover object-top" onerror="this.src='https://placehold.co/400x500/111/444?text=${artist.name}'" />
+                                    <div class="absolute inset-0 border-[12px] border-white/5 pointer-events-none"></div>
+                                </div>
+                                <div class="bg-white/[0.03] border border-white/10 p-8 backdrop-blur-sm">
+                                    <h3 class="font-serif text-2xl mb-6 text-white border-b border-white/10 pb-4">Social Stats</h3>
+                                    <div class="space-y-6">
+                                        ${artist.followers.map(s => `
+                                            <div class="flex items-center justify-between group">
+                                                <div class="flex items-center gap-3 text-white/60 group-hover:text-white transition-colors">
+                                                    <div class="p-2 border border-white/10 rounded-full">${s.platform === 'Instagram' ? ICONS.Instagram : s.platform === 'TikTok' ? ICONS.TikTok : ICONS.Facebook}</div>
+                                                    <div class="flex flex-col"><span class="text-xs uppercase tracking-widest font-bold">${s.platform}</span><span class="text-[10px] text-white/30">${s.handle}</span></div>
+                                                </div>
+                                                <span class="font-serif text-xl text-white">${s.count}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-7 pt-4">
+                            <div class="mb-16">
+                                <span class="inline-block px-3 py-1 border border-white/20 text-[10px] font-bold tracking-[0.2em] uppercase text-white/60 mb-6">${artist.role}</span>
+                                <h1 class="font-serif text-6xl md:text-8xl text-white mb-8 leading-[0.9] tracking-tight">${artist.name}</h1>
+                                <div class="flex gap-3 mb-10">${artist.categories.map(c => `<span class="px-4 py-2 bg-white text-black text-xs font-bold uppercase tracking-wider">${c}</span>`).join('')}</div>
+                                <p class="text-lg md:text-xl text-white/60 font-light leading-relaxed mb-10">${artist.about}</p>
+                                <a href="#contact" class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 inline-flex items-center gap-3"><span class="relative z-10 flex items-center gap-3">Book ${artist.name} ${ICONS.ArrowRight}</span></a>
+                            </div>
+                            <div class="mb-20">
+                                <h3 class="font-serif text-3xl mb-8 text-white">Engagement Rates</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="border border-white/10 p-8 bg-black hover:bg-neutral-900 transition-colors"><span class="block text-xs font-bold uppercase tracking-widest text-white/40 mb-2">Livestream Rate</span><div class="text-4xl font-serif text-white mb-2">₱${artist.ratePerLive}</div><span class="text-white/30 text-sm">Per 1 hour session</span></div>
+                                    <div class="border border-white/10 p-8 bg-white text-black"><span class="block text-xs font-bold uppercase tracking-widest text-black/40 mb-2">Package Deal</span><div class="text-4xl font-serif text-black mb-2">₱${artist.packageRate}</div><span class="text-black/50 text-sm">Multiple sessions / Campaign bundle</span></div>
+                                </div>
+                            </div>
+                             <div>
+                                <h3 class="font-serif text-3xl mb-8 text-white flex items-center gap-4">Latest Content <div class="h-px flex-grow bg-white/10"></div></h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    ${artist.gallery.map((img, idx) => `
+                                        <div class="relative group overflow-hidden border border-white/10 ${idx % 3 === 0 ? 'col-span-2 aspect-video' : 'col-span-1 aspect-[4/5]'}">
+                                            <img src="${img}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCaseStudies() {
+            document.getElementById('case-studies-list').innerHTML = CASE_STUDIES.map((study, idx) => `
+                <div class="relative group">
+                    <span class="absolute -top-24 -left-12 text-[200px] font-serif font-bold text-white/[0.02] pointer-events-none select-none z-0">${String(idx + 1).padStart(2, '0')}</span>
+                    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                        <div class="order-2 lg:order-1 pt-8">
+                            <div class="inline-block px-4 py-2 border border-white text-white text-xs font-bold uppercase tracking-widest mb-8">${study.date}</div>
+                            <h3 class="text-4xl md:text-5xl font-serif mb-8 leading-tight">${study.title}</h3>
+                            <p class="text-white/60 text-lg font-light leading-relaxed mb-12 border-l border-white/20 pl-8">${study.description}</p>
+                            <div class="grid grid-cols-2 gap-px bg-white/10 border border-white/10">
+                                ${study.metrics.map(m => `
+                                    <div class="text-center py-10 bg-black hover:bg-neutral-900 transition-colors">
+                                        <div class="text-3xl md:text-4xl font-serif text-white mb-2">${m.value}</div>
+                                        <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">${m.label}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="order-1 lg:order-2">
+                            <div class="w-full aspect-video border border-white/10 p-2 relative">
+                                <div class="w-full h-full bg-neutral-800 overflow-hidden relative">
+                                    <img src="${study.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        // --- INTERACTIONS & EFFECTS ---
+        function initScrollEffects() {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('py-4', 'bg-black/80', 'backdrop-blur-xl', 'border-b', 'border-white/5');
+                    navbar.classList.remove('py-8', 'bg-transparent');
+                } else {
+                    navbar.classList.add('py-8', 'bg-transparent');
+                    navbar.classList.remove('py-4', 'bg-black/80', 'backdrop-blur-xl', 'border-b', 'border-white/5');
+                }
+            });
+        }
+
+        // Particle Effect (Canvas)
+        function initParticles() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animationFrameId;
+            let mouseX = 0;
+            let mouseY = 0;
+
+            function handleResize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            window.addEventListener('resize', handleResize);
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.speedY = Math.random() * 0.5 - 0.25;
+                    this.opacity = Math.random() * 0.5 + 0.1;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    const dx = this.x - mouseX;
+                    const dy = this.y - mouseY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (100 - distance) / 100;
+                        this.speedX += forceDirectionX * force * 0.05;
+                        this.speedY += forceDirectionY * force * 0.05;
+                    }
+                    if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width;
+                    if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height;
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(220, 220, 220, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            handleResize();
+            for (let i = 0; i < 18; i++) particles.push(new Particle());
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Mouse Spotlight
+        function initMouseSpotlight() {
+            const spotlight = document.getElementById('mouse-spotlight');
+            window.addEventListener('mousemove', (e) => {
+                spotlight.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(255,255,255,0.06), transparent 80%)`;
+            });
+        }
+
+        // --- CHAT WIDGET LOGIC ---
+        function initChatWidget() {
+            const chatWindow = document.getElementById('chat-window');
+            const toggleBtn = document.getElementById('toggle-chat-btn');
+            const closeBtn = document.getElementById('close-chat-btn');
+            const openIcon = document.getElementById('chat-icon-open');
+            const closeIcon = document.getElementById('chat-icon-close');
+            const tooltip = document.getElementById('chat-tooltip');
+            const messagesContainer = document.getElementById('chat-messages');
+            const input = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const quickRepliesContainer = document.getElementById('quick-replies');
+
+            const QUICK_REPLIES = ["What services do you offer?", "Show me your talent roster", "How can I contact you?", "Where are you located?"];
+            let isOpen = false;
+
+            // Initial Message
+            addMessage("Welcome to The Aura Creatives! 🖤 I'm your virtual assistant. How can I help you elevate your brand today?", 'bot');
+
+            // Render Quick Replies
+            quickRepliesContainer.innerHTML = QUICK_REPLIES.map(r =>
+                `<button class="quick-reply-btn whitespace-nowrap px-3 py-1.5 rounded-full border border-white/20 bg-white/5 text-[10px] text-white/70 hover:bg-white hover:text-black hover:border-white transition-all duration-300">${r}</button>`
+            ).join('');
+
+            document.querySelectorAll('.quick-reply-btn').forEach(btn => {
+                btn.addEventListener('click', () => handleSend(btn.innerText));
+            });
+
+            // Toggle logic
+            function toggleChat() {
+                isOpen = !isOpen;
+                if (isOpen) {
+                    chatWindow.classList.remove('hidden');
+                    // Small delay to allow transition
+                    setTimeout(() => {
+                        chatWindow.style.opacity = '1';
+                        chatWindow.style.transform = 'scale(1)';
+                    }, 10);
+                    openIcon.classList.add('hidden');
+                    closeIcon.classList.remove('hidden');
+                    toggleBtn.classList.add('bg-black', 'border', 'border-white', 'text-white');
+                    toggleBtn.classList.remove('bg-white', 'text-black');
+                    tooltip.classList.add('opacity-0'); // Hide tooltip
+                    scrollToBottom();
+                } else {
+                    chatWindow.style.opacity = '0';
+                    chatWindow.style.transform = 'scale(0.95)';
+                    setTimeout(() => chatWindow.classList.add('hidden'), 300);
+                    openIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                    toggleBtn.classList.remove('bg-black', 'border', 'border-white', 'text-white');
+                    toggleBtn.classList.add('bg-white', 'text-black');
+                }
+            }
+
+            toggleBtn.addEventListener('click', toggleChat);
+            closeBtn.addEventListener('click', toggleChat);
+
+            // Send Logic
+            function handleSend(text = input.value) {
+                if (!text.trim()) return;
+                addMessage(text, 'user');
+                input.value = '';
+
+                // Show Typing
+                typingIndicator.classList.remove('hidden');
+                quickRepliesContainer.classList.add('hidden'); // Hide quick replies while typing
+                scrollToBottom();
+
+                setTimeout(() => {
+                    const response = generateResponse(text);
+                    addMessage(response, 'bot');
+                    typingIndicator.classList.add('hidden');
+                    quickRepliesContainer.classList.remove('hidden');
+                }, 1200);
+            }
+
+            sendBtn.addEventListener('click', () => handleSend());
+            input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
+
+            function addMessage(text, sender) {
+                const div = document.createElement('div');
+                div.className = `flex items-end gap-3 ${sender === 'user' ? 'flex-row-reverse' : ''} animate-fade-in-up`;
+
+                const icon = sender === 'bot'
+                    ? `<div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border border-white/10 bg-white/5">${ICONS.Bot || '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2v0a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"/><path d="M12 22v-8"/><path d="M16 10a4 4 0 0 1 4 4v4"/><path d="M8 10a4 4 0 0 0-4 4v4"/></svg>'}</div>`
+                    : `<div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border border-white/10 bg-white text-black">${ICONS.User || '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'}</div>`;
+
+                const bubbleStyle = sender === 'bot' ? 'bg-white/5 border border-white/10 text-white/90 rounded-bl-none' : 'bg-white text-black rounded-br-none font-medium';
+
+                // Parse bold markdown roughly
+                const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+
+                div.innerHTML = `
+                    ${icon}
+                    <div class="max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed ${bubbleStyle}">${formattedText}</div>
+                `;
+                messagesContainer.appendChild(div);
+                scrollToBottom();
+            }
+
+            function scrollToBottom() {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            function generateResponse(query) {
+                const lower = query.toLowerCase();
+                if (lower.includes('contact') || lower.includes('email') || lower.includes('phone')) return `You can reach our team directly at <strong>${COMPANY_INFO.contactEmail}</strong> or call/text us at <strong>${COMPANY_INFO.contactPhone}</strong>.`;
+                if (lower.includes('where') || lower.includes('located')) return `We are based in <strong>Manila, Philippines</strong>, but we operate digitally across multiple platforms.`;
+                if (lower.includes('service') || lower.includes('offer')) {
+                    const titles = SERVICES.map(s => `• ${s.title}`).join('<br>');
+                    return `We offer end-to-end digital solutions:<br><br>${titles}<br><br>Would you like specific details on any of these?`;
+                }
+                if (lower.includes('talent') || lower.includes('artist')) {
+                    const names = ARTISTS.slice(0, 3).map(a => a.name).join(', ');
+                    return `We represent top-tier talents like <strong>${names}</strong>, and many more. You can view our full roster on the Talents page.`;
+                }
+                return "I appreciate your interest! While I'm an AI, our team would love to discuss this further. Please click the 'Let's Talk' button or email us.";
+            }
+
+            // Tooltip timeout
+            setTimeout(() => {
+                if (!isOpen) tooltip.classList.add('opacity-0');
+            }, 10000);
+        }
+
+    </script>
+</body>
+
+</html>
