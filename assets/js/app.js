@@ -1,23 +1,7 @@
 // --- APP STATE ---
 let currentFilter = 'All';
 
-// --- DOM ELEMENTS ---
-const navbar = document.getElementById('navbar');
-const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-const mobileMenu = document.getElementById('mobile-menu');
-
-// --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Lenis Smooth Scroll Initialization
-    if (typeof Lenis !== 'undefined') {
-        const lenis = new Lenis();
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-    }
-
     initParticles();
     initMouseSpotlight();
     populateData();
@@ -51,6 +35,7 @@ function initScrollReveal() {
 
 //--- ROUTING ---
 function initRouter() {
+    console.log('[Router] Initializing router...');
     window.addEventListener('hashchange', handleHashChange);
     handleHashChange(); // Handle initial load
 }
@@ -58,7 +43,9 @@ function initRouter() {
 function handleHashChange() {
     const fullHash = window.location.hash.substring(1) || 'home';
     const [route, query] = fullHash.split('?');
+    console.log('[Router] Handling route:', route, 'Full hash:', fullHash);
     const views = document.querySelectorAll('.page-view');
+    let routeMatched = false;
 
     // Reset UI State (Show Navbar/Footer by default)
     if (navbar) navbar.classList.remove('hidden');
@@ -78,31 +65,38 @@ function handleHashChange() {
     if (route === 'home') {
         const view = document.getElementById('view-home');
         if (view) view.classList.add('active');
+        routeMatched = true;
     } else if (route === 'services') {
         renderServicesPage();
         const view = document.getElementById('view-services');
         if (view) view.classList.add('active');
+        routeMatched = true;
     } else if (route.startsWith('services/')) {
         const id = route.split('/')[1];
         renderServiceDetail(id);
         const view = document.getElementById('view-service-detail');
         if (view) view.classList.add('active');
+        routeMatched = true;
     } else if (route === 'talents') {
         renderTalentsPage();
         const view = document.getElementById('view-talents');
         if (view) view.classList.add('active');
+        routeMatched = true;
     } else if (route.startsWith('talents/')) {
         const id = route.split('/')[1];
         renderTalentDetail(id);
         const view = document.getElementById('view-talent-detail');
         if (view) view.classList.add('active');
+        routeMatched = true;
     } else if (route === 'case-studies') {
         renderCaseStudies();
         const view = document.getElementById('view-case-studies');
         if (view) view.classList.add('active');
+        routeMatched = true;
     } else if (route === 'contact') {
         const view = document.getElementById('view-contact');
         if (view) view.classList.add('active');
+        routeMatched = true;
     } else if (route.startsWith('gallery/')) {
         const folderName = decodeURIComponent(route.split('/')[1]);
         renderGalleryView(folderName);
@@ -110,7 +104,10 @@ function handleHashChange() {
         if (view) view.classList.add('active');
         if (navbar) navbar.classList.add('hidden'); // Hide navbar for immersive view
         if (footer) footer.classList.add('hidden');
-    } else {
+        routeMatched = true;
+    }
+
+    if (!routeMatched) {
         const view = document.getElementById('view-home');
         if (view) view.classList.add('active'); // Default
     }
@@ -811,7 +808,7 @@ function initChatWidget() {
         }
         // 2. Services
         if (lowerText.match(/(services|offer|do|livestream)/)) {
-            return 'We offer 6 core services: KOL/Artist Livestreaming, Short-Form Video Production, Studio Rental, Marketing Video Production, Product Shoppable Pictures, and Artist/Band Production.';
+            return 'We offer 6 core services: KOL/Artist Livestreaming, Short-Form Video Production, Studio Rental, Artist Management, Marketing Video Production, and Product Shoppable Pictures.';
         }
         // 3. Talents/Influencers
         if (lowerText.match(/(talent|roster|influencers|jaja|igiboy|sofi)/)) {
@@ -823,7 +820,7 @@ function initChatWidget() {
         }
         // 5. Contact/Booking
         if (lowerText.match(/(contact|email|phone|rate)/)) {
-            return 'Let's connect! You can reach us at business @theauracreatives.co or call 09219715546. You can also fill out the form in the Contact section.';
+            return 'Let\'s connect! You can reach us at business@theauracreatives.co or call 09219715546. You can also fill out the form in the Contact section.';
         }
         // 6. Why Us
         if (lowerText.match(/(why|benefit)/)) {

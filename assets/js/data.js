@@ -38,6 +38,21 @@ const SERVICES = [
     { id: "studio-rental", title: "Studio Rental", description: "Professional space equipped for livestreams, photoshoots, and video production.", longDescription: "Step into a space designed for creators. Our studio is fully equipped with industry-standard lighting, audio, and video gear.", features: ["Professional Lighting Grid", "High-Fidelity Audio Equipment", "Customizable Sets & Backdrops", "High-Speed Internet for Streaming", "Dressing & Makeup Area", "On-Site Technical Assistance"], images: ["https://picsum.photos/seed/studio1/800/600", "https://picsum.photos/seed/studio2/800/600"], icon: "Camera" },
     { id: "artist-management", title: "Artist Management", description: "End-to-end support for influencers, creators, and celebrities to maximize their brand potential.", longDescription: "We empower talent. Our artist management division is dedicated to nurturing careers, negotiating high-value brand partnerships.", features: ["Career Strategy & Planning", "Brand Partnership Negotiation", "Public Relations & Crisis Management", "Content Strategy Consultation", "Exclusive Event Access", "Legal & Contract Support"], images: ["https://picsum.photos/seed/mgmt1/800/600", "https://picsum.photos/seed/mgmt2/800/600"], icon: "Users" },
     {
+        id: "marketing-video-production",
+        title: "Marketing Video Production",
+        description: "Professional video production services for brands, from concept to final cut.",
+        longDescription: "Transform your brand story into compelling visual narratives. Our full-service video production team handles everything from creative concepting and scriptwriting to filming and post-production, delivering cinematic quality content that drives results.",
+        features: ["Creative Concept Development", "Professional Scriptwriting", "Multi-Camera Production", "Professional Lighting & Audio", "Advanced Color Grading", "Motion Graphics & VFX", "Licensed Music & Sound Design", "Multi-Format Export (Social, Web, Broadcast)"],
+        images: [],
+        folders: [
+            { name: "CORPORATE VIDEOS", images: ["https://picsum.photos/seed/corp1/800/600", "https://picsum.photos/seed/corp2/800/600", "https://picsum.photos/seed/corp3/800/600", "https://picsum.photos/seed/corp4/800/600"] },
+            { name: "COMMERCIALS", images: ["https://picsum.photos/seed/commercial1/800/600", "https://picsum.photos/seed/commercial2/800/600", "https://picsum.photos/seed/commercial3/800/600", "https://picsum.photos/seed/commercial4/800/600"] },
+            { name: "SOCIAL MEDIA VIDEOS", images: ["https://picsum.photos/seed/social1/400/700", "https://picsum.photos/seed/social2/400/700", "https://picsum.photos/seed/social3/400/700", "https://picsum.photos/seed/social4/400/700"] },
+            { name: "EVENT COVERAGE", images: ["https://picsum.photos/seed/event1/800/600", "https://picsum.photos/seed/event2/800/600", "https://picsum.photos/seed/event3/800/600", "https://picsum.photos/seed/event4/800/600"] }
+        ],
+        icon: "Video"
+    },
+    {
         id: "shoppable-pictures",
         title: "Shoppable Pictures",
         description: "High-quality product photography designed specifically for e-commerce conversion.",
@@ -49,12 +64,12 @@ const SERVICES = [
                 name: "BEAUTY",
                 images: ["assets/images/p1.png", "assets/images/p2.png", "assets/images/p3.png", "assets/images/p4.png", "assets/images/p5.png", "assets/images/p6.png"]
             },
-            { name: "ELECTRONICS", images: [] },
-            { name: "GOLD", images: [] },
-            { name: "LIFESTYLE", images: [] },
-            { name: "FASHION", images: [] },
-            { name: "HEALTH", images: [] },
-            { name: "MOM AND BABY", images: [] }
+            { name: "ELECTRONICS", images: ["https://picsum.photos/seed/elec1/600/600", "https://picsum.photos/seed/elec2/600/600", "https://picsum.photos/seed/elec3/600/600", "https://picsum.photos/seed/elec4/600/600"] },
+            { name: "GOLD", images: ["https://picsum.photos/seed/gold1/600/600", "https://picsum.photos/seed/gold2/600/600", "https://picsum.photos/seed/gold3/600/600", "https://picsum.photos/seed/gold4/600/600", "https://picsum.photos/seed/gold5/600/600"] },
+            { name: "LIFESTYLE", images: ["https://picsum.photos/seed/lifestyle1/600/600", "https://picsum.photos/seed/lifestyle2/600/600", "https://picsum.photos/seed/lifestyle3/600/600", "https://picsum.photos/seed/lifestyle4/600/600"] },
+            { name: "FASHION", images: ["https://picsum.photos/seed/fashion1/600/600", "https://picsum.photos/seed/fashion2/600/600", "https://picsum.photos/seed/fashion3/600/600", "https://picsum.photos/seed/fashion4/600/600", "https://picsum.photos/seed/fashion5/600/600"] },
+            { name: "HEALTH", images: ["https://picsum.photos/seed/health1/600/600", "https://picsum.photos/seed/health2/600/600", "https://picsum.photos/seed/health3/600/600", "https://picsum.photos/seed/health4/600/600"] },
+            { name: "MOM AND BABY", images: ["https://picsum.photos/seed/baby1/600/600", "https://picsum.photos/seed/baby2/600/600", "https://picsum.photos/seed/baby3/600/600", "https://picsum.photos/seed/baby4/600/600", "https://picsum.photos/seed/baby5/600/600", "https://picsum.photos/seed/baby6/600/600"] }
         ],
         icon: "ShoppingBag"
     }
