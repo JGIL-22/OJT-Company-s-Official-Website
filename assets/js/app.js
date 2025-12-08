@@ -1,4 +1,24 @@
 // ==========================================
+// PART 0: FIREBASE CONFIGURATION
+// ==========================================
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyC97VjPaad6iirasxMvY0oaMTf8ffH3ed4",
+    authDomain: "the-aura-759bc.firebaseapp.com",
+    projectId: "the-aura-759bc",
+    storageBucket: "the-aura-759bc.firebasestorage.app",
+    messagingSenderId: "480041563762",
+    appId: "1:480041563762:web:d87417546fbe18d3f5b4eb",
+    measurementId: "G-87LFNMSSVW"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// ==========================================
 // PART 1: DATA & ICONS
 // ==========================================
 
