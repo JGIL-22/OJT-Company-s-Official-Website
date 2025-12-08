@@ -1,5 +1,8 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+// "use strict";
+// Firebase imports removed for local file:// compatibility
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+// console.log("SCRIPT EXECUTED - Non-module mode");
 
 // ==========================================
 // PART 0: FIREBASE CONFIGURATION (SAFE INIT)
@@ -16,6 +19,7 @@ const firebaseConfig = {
 
 let app, analytics;
 
+/*
 try {
     app = initializeApp(firebaseConfig);
     analytics = getAnalytics(app);
@@ -23,6 +27,7 @@ try {
 } catch (error) {
     console.error("Firebase failed, but app continues:", error);
 }
+*/
 
 // ==========================================
 // PART 1: CONSOLIDATED DATA (Data & Icons)
@@ -153,9 +158,11 @@ const initApp = () => {
     console.log("Initializing App State...");
     populateData();
     initRouter();
+    initLenis();
     initScrollEffects();
     initChatWidget();
     initScrollReveal();
+    initParticles();
 
     // --- GLOBAL EVENT DELEGATION FOR NAVIGATION ---
     document.addEventListener('click', function (e) {
@@ -247,7 +254,9 @@ function handleHashChange() {
     if (navbar) navbar.classList.remove('hidden');
     if (footer) footer.classList.remove('hidden');
 
-    views.forEach(view => view.classList.remove('active'));
+    views.forEach(view => {
+        view.classList.remove('active');
+    });
     window.scrollTo(0, 0);
 
     const mobileMenu = document.getElementById('mobile-menu');
@@ -269,8 +278,11 @@ function handleHashChange() {
     }
 
     const view = document.getElementById(activeViewId);
-    if (view) view.classList.add('active');
-    else if (document.getElementById('view-home')) document.getElementById('view-home').classList.add('active');
+    if (view) {
+        view.classList.add('active');
+    } else if (document.getElementById('view-home')) {
+        document.getElementById('view-home').classList.add('active');
+    }
 }
 
 // --- DATA POPULATION ---
@@ -489,7 +501,91 @@ function initMouseSpotlight() {
 function initParticles() {
     const canvas = document.getElementById('particle-canvas');
     if (!canvas) return;
-    // ... basic particle implementation ...
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+    const particleCount = 50;
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2;
+            this.speedX = Math.random() * 0.5 - 0.25;
+            this.speedY = Math.random() * 0.5 - 0.25;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function init() {
+        particles = [];
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+        }
+        requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+    });
+}
+
+// --- LENIS SMOOTH SCROLL ---
+function initLenis() {
+    if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+
+        // Connect Lenis to ScrollTrigger if you use GSAP, otherwise just global exposure if needed
+        window.lenis = lenis;
+        console.log("Lenis initialized");
+    } else {
+        console.warn("Lenis library not found.");
+    }
 }
 
 // --- CHAT WIDGET ---
