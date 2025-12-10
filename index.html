@@ -110,9 +110,10 @@
     <!-- Cinematic Preloader -->
     <!-- Text Layer (Highest Z-Index) -->
     <div id="preloader-text"
-        class="fixed inset-0 z-[10000] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-1000">
-        <div class="text-center">
-            <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter leading-[0.85]">
+        class="fixed inset-0 z-[10000] flex flex-col items-center justify-center h-screen opacity-0 pointer-events-none transition-opacity duration-1000">
+        <div class="text-center pt-10"> <!-- Added pt-10 to match Hero container padding -->
+            <!-- Exact Clone of Hero H1 -->
+            <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-8 leading-[0.85]">
                 THE HOME OF <br />
                 <span class="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50">BOLD
                     IDEAS</span>

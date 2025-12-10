@@ -496,52 +496,61 @@ function renderCaseStudies() {
 
 // --- PRELOADER ---
 function initPreloader() {
-    console.log("Initializing Cinematic Preloader (Epic Mode)...");
+    console.log("Initializing Cinematic Preloader (The Swap)...");
 
     const top = document.getElementById('curtain-top');
     const bottom = document.getElementById('curtain-bottom');
-    const text = document.getElementById('preloader-text');
+    const preloaderText = document.getElementById('preloader-text');
+    const heroH1 = document.querySelector('#view-home h1'); // Select main Hero H1
 
-    if (!top || !bottom || !text) {
+    if (!top || !bottom || !preloaderText) {
         console.warn("Preloader elements not found.");
         return;
     }
 
-    // 1. Initial State (Ensure Reset)
+    // 1. Initial State
+    // Hide Hero H1 immediately so it doesn't double-up
+    if (heroH1) {
+        heroH1.style.opacity = '0';
+        heroH1.style.transition = 'opacity 1s ease-in-out';
+    }
+
     top.style.transform = 'translateY(0)';
     bottom.style.transform = 'translateY(0)';
-    text.style.opacity = '0';
+    preloaderText.style.opacity = '0';
     document.body.style.overflow = 'hidden';
 
     // 2. Timeline
-    // 0.5s: Fade In Text
+    // 0.5s: Fade In Preloader Text
     setTimeout(() => {
-        text.style.transition = 'opacity 2s ease-in-out';
-        text.style.opacity = '1';
+        preloaderText.style.transition = 'opacity 2s ease-in-out';
+        preloaderText.style.opacity = '1';
     }, 500);
 
-    // 3.0s: Trigger Split & Reveal
+    // 3.0s: Trigger The Swap
     setTimeout(() => {
-        // Defined "Epic" Easing & Duration
-        const transition = 'transform 3s cubic-bezier(0.22, 1, 0.36, 1)';
-
-        // Curtains
-        top.style.transition = transition;
-        bottom.style.transition = transition;
-
+        // Curtains Open (4.5s Slow-Mo)
+        const curtainTransition = 'transform 4.5s cubic-bezier(0.22, 1, 0.36, 1)';
+        top.style.transition = curtainTransition;
+        bottom.style.transition = curtainTransition;
         top.style.transform = 'translateY(-100%)';
         bottom.style.transform = 'translateY(100%)';
 
-        // Fade Out Text (Faster than curtains to reveal Hero underneath)
-        text.style.transition = 'opacity 1s ease-out';
-        text.style.opacity = '0';
+        // THE SWAP: Cross-Fade
+        // Fade OUT Preloader Text
+        preloaderText.style.transition = 'opacity 1s ease-in-out';
+        preloaderText.style.opacity = '0';
 
-        // Unlock Scroll
+        // Fade IN Hero H1
+        if (heroH1) {
+            heroH1.style.opacity = '1';
+        }
+
+        // Cleanup
         setTimeout(() => {
             document.body.style.overflow = '';
-            // Optimization: Remove from DOM or Hide
-            text.style.display = 'none';
-        }, 3000);
+            preloaderText.style.display = 'none';
+        }, 4500);
 
     }, 3000);
 }
