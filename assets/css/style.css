@@ -28,7 +28,12 @@ body {
 
 .hide-scrollbar {
     -ms-overflow-style: none;
-    scrollbar-width: none;
+}
+
+@supports (scrollbar-width: none) {
+    .hide-scrollbar {
+        scrollbar-width: none;
+    }
 }
 
 /* View Transitions */
@@ -56,4 +61,26 @@ body {
 /* Liquid Background specific */
 .will-change-transform {
     will-change: transform;
+}
+
+/* Background Utilities */
+.bg-noise {
+    background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+}
+
+.bg-spotlight {
+    background: radial-gradient(600px circle at 50% 50%, rgba(255, 255, 255, 0.06), transparent 80%);
+}
+
+/* Animation Delay Utilities */
+.delay-0 {
+    animation-delay: 0ms;
+}
+
+.delay-150 {
+    animation-delay: 150ms;
+}
+
+.delay-300 {
+    animation-delay: 300ms;
 }

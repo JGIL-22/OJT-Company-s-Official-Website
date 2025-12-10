@@ -19,15 +19,17 @@ const firebaseConfig = {
 
 let app, analytics;
 
-/*
 try {
-    app = initializeApp(firebaseConfig);
-    analytics = getAnalytics(app);
-    console.log("Firebase initialized successfully.");
+    if (typeof firebase !== 'undefined') {
+        app = firebase.initializeApp(firebaseConfig);
+        analytics = firebase.analytics();
+        console.log("Firebase initialized successfully.");
+    } else {
+        console.warn("Firebase SDK not loaded (offline or blocked). App continuing without it.");
+    }
 } catch (error) {
     console.error("Firebase failed, but app continues:", error);
 }
-*/
 
 // ==========================================
 // PART 1: CONSOLIDATED DATA (Data & Icons)
@@ -73,7 +75,7 @@ const SERVICES = [
         images: ["https://picsum.photos/seed/stream1/800/600", "https://picsum.photos/seed/stream2/800/600"],
         icon: "Radio",
         folders: [
-            { name: "TALENTS", link: "#talents?from=kol", images: [] },
+            { name: "TALENTS", link: "#talents?from=kol", images: ["https://picsum.photos/seed/talent1/400/500", "https://picsum.photos/seed/talent2/400/500", "https://picsum.photos/seed/talent3/400/500", "https://picsum.photos/seed/talent4/400/500"] },
             { name: "LIVE", images: ["https://picsum.photos/seed/live1/800/600", "https://picsum.photos/seed/live2/800/600", "https://picsum.photos/seed/live3/800/600", "https://picsum.photos/seed/live4/800/600", "https://picsum.photos/seed/live5/800/600", "https://picsum.photos/seed/live6/800/600"] }
         ]
     },
@@ -223,8 +225,9 @@ if (document.readyState === 'loading') {
 // --- FUNCTIONS ---
 
 // Exposed Globals (for legacy safety, though delegation handles most)
-window.toggleMobileMenu = () => toggleMobileMenu();
-window.toggleChat = () => toggleChat();
+// Exposed Globals
+window.toggleMobileMenu = toggleMobileMenu;
+window.toggleChat = toggleChat;
 
 // --- SCROLL REVEAL ---
 function initScrollReveal() {
@@ -293,7 +296,7 @@ function populateData() {
     const ticker = document.getElementById('client-ticker');
     if (ticker) {
         const list = [...CLIENTS, ...CLIENTS];
-        ticker.innerHTML = list.map(c => `<span class="text-xl font-sans font-bold text-white/40 uppercase tracking-widest px-8">${c}</span>`).join('');
+        ticker.innerHTML = list.map(c => `<span class="text-xl font-sans font-bold text-white/40 uppercase tracking-widest px-8 hover:text-white transition-colors duration-300 cursor-default">${c}</span>`).join('');
     }
 
     const homeGrid = document.getElementById('home-services-grid');
@@ -416,7 +419,7 @@ function renderTalentDetail(id) {
     if (!a || !c) return;
     c.innerHTML = `
             <div class="container mx-auto px-6 py-20">
-                <a href="#talents" class="js-back-btn text-white/50 hover:text-white uppercase text-xs font-bold tracking-widest mb-10 block" data-route="talents">← Back to Talents</a>
+                <a href="#talents" class="text-white/50 hover:text-white uppercase text-xs font-bold tracking-widest mb-10 block">← Back to Talents</a>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
                     <div><img src="${a.image}" class="w-full h-auto" /></div>
                     <div>
@@ -452,7 +455,7 @@ function renderGalleryView(folderName) {
     // FIXED: VERTICAL STACK LAYOUT
     c.innerHTML = `
             <div class="container mx-auto px-6 py-20">
-                <a href="#" class="js-back-btn text-white/50 hover:text-white uppercase text-xs font-bold tracking-widest mb-10 block" onclick="history.back(); return false;">← Back</a>
+                <a href="#services" class="text-white/50 hover:text-white uppercase text-xs font-bold tracking-widest mb-10 block">← Back to Services</a>
                 <div class="text-center mb-20">
                     <h1 class="font-serif text-6xl md:text-8xl text-white mb-6">${folder.name}</h1>
                 </div>
@@ -526,7 +529,7 @@ function initParticles() {
             if (this.y < 0) this.y = canvas.height;
         }
         draw() {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
@@ -600,6 +603,18 @@ function initChatWidget() {
         const quick = document.getElementById('quick-replies');
         if (quick) {
             quick.innerHTML = ["What are your rates?", "Do you have influencers?", "How do livestreams work?", "Where is your studio?"].map(r => `<button class="quick-reply-btn whitespace-nowrap px-4 py-2 rounded-full border border-white/20 bg-white/5 text-xs text-white/70 hover:bg-white hover:text-black transition-all">${r}</button>`).join('');
+
+            // Add Event Delegation for Quick Replies
+            quick.addEventListener('click', (e) => {
+                const btn = e.target.closest('.quick-reply-btn');
+                if (btn) {
+                    const input = document.getElementById('chat-input');
+                    if (input) {
+                        input.value = btn.textContent;
+                        handleChatSend();
+                    }
+                }
+            });
         }
     }
 
@@ -611,17 +626,24 @@ function initChatWidget() {
     }
 }
 
-function toggleChat() {
+function toggleChat(e) {
+    if (e) e.stopPropagation(); // Prevent bubbling if called via inline onclick
     const win = document.getElementById('chat-window');
     const input = document.getElementById('chat-input');
+    const openIcon = document.getElementById('chat-icon-open');
+    const closeIcon = document.getElementById('chat-icon-close');
 
     if (!win) return;
 
     if (win.classList.contains('hidden')) {
         win.classList.remove('hidden');
         if (input) input.focus();
+        if (openIcon) openIcon.classList.add('hidden');
+        if (closeIcon) closeIcon.classList.remove('hidden');
     } else {
         win.classList.add('hidden');
+        if (openIcon) openIcon.classList.remove('hidden');
+        if (closeIcon) closeIcon.classList.add('hidden');
     }
 }
 

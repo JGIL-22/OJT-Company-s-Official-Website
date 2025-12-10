@@ -120,26 +120,23 @@
             class="absolute bottom-[-20%] left-[20%] w-[600px] h-[600px] bg-white/5 rounded-full mix-blend-screen filter blur-[120px] animate-blob animation-delay-4000 will-change-transform">
         </div>
         <!-- Noise -->
-        <div class="absolute inset-0 opacity-[0.05]"
-            style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
+        <div class="absolute inset-0 opacity-[0.05] bg-noise"></div>
     </div>
 
     <!-- Mouse Spotlight -->
-    <div id="mouse-spotlight" class="pointer-events-none fixed inset-0 z-0"
-        style="background: radial-gradient(600px circle at 50% 50%, rgba(255,255,255,0.06), transparent 80%);"></div>
+    <div id="mouse-spotlight" class="pointer-events-none fixed inset-0 z-0 bg-spotlight"></div>
 
     <!-- Particles -->
     <canvas id="particle-canvas" class="fixed inset-0 z-0 pointer-events-none"></canvas>
 
     <!-- Cinematic Texture Overlay -->
-    <div class="fixed inset-0 z-[1] pointer-events-none opacity-5"
-        style="background-image: url('https://grainy-gradients.vercel.app/noise.svg');"></div>
+    <div class="fixed inset-0 z-[1] pointer-events-none opacity-5 bg-noise"></div>
 
     <!-- ================= Navigation ================= -->
     <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500 py-12 bg-transparent">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <!-- Logo -->
-            <a href="#home" class="relative group cursor-pointer" data-route="home">
+            <a href="#home" class="relative group cursor-pointer -ml-[250px]" data-route="home">
                 <div class="flex flex-col items-center select-none">
                     <img src="assets/images/logo.png" alt="The Aura Creatives" class="h-40 object-contain" />
                 </div>
@@ -525,15 +522,14 @@
     </footer>
 
     <!-- ================= Chat Widget ================= -->
-    <div class="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-4 font-sans pointer-events-none">
+    <div class="fixed bottom-8 right-8 z-[9999] flex flex-col items-end gap-4 font-sans pointer-events-none">
 
         <!-- Chat Window -->
         <div id="chat-window"
             class="hidden pointer-events-auto w-[360px] h-[550px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden relative transition-all duration-300 origin-bottom-right">
 
             <!-- Background Noise -->
-            <div class="absolute inset-0 opacity-[0.03] pointer-events-none z-0"
-                style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
+            <div class="absolute inset-0 opacity-[0.03] pointer-events-none z-0 bg-noise"></div>
 
             <!-- Header -->
             <div class="relative z-10 flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
@@ -578,12 +574,9 @@
                     </div>
                     <div
                         class="bg-white/5 border border-white/10 p-4 rounded-2xl rounded-bl-none flex gap-1.5 w-16 items-center justify-center h-10">
-                        <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce"
-                            style="animation-delay: 0ms"></span>
-                        <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce"
-                            style="animation-delay: 150ms"></span>
-                        <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce"
-                            style="animation-delay: 300ms"></span>
+                        <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce delay-0"></span>
+                        <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce delay-150"></span>
+                        <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce delay-300"></span>
                     </div>
                 </div>
             </div>
@@ -617,8 +610,8 @@
                 <div class="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
             </div>
 
-            <button id="toggle-chat-btn" aria-label="Open chat assistant"
-                class="w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 bg-white text-black hover:scale-110">
+            <button id="toggle-chat-btn" aria-label="Open chat assistant" onclick="toggleChat(event)"
+                class="pointer-events-auto w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 bg-white text-black hover:scale-110">
                 <svg id="chat-icon-open" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="none"
                     class="block">
                     <path
@@ -636,8 +629,8 @@
     <!-- ================= Scripts ================= -->
     <!-- ================= Scripts ================= -->
     <!-- Firebase (Global/CDN or Compat if needed later) -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script> -->
-    <!-- <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
 
     <script src="assets/js/app.js" defer></script>
 </body>
