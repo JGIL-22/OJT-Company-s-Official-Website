@@ -161,6 +161,7 @@ const initApp = () => {
     populateData();
     initRouter();
     initLenis();
+    initPreloader();
     initScrollEffects();
     initChatWidget();
     initScrollReveal();
@@ -295,7 +296,7 @@ function populateData() {
     const homeGrid = document.getElementById('home-services-grid');
     if (homeGrid) {
         homeGrid.innerHTML = SERVICES.slice(0, 3).map(s => `
-                <a href="#services/${s.id}" data-page="service-detail" class="group bg-black p-12 hover:bg-neutral-900 transition-colors duration-500 block relative">
+                <a href="#services/${s.id}" data-page="service-detail" class="group bg-black p-12 border border-transparent hover:border-white/50 hover:bg-white/5 transition-colors duration-300 block relative">
                     <div class="w-12 h-12 border border-white/20 flex items-center justify-center mb-8 group-hover:border-white transition-colors text-white">${ICONS[s.icon] || ICONS.Radio}</div>
                     <h3 class="text-2xl font-serif mb-4 text-white">${s.title}</h3>
                     <p class="text-white/50 mb-8 font-light">${s.description}</p>
@@ -326,9 +327,17 @@ function renderServicesPage() {
     const list = document.getElementById('services-list');
     if (!list) return;
     list.innerHTML = SERVICES.map(s => `
-            <a href="#services/${s.id}" data-page="service-detail" class="block p-10 bg-black hover:bg-neutral-900 border-b border-white/10">
-                <h3 class="text-3xl font-serif mb-4 text-white">${s.title}</h3>
-                <p class="text-white/60">${s.description}</p>
+            <a href="#services/${s.id}" data-page="service-detail" class="group relative flex items-center gap-8 p-8 border border-white/10 bg-transparent transition-all duration-500 hover:border-white/40 hover:bg-white/[0.03] rounded-xl overflow-hidden">
+                <div class="w-16 h-16 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-white/50 transition-all duration-500 group-hover:bg-white group-hover:text-black group-hover:scale-110">
+                    ${ICONS[s.icon] || ICONS.Radio}
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-3xl font-serif text-white mb-2 group-hover:translate-x-2 transition-transform duration-500">${s.title}</h3>
+                    <p class="text-white/60 font-light">${s.description}</p>
+                </div>
+                <div class="opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500 text-white">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </div>
             </a>
         `).join('');
 }
@@ -396,8 +405,8 @@ function renderTalentsGrid() {
     if (!grid) return;
     const filtered = currentFilter === 'All' ? ARTISTS : ARTISTS.filter(a => a.categories.includes(currentFilter));
     grid.innerHTML = filtered.map(a => `
-            <a href="#talents/${a.id}" data-page="talent-detail" class="group block border border-white/10 bg-neutral-900">
-                <div class="aspect-[3/4] overflow-hidden"><img src="${a.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" /></div>
+            <a href="#talents/${a.id}" data-page="talent-detail" class="group block border border-white/10 bg-neutral-900 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.1)]">
+                <div class="aspect-[3/4] overflow-hidden"><img src="${a.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 ease-out group-hover:scale-105" /></div>
                 <div class="p-6">
                     <h3 class="font-serif text-2xl text-white mb-2">${a.name}</h3>
                     <p class="text-xs font-bold uppercase tracking-widest text-white/40">${a.role}</p>
@@ -412,8 +421,8 @@ function renderTalentDetail(id) {
     if (!a || !c) return;
     c.innerHTML = `
             <div class="container mx-auto px-6 py-20">
-                <a href="#talents" class="js-back-btn inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors mb-10 z-50 relative">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                <a href="#talents" class="js-back-btn inline-flex items-center gap-3 text-xs md:text-sm font-bold tracking-widest uppercase text-white/60 hover:text-white transition-all duration-300 mb-10 px-4 py-3 md:px-6 md:py-4 hover:bg-white/10 rounded-full w-fit">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                     BACK TO TALENTS
                 </a>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -451,7 +460,10 @@ function renderGalleryView(folderName) {
     // FIXED: VERTICAL STACK LAYOUT
     c.innerHTML = `
             <div class="container mx-auto px-6 py-20">
-                <a href="#services" class="text-white/50 hover:text-white uppercase text-xs font-bold tracking-widest mb-10 block">← Back to Services</a>
+                <a href="#services" class="inline-flex items-center gap-3 text-xs md:text-sm font-bold tracking-widest uppercase text-white/60 hover:text-white transition-all duration-300 mb-10 px-4 py-3 md:px-6 md:py-4 hover:bg-white/10 rounded-full w-fit">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    BACK TO SERVICES
+                </a>
                 <div class="text-center mb-20">
                     <h1 class="font-serif text-6xl md:text-8xl text-white mb-6">${folder.name}</h1>
                 </div>
@@ -482,13 +494,79 @@ function renderCaseStudies() {
         `).join('');
 }
 
+// --- PRELOADER ---
+function initPreloader() {
+    console.log("Initializing Cinematic Preloader (Epic Mode)...");
+
+    const top = document.getElementById('curtain-top');
+    const bottom = document.getElementById('curtain-bottom');
+    const text = document.getElementById('preloader-text');
+
+    if (!top || !bottom || !text) {
+        console.warn("Preloader elements not found.");
+        return;
+    }
+
+    // 1. Initial State (Ensure Reset)
+    top.style.transform = 'translateY(0)';
+    bottom.style.transform = 'translateY(0)';
+    text.style.opacity = '0';
+    document.body.style.overflow = 'hidden';
+
+    // 2. Timeline
+    // 0.5s: Fade In Text
+    setTimeout(() => {
+        text.style.transition = 'opacity 2s ease-in-out';
+        text.style.opacity = '1';
+    }, 500);
+
+    // 3.0s: Trigger Split & Reveal
+    setTimeout(() => {
+        // Defined "Epic" Easing & Duration
+        const transition = 'transform 3s cubic-bezier(0.22, 1, 0.36, 1)';
+
+        // Curtains
+        top.style.transition = transition;
+        bottom.style.transition = transition;
+
+        top.style.transform = 'translateY(-100%)';
+        bottom.style.transform = 'translateY(100%)';
+
+        // Fade Out Text (Faster than curtains to reveal Hero underneath)
+        text.style.transition = 'opacity 1s ease-out';
+        text.style.opacity = '0';
+
+        // Unlock Scroll
+        setTimeout(() => {
+            document.body.style.overflow = '';
+            // Optimization: Remove from DOM or Hide
+            text.style.display = 'none';
+        }, 3000);
+
+    }, 3000);
+}
+
 // --- EFFECTS ---
 function initScrollEffects() {
     const navbar = document.getElementById('navbar');
+    const logo = document.getElementById('main-logo');
+
     window.addEventListener('scroll', () => {
         if (!navbar) return;
-        if (window.scrollY > 50) navbar.classList.add('bg-black/90', 'backdrop-blur-md');
-        else navbar.classList.remove('bg-black/90', 'backdrop-blur-md');
+
+        if (window.scrollY > 50) {
+            navbar.classList.add('bg-black/90', 'backdrop-blur-md');
+            if (logo) {
+                logo.classList.remove('h-20', 'md:h-40');
+                logo.classList.add('h-16');
+            }
+        } else {
+            navbar.classList.remove('bg-black/90', 'backdrop-blur-md');
+            if (logo) {
+                logo.classList.remove('h-16');
+                logo.classList.add('h-20', 'md:h-40');
+            }
+        }
     });
 }
 

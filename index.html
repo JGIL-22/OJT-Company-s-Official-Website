@@ -107,6 +107,27 @@
 
 <body class="selection:bg-white selection:text-black overflow-x-hidden">
 
+    <!-- Cinematic Preloader -->
+    <!-- Text Layer (Highest Z-Index) -->
+    <div id="preloader-text"
+        class="fixed inset-0 z-[10000] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-1000">
+        <div class="text-center">
+            <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter leading-[0.85]">
+                THE HOME OF <br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50">BOLD
+                    IDEAS</span>
+            </h1>
+        </div>
+    </div>
+
+    <!-- Curtains -->
+    <div id="curtain-top"
+        class="fixed top-0 left-0 w-full h-[50vh] bg-black z-[9999] transition-transform will-change-transform origin-top">
+    </div>
+    <div id="curtain-bottom"
+        class="fixed bottom-0 left-0 w-full h-[50vh] bg-black z-[9999] transition-transform will-change-transform origin-bottom">
+    </div>
+
     <!-- ================= Background Elements ================= -->
     <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div class="absolute inset-0 bg-black"></div>
@@ -135,41 +156,46 @@
 
     <!-- ================= Navigation ================= -->
     <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500 py-12 bg-transparent">
-        <div class="container mx-auto px-6 flex justify-between items-center">
-            <!-- Logo -->
-            <a href="#home" class="relative group cursor-pointer -ml-[250px]" data-route="home">
-                <div class="flex flex-col items-center select-none">
-                    <img src="assets/images/logo.png" alt="The Aura Creatives" class="h-40 object-contain" />
-                </div>
-            </a>
+        <div class="container mx-auto px-6 grid grid-cols-3 items-center">
+            <!-- Col 1: Logo -->
+            <div class="flex justify-start">
+                <a href="#home" class="relative group cursor-pointer" data-route="home">
+                    <div class="flex flex-col items-center select-none">
+                        <img id="main-logo" src="assets/images/logo.png" alt="The Aura Creatives"
+                            class="h-20 md:h-40 object-contain transition-all duration-500 ease-in-out" />
+                    </div>
+                </a>
+            </div>
 
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center gap-10">
+            <!-- Col 2: Desktop Menu -->
+            <div class="hidden md:flex justify-center items-center gap-12">
                 <a href="#home"
-                    class="nav-link text-sm font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider"
+                    class="nav-link text-base font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider hover:-translate-y-0.5"
                     data-page="home">Home</a>
                 <a href="#services"
-                    class="nav-link text-sm font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider"
+                    class="nav-link text-base font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider hover:-translate-y-0.5"
                     data-page="services">Services</a>
                 <a href="#talents"
-                    class="nav-link text-sm font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider"
+                    class="nav-link text-base font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider hover:-translate-y-0.5"
                     data-page="talents">Talents</a>
                 <a href="#case-studies"
-                    class="nav-link text-sm font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider"
+                    class="nav-link text-base font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider hover:-translate-y-0.5"
                     data-page="case-studies">Case Studies</a>
             </div>
 
-            <!-- Call to Action -->
-            <div class="hidden md:block">
-                <a href="#contact"
-                    class="reveal px-8 py-3 bg-white text-black text-xs font-bold tracking-widest uppercase hover:bg-zinc-400 transition-colors duration-300">Let's
-                    Talk</a>
-            </div>
+            <!-- Col 3: Call to Action & Mobile Toggle -->
+            <div class="flex justify-end items-center gap-4">
+                <div class="hidden md:block">
+                    <a href="#contact"
+                        class="reveal px-8 py-3 bg-white text-black text-xs font-bold tracking-widest uppercase hover:bg-zinc-400 active:scale-95 transition-all duration-100 ease-in-out">Let's
+                        Talk</a>
+                </div>
 
-            <!-- Mobile Toggle -->
-            <button id="mobile-menu-btn" class="md:hidden text-white z-50 relative" aria-label="Toggle mobile menu">
-                <!-- Icon injected by JS -->
-            </button>
+                <!-- Mobile Toggle -->
+                <button id="mobile-menu-btn" class="md:hidden text-white z-50 relative" aria-label="Toggle mobile menu">
+                    <!-- Icon injected by JS -->
+                </button>
+            </div>
         </div>
 
         <!-- Mobile Menu Overlay -->
@@ -216,7 +242,7 @@
                     </p>
                     <div class="reveal flex flex-col md:flex-row gap-6 justify-center">
                         <a href="#talents"
-                            class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 flex items-center justify-center gap-3">
+                            class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 active:scale-95 duration-100 flex items-center justify-center gap-3">
                             <span class="relative z-10 flex items-center gap-3">View Talents <svg width="16" height="16"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round"
@@ -324,16 +350,18 @@
         <!-- SERVICES PAGE -->
         <div id="view-services" class="page-view">
             <div class="min-h-screen pb-20">
-                <div class="container mx-auto px-6">
-                    <div class="mb-16">
+                <div class="container mx-auto px-6 pt-48">
+                    <div class="mb-16 text-center mx-auto max-w-3xl">
                         <span
                             class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">What
                             We Offer</span>
                         <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Digital Solutions</h2>
-                        <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
+                        <div
+                            class="h-[1px] w-24 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-8">
+                        </div>
                     </div>
 
-                    <div id="services-list" class="grid grid-cols-1 gap-px bg-white/10 border border-white/10">
+                    <div id="services-list" class="max-w-5xl mx-auto flex flex-col gap-6">
                         <!-- Injected via JS -->
                     </div>
                 </div>
@@ -348,7 +376,7 @@
         <!-- TALENTS PAGE -->
         <div id="view-talents" class="page-view">
             <div class="min-h-screen pb-20">
-                <div class="container mx-auto px-6">
+                <div class="container mx-auto px-6 pt-32">
                     <div
                         class="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-white/10 pb-10">
                         <div>
@@ -455,7 +483,7 @@
                                         placeholder="Tell us about your project..."></textarea>
                                 </div>
                                 <button type="submit"
-                                    class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 w-full justify-center">
+                                    class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 active:scale-95 duration-100 w-full justify-center">
                                     <span class="relative z-10 flex items-center gap-3 justify-center">Send Inquiry <svg
                                             width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
