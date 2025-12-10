@@ -193,23 +193,16 @@ const initApp = () => {
         // 5. Handle 'Back' Buttons & Global Router (Standardized)
         if (e.target.closest('.js-back-btn') || e.target.closest('[data-route]')) {
             const el = e.target.closest('.js-back-btn') || e.target.closest('[data-route]');
+
+            // Logic Rule: If it's an anchor with a hash ref, let the browser handle it.
+            if (el.tagName === 'A' && el.getAttribute('href')?.startsWith('#')) {
+                return; // Do nothing, allow default behavior
+            }
+
             e.preventDefault();
-
-            // If it's a back button (js-back-btn) we can trust it to have a standard behavior or explicit href
-            // But user requested "global router" logic here
-            // If it has data-route, use that. If not, default to home or do history.back()?
-            // User snippet: "const route = e.target.closest('[data-route]')?.dataset.route || 'home';"
-            // This implies js-back-btn should probably have data-route="talents" or similar.
-            // If the element is an anchor with href="#...", strict routing handles it automatically via hashchange.
-            // But let's support data-route overrides.
-
             const route = el.dataset.route;
             if (route) {
                 window.location.hash = route;
-            } else if (el.classList.contains('js-back-btn') && el.tagName === 'A') {
-                // Fallback to href if it's an anchor
-                const href = el.getAttribute('href');
-                if (href) window.location.hash = href;
             }
         }
     });
@@ -419,7 +412,10 @@ function renderTalentDetail(id) {
     if (!a || !c) return;
     c.innerHTML = `
             <div class="container mx-auto px-6 py-20">
-                <a href="#talents" class="text-white/50 hover:text-white uppercase text-xs font-bold tracking-widest mb-10 block">← Back to Talents</a>
+                <a href="#talents" class="js-back-btn inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white/60 hover:text-white transition-colors mb-10 z-50 relative">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    BACK TO TALENTS
+                </a>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
                     <div><img src="${a.image}" class="w-full h-auto" /></div>
                     <div>
