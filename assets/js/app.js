@@ -165,7 +165,9 @@ const initApp = () => {
     initScrollEffects();
     initChatWidget();
     initScrollReveal();
+
     initParticles();
+    initCustomCursor();
 
     // --- GLOBAL EVENT DELEGATION FOR NAVIGATION ---
     document.addEventListener('click', function (e) {
@@ -316,9 +318,11 @@ function toggleMobileMenu() {
     if (isOpen) {
         menu.classList.add('translate-x-full'); menu.classList.remove('translate-x-0');
         btn.innerHTML = ICONS.Menu;
+        document.body.classList.remove('overflow-hidden');
     } else {
         menu.classList.remove('translate-x-full'); menu.classList.add('translate-x-0');
         btn.innerHTML = ICONS.X;
+        document.body.classList.add('overflow-hidden');
     }
 }
 
@@ -750,4 +754,47 @@ function handleChatSend() {
         msgs.appendChild(bDiv);
         msgs.scrollTop = msgs.scrollHeight;
     }, 1000);
+}
+
+// --- CUSTOM CURSOR ---
+function initCustomCursor() {
+    const cursor = document.getElementById('custom-cursor');
+    if (!cursor) return;
+
+    // Logic: Smooth Follow
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        // Ensure cursor is visible when moving
+        if (cursor.style.opacity === '0') cursor.style.opacity = '1';
+    });
+
+    function animateCursor() {
+        const speed = 0.15; // Smoothness factor
+        cursorX += (mouseX - cursorX) * speed;
+        cursorY += (mouseY - cursorY) * speed;
+
+        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // Logic: Hover Effects (Global Delegation)
+    document.addEventListener('mouseover', (e) => {
+        const target = e.target;
+        if (target.matches('a, button, .hover-trigger') || target.closest('a, button, .hover-trigger')) {
+            cursor.classList.add('hovered');
+        } else {
+            cursor.classList.remove('hovered');
+        }
+    });
+
+    // Hide real cursor again properly in case CSS didn't catch it
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        document.body.style.cursor = 'none';
+    }
 }

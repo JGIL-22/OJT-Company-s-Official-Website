@@ -156,7 +156,7 @@
     <div class="fixed inset-0 z-[1] pointer-events-none opacity-5 bg-noise"></div>
 
     <!-- ================= Navigation ================= -->
-    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500 py-12 bg-transparent">
+    <nav id="navbar" class="fixed top-0 w-full z-[1000] transition-all duration-500 py-12 bg-transparent">
         <div class="container mx-auto px-6 grid grid-cols-3 items-center">
             <!-- Col 1: Logo -->
             <div class="flex justify-start">
@@ -201,18 +201,18 @@
 
         <!-- Mobile Menu Overlay -->
         <div id="mobile-menu"
-            class="fixed inset-0 bg-black/95 backdrop-blur-xl z-40 transition-transform duration-500 ease-in-out translate-x-full md:hidden flex flex-col justify-center items-center gap-8">
+            class="fixed inset-0 w-full h-[100dvh] bg-black z-[999] flex flex-col justify-center items-center gap-8 transition-transform duration-300 ease-in-out translate-x-full md:hidden">
             <a href="#home"
-                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Home</a>
+                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Home</a>
             <a href="#services"
-                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Services</a>
+                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Services</a>
             <a href="#talents"
-                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Talents</a>
+                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Talents</a>
             <a href="#case-studies"
-                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Case
+                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Case
                 Studies</a>
             <a href="#contact"
-                class="mobile-link font-serif text-3xl italic text-white hover:text-zinc-400 transition-colors">Let's
+                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Let's
                 Talk</a>
         </div>
     </nav>
@@ -661,6 +661,9 @@
     <!-- Firebase (Global/CDN or Compat if needed later) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
 
     <script src="assets/js/app.js" defer></script>
 </body>
