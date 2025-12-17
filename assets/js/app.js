@@ -489,11 +489,37 @@ function renderGalleryView(folderName) {
 
 function renderCaseStudies() {
     const l = document.getElementById('case-studies-list');
-    if (l) l.innerHTML = CASE_STUDIES.map(s => `
-            <div class="border border-white/10 p-10">
-                <h3 class="font-serif text-4xl mb-4">${s.title}</h3>
-                <p class="text-white/60 mb-8">${s.description}</p>
-                <div class="grid grid-cols-4 gap-4">${s.metrics.map(m => `<div><div class="text-2xl font-serif">${m.value}</div><div class="text-[10px] uppercase text-white/40">${m.label}</div></div>`).join('')}</div>
+    if (!l) return;
+
+    // Apply Horizontal Scroll Container Classes
+    l.className = "flex overflow-x-auto snap-x snap-mandatory gap-8 pb-10 hide-scrollbar w-full"; // Added w-full safety
+
+    l.innerHTML = CASE_STUDIES.map((s, index) => `
+            <div class="min-w-[85vw] md:min-w-[70vw] snap-center shrink-0">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+                    <!-- Image Side -->
+                    <div class="h-[500px] w-full overflow-hidden rounded-2xl relative group">
+                        <img src="${s.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                    </div>
+
+                    <!-- Content Side -->
+                    <div class="bg-white/5 backdrop-blur-md p-10 rounded-2xl border border-white/10 flex flex-col justify-center h-[500px]"> <!-- Matched height -->
+                        <span class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">${s.date || '2025'}</span>
+                        <h3 class="font-serif text-4xl md:text-6xl text-white mb-8 leading-tight">${s.title}</h3>
+                        <p class="text-white/60 text-lg font-light mb-12 max-w-xl">${s.description}</p>
+                        
+                        <!-- Metrics Grid -->
+                        <div class="grid grid-cols-2 gap-y-8 gap-x-4">
+                            ${s.metrics.map(m => `
+                                <div>
+                                    <div class="text-3xl md:text-4xl font-bold text-white mb-2" style="text-shadow: 0 0 20px rgba(255,255,255,0.3);">${m.value}</div>
+                                    <div class="text-[10px] uppercase tracking-widest text-white/50">${m.label}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
             </div>
         `).join('');
 }

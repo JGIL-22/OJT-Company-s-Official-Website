@@ -23,7 +23,7 @@
             "webRoot": "${workspaceFolder}"
         },
         {
-            "type": "pwa-chrome",
+            "type": "chrome",
             "request": "launch",
             "name": "Open index.html",
             "file": "${workspaceFolder}/index.html"
