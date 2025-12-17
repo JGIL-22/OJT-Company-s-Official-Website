@@ -400,8 +400,41 @@ function renderTalentsPage() {
 }
 
 function filterTalents(cat) {
-    currentFilter = cat;
-    renderTalentsPage();
+    if (currentFilter === cat) return; // Optimization: Avoid re-render if same category
+
+    const grid = document.getElementById('talents-grid');
+    if (!grid) {
+        currentFilter = cat;
+        renderTalentsPage();
+        return;
+    }
+
+    // 1. Fade Out
+    grid.style.transition = 'all 300ms ease-in-out';
+    grid.classList.add('opacity-0', 'translate-y-4');
+
+    // 2. Wait, Update, Fade In
+    setTimeout(() => {
+        currentFilter = cat;
+        renderTalentsPage(); // Re-renders grid and buttons
+
+        // Re-select grid in case it was blown away (though renderTalentsPage re-uses the container usually)
+        // Actually renderTalentsPage calls renderTalentsGrid which updates innerHTML, preserving the container.
+        // But renderTalentsPage ALSO updates the filter buttons.
+
+        // We need to re-select because reference might be lost if container was replaced? 
+        // renderTalentsPage updates 'talent-filters' and calls renderTalentsGrid. 
+        // 'talents-grid' is usually static in HTML, but let's be safe.
+        const newGrid = document.getElementById('talents-grid');
+        if (newGrid) {
+            // Force browser to accept the 'opacity-0' state before removing it for transition to work
+            // (Standard reflow trigger)
+            void newGrid.offsetWidth;
+
+            newGrid.style.transition = 'all 300ms ease-in-out';
+            newGrid.classList.remove('opacity-0', 'translate-y-4');
+        }
+    }, 300);
 }
 
 function renderTalentsGrid() {
@@ -491,11 +524,11 @@ function renderCaseStudies() {
     const l = document.getElementById('case-studies-list');
     if (!l) return;
 
-    // Apply Horizontal Scroll Container Classes
-    l.className = "flex overflow-x-auto snap-x snap-mandatory gap-8 pb-10 hide-scrollbar w-full"; // Added w-full safety
+    // Apply Vertical Stack Container Classes (Fit to Screen)
+    l.className = "flex flex-col gap-20 max-w-5xl mx-auto w-full";
 
     l.innerHTML = CASE_STUDIES.map((s, index) => `
-            <div class="min-w-[85vw] md:min-w-[70vw] snap-center shrink-0">
+            <div class="w-full">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
                     <!-- Image Side -->
                     <div class="h-[500px] w-full overflow-hidden rounded-2xl relative group">
