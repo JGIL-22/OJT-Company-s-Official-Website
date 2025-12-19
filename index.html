@@ -103,6 +103,29 @@
             transform: translateY(0);
         }
     </style>
+
+    <!-- Emergency Rescue Script (QA-PROVED) -->
+    <script>
+            (function () {
+                window.rescueActive = true;
+                setTimeout(function () {
+                    if (!window.appReady) {
+                        console.warn("Rescue: Site taking too long to load. Forcing visibility.");
+                        var top = document.getElementById('curtain-top');
+                        var bottom = document.getElementById('curtain-bottom');
+                        var text = document.getElementById('preloader-text');
+                        if (top) top.style.transform = 'translateY(-100%)';
+                        if (bottom) bottom.style.transform = 'translateY(100%)';
+                        if (text) text.style.opacity = '0';
+                        document.body.style.overflow = 'auto';
+                    }
+                }, 3000); // 3 second safety window
+            })();
+    </script>
+
+    <!-- Three.js Global Scripts (Non-Module for Local Compatibility) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body class="selection:bg-white selection:text-black overflow-x-hidden">
@@ -229,10 +252,11 @@
         <!-- HOME PAGE -->
         <div id="view-home" class="page-view active">
             <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+                <!-- 3D Background (Sanity Check Stage) -->
+                <!-- 3D Background (Diagnostic Mode) -->
+                <div id="hero-3d-stage" class="absolute inset-0 z-0 w-full h-full pointer-events-none"></div>
 
-
-
-                <div class="container mx-auto px-6 text-center z-10 pt-10 animate-fade-in-up">
+                <div class="container mx-auto px-6 text-center relative z-10 pt-10 animate-fade-in-up">
                     <span
                         class="inline-block px-4 py-1 border border-white/20 text-white/80 text-xs font-bold tracking-[0.3em] mb-10 backdrop-blur-sm uppercase">Est.
                         April 2025</span>
@@ -661,7 +685,8 @@
     <!-- Custom Cursor -->
     <div id="custom-cursor"></div>
 
-    <script src="assets/js/app.js" defer></script>
+    <!-- Main App Script (Reverted to standard for local compatibility) -->
+    <script src="assets/js/app.js"></script>
 </body>
 
 </html>

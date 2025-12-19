@@ -1,8 +1,22 @@
 // "use strict";
+
+// --- GLOBAL SAFETY NET (QA FIX) ---
+window.onerror = function (message, source, lineno, colno, error) {
+    console.error('CRITICAL ERROR:', message);
+    // Emergency: Force remove preloader so user isn't stuck
+    const preloader = document.getElementById('preloader-text');
+    const top = document.getElementById('curtain-top');
+    const bottom = document.getElementById('curtain-bottom');
+    if (preloader) preloader.style.display = 'none';
+    if (top) top.style.transform = 'translateY(-100%)';
+    if (bottom) bottom.style.transform = 'translateY(100%)';
+    document.body.style.overflow = 'auto'; // Release scroll lock
+};
+
 // Firebase imports removed for local file:// compatibility
 // import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-// console.log("SCRIPT EXECUTED - Non-module mode");
+// console.log("SCRIPT EXECUTED - Module mode");
 
 // ==========================================
 // PART 0: FIREBASE CONFIGURATION (SAFE INIT)
@@ -157,6 +171,30 @@ const CLIENTS = ["Oppo", "Infinix", "BELO", "Honor", "BingoPlus", "Canon", "Anke
 let currentFilter = 'All';
 
 const initApp = () => {
+    // Emergency Failsafe: Force curtains open after 6 seconds if they haven't opened yet
+    setTimeout(() => {
+        const top = document.getElementById('curtain-top');
+        const preloaderText = document.getElementById('preloader-text');
+
+        if (top && top.style.transform !== 'translateY(-100%)') {
+            console.warn("Preloader stuck! Forcing open.");
+            // Manually trigger the fade out/slide logic here to rescue the user
+            if (preloaderText) preloaderText.style.opacity = '0';
+            if (preloaderText) preloaderText.style.display = 'none'; // Ensure it's gone
+
+            top.style.transition = 'transform 1s ease-in-out'; // Fast transition for rescue
+            top.style.transform = 'translateY(-100%)';
+
+            const bottom = document.getElementById('curtain-bottom');
+            if (bottom) {
+                bottom.style.transition = 'transform 1s ease-in-out';
+                bottom.style.transform = 'translateY(100%)';
+            }
+
+            document.body.style.overflow = ''; // Release scroll lock
+        }
+    }, 6000);
+
     console.log("Initializing App State...");
     populateData();
     initRouter();
@@ -165,11 +203,16 @@ const initApp = () => {
     initScrollEffects();
     initChatWidget();
     initScrollReveal();
+    try {
+        init3DBackground(); // 3D Background (Sanity Check)
+    } catch (e) {
+        console.error("3D Failed to load, skipping:", e);
+    }
 
     initParticles();
     initCustomCursor();
 
-    // Fix: Programmatically add playsinline to satisfy HTML linter while supporting iOS
+    window.appReady = true; // Signal rescue script that app is loaded
     document.querySelectorAll('video').forEach(v => {
         v.setAttribute('playsinline', '');
         v.setAttribute('webkit-playsinline', '');
@@ -230,6 +273,106 @@ if (document.readyState === 'loading') {
 // Exposed Globals
 window.toggleMobileMenu = toggleMobileMenu;
 window.toggleChat = toggleChat;
+
+// --- 3D BACKGROUND ---
+function init3DBackground() {
+    const container = document.getElementById('hero-3d-stage');
+
+    // Step 1: Create Status Text Overlay (via JS)
+    const debugOverlay = document.createElement('div');
+    debugOverlay.id = 'debug-overlay';
+    debugOverlay.style.position = 'fixed';
+    debugOverlay.style.top = '10px';
+    debugOverlay.style.left = '10px';
+    debugOverlay.style.zIndex = '99999';
+    debugOverlay.style.padding = '10px';
+    debugOverlay.style.backgroundColor = 'red';
+    debugOverlay.style.color = 'white';
+    debugOverlay.style.fontFamily = 'monospace';
+    debugOverlay.style.fontWeight = 'bold';
+    debugOverlay.textContent = 'Status: Initializing 3D...';
+    document.body.appendChild(debugOverlay);
+
+    if (!container) {
+        debugOverlay.style.backgroundColor = 'blue';
+        debugOverlay.textContent = 'Error: #hero-3d-stage container not found!';
+        return;
+    }
+
+    // Scene setup
+    const scene = new THREE.Scene();
+
+    // Step 4: Camera Check
+    // Move the camera further back: camera.position.z = 10.
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 10;
+    camera.lookAt(0, 0, 0);
+
+    // Renderer setup
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+
+    // No lighting required for Basic Material
+
+    // Load Model
+    const loader = new THREE.GLTFLoader();
+
+    console.log('Loading 3D Model: assets/models/logo_3d.glb ...');
+
+    loader.load('assets/models/logo_3d.glb', function (gltf) {
+        const model = gltf.scene;
+
+        let objectCount = 0;
+
+        // Step 2: The 'Brute Force' Loader
+        // Use a Basic Material: Green Wireframe
+        model.traverse((child) => {
+            objectCount++;
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+            }
+        });
+
+        // Hardcoded Scale: 50
+        model.scale.set(50, 50, 50);
+
+        // Reset Position
+        model.position.set(0, 0, 0);
+
+        scene.add(model);
+        console.log("3D Model Debug Loaded Successfully");
+
+        // Step 3: Logging to Screen - Success
+        debugOverlay.style.backgroundColor = 'green';
+        debugOverlay.textContent = `Success! Model Loaded. Objects found: ${objectCount}`;
+
+    }, undefined, function (error) {
+        console.error('An error happened loading 3D model:', error);
+
+        // Step 3: Logging to Screen - Error
+        debugOverlay.style.backgroundColor = 'blue';
+        debugOverlay.textContent = `Error: ${error.message || JSON.stringify(error)}`;
+    });
+
+    // Animation Loop
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Handle Resize
+    window.addEventListener('resize', () => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+    });
+}
+
 
 // --- SCROLL REVEAL ---
 function initScrollReveal() {
@@ -596,11 +739,11 @@ function initPreloader() {
         preloaderText.style.opacity = '1';
     }, 100);
 
-    // 3.0s: Fade Out Preloader Text (Fade to Black)
+    // 2.5s: Fade Out Preloader Text (Fade to Black)
     setTimeout(() => {
         preloaderText.style.transition = 'opacity 0.8s ease-out';
         preloaderText.style.opacity = '0';
-    }, 3000);
+    }, 2500);
 
     // 3.5s: Open Curtains & Reveal Hero
     setTimeout(() => {
@@ -864,3 +1007,5 @@ function initCustomCursor() {
         document.body.style.cursor = 'none';
     }
 }
+
+// 3D V2 removed (Replaced by Sanity Check version)
