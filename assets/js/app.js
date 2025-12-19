@@ -169,6 +169,12 @@ const initApp = () => {
     initParticles();
     initCustomCursor();
 
+    // Fix: Programmatically add playsinline to satisfy HTML linter while supporting iOS
+    document.querySelectorAll('video').forEach(v => {
+        v.setAttribute('playsinline', '');
+        v.setAttribute('webkit-playsinline', '');
+    });
+
     // --- GLOBAL EVENT DELEGATION FOR NAVIGATION ---
     document.addEventListener('click', function (e) {
         // 1. Mobile Menu Toggle
@@ -584,13 +590,19 @@ function initPreloader() {
     document.body.style.overflow = 'hidden';
 
     // 2. Timeline
-    // 0.5s: Fade In Preloader Text
+    // 0.1s: Fade In Preloader Text
     setTimeout(() => {
         preloaderText.style.transition = 'opacity 2s ease-in-out';
         preloaderText.style.opacity = '1';
-    }, 500);
+    }, 100);
 
-    // 3.0s: Trigger The Swap
+    // 3.0s: Fade Out Preloader Text (Fade to Black)
+    setTimeout(() => {
+        preloaderText.style.transition = 'opacity 0.8s ease-out';
+        preloaderText.style.opacity = '0';
+    }, 3000);
+
+    // 3.5s: Open Curtains & Reveal Hero
     setTimeout(() => {
         // Curtains Open (4.5s Slow-Mo)
         const curtainTransition = 'transform 4.5s cubic-bezier(0.22, 1, 0.36, 1)';
@@ -599,12 +611,7 @@ function initPreloader() {
         top.style.transform = 'translateY(-100%)';
         bottom.style.transform = 'translateY(100%)';
 
-        // THE SWAP: Cross-Fade
-        // Fade OUT Preloader Text
-        preloaderText.style.transition = 'opacity 1s ease-in-out';
-        preloaderText.style.opacity = '0';
-
-        // Fade IN Hero H1
+        // Fade IN Hero H1 (Waiting behind curtains)
         if (heroH1) {
             heroH1.style.opacity = '1';
         }
