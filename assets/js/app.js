@@ -37,7 +37,6 @@ try {
     if (typeof firebase !== 'undefined') {
         app = firebase.initializeApp(firebaseConfig);
         analytics = firebase.analytics();
-        console.log("Firebase initialized successfully.");
     } else {
         console.warn("Firebase SDK not loaded (offline or blocked). App continuing without it.");
     }
@@ -163,12 +162,29 @@ const CASE_STUDIES = [
 
 const CLIENTS = ["Oppo", "Infinix", "BELO", "Honor", "BingoPlus", "Canon", "Anker", "Insta360"];
 
+const CHAT_QUICK_REPLIES = [
+    "What are your rates?",
+    "Do you have influencers?",
+    "How do livestreams work?",
+    "Where is your studio?",
+    "Can I join your team?",
+    "Do you handle branding?",
+    "What are your office hours?",
+    "Do you offer video editing?",
+    "How to book a talent?",
+    "What services do you provide?",
+    "Do you work internationally?",
+    "Can I see your portfolio?"
+];
+
 // ==========================================
 // PART 2: APP LOGIC & GLOBAL DELEGATION
 // ==========================================
 
 // App State
 let currentFilter = 'All';
+let activeChatReplies = [];
+let chatReplyPool = [];
 
 const initApp = () => {
     // Emergency Failsafe: Force curtains open after 6 seconds if they haven't opened yet
@@ -177,7 +193,7 @@ const initApp = () => {
         const preloaderText = document.getElementById('preloader-text');
 
         if (top && top.style.transform !== 'translateY(-100%)') {
-            console.warn("Preloader stuck! Forcing open.");
+
             // Manually trigger the fade out/slide logic here to rescue the user
             if (preloaderText) preloaderText.style.opacity = '0';
             if (preloaderText) preloaderText.style.display = 'none'; // Ensure it's gone
@@ -195,7 +211,6 @@ const initApp = () => {
         }
     }, 6000);
 
-    console.log("Initializing App State...");
     populateData();
     initRouter();
     initLenis();
@@ -203,20 +218,21 @@ const initApp = () => {
     initScrollEffects();
     initChatWidget();
     initScrollReveal();
-    try {
-        init3DBackground(); // 3D Background (Sanity Check)
-    } catch (e) {
-        console.error("3D Failed to load, skipping:", e);
-    }
-
-    initParticles();
-    initCustomCursor();
+    initParticles(); // Original Simple Particles
+    initCustomCursor(); // Custom Cursor Enabled
+    initMagneticButtons(); // Physics Effect for Buttons
+    initParallax(); // Parallax Images
+    initKineticText(); // Kinetic Typography Background
+    init3DTilt(); // Premium 3D Tilt Effect
+    initThemeToggle(); // Day/Night Theme Switch
 
     window.appReady = true; // Signal rescue script that app is loaded
     document.querySelectorAll('video').forEach(v => {
         v.setAttribute('playsinline', '');
         v.setAttribute('webkit-playsinline', '');
     });
+
+
 
     // --- GLOBAL EVENT DELEGATION FOR NAVIGATION ---
     document.addEventListener('click', function (e) {
@@ -274,105 +290,8 @@ if (document.readyState === 'loading') {
 window.toggleMobileMenu = toggleMobileMenu;
 window.toggleChat = toggleChat;
 
-// --- 3D BACKGROUND ---
-function init3DBackground() {
-    const container = document.getElementById('hero-3d-stage');
 
-    // Step 1: Create Status Text Overlay (via JS)
-    const debugOverlay = document.createElement('div');
-    debugOverlay.id = 'debug-overlay';
-    debugOverlay.style.position = 'fixed';
-    debugOverlay.style.top = '10px';
-    debugOverlay.style.left = '10px';
-    debugOverlay.style.zIndex = '99999';
-    debugOverlay.style.padding = '10px';
-    debugOverlay.style.backgroundColor = 'red';
-    debugOverlay.style.color = 'white';
-    debugOverlay.style.fontFamily = 'monospace';
-    debugOverlay.style.fontWeight = 'bold';
-    debugOverlay.textContent = 'Status: Initializing 3D...';
-    document.body.appendChild(debugOverlay);
-
-    if (!container) {
-        debugOverlay.style.backgroundColor = 'blue';
-        debugOverlay.textContent = 'Error: #hero-3d-stage container not found!';
-        return;
-    }
-
-    // Scene setup
-    const scene = new THREE.Scene();
-
-    // Step 4: Camera Check
-    // Move the camera further back: camera.position.z = 10.
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 10;
-    camera.lookAt(0, 0, 0);
-
-    // Renderer setup
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    container.appendChild(renderer.domElement);
-
-    // No lighting required for Basic Material
-
-    // Load Model
-    const loader = new THREE.GLTFLoader();
-
-    console.log('Loading 3D Model: assets/models/logo_3d.glb ...');
-
-    loader.load('assets/models/logo_3d.glb', function (gltf) {
-        const model = gltf.scene;
-
-        let objectCount = 0;
-
-        // Step 2: The 'Brute Force' Loader
-        // Use a Basic Material: Green Wireframe
-        model.traverse((child) => {
-            objectCount++;
-            if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-            }
-        });
-
-        // Hardcoded Scale: 50
-        model.scale.set(50, 50, 50);
-
-        // Reset Position
-        model.position.set(0, 0, 0);
-
-        scene.add(model);
-        console.log("3D Model Debug Loaded Successfully");
-
-        // Step 3: Logging to Screen - Success
-        debugOverlay.style.backgroundColor = 'green';
-        debugOverlay.textContent = `Success! Model Loaded. Objects found: ${objectCount}`;
-
-    }, undefined, function (error) {
-        console.error('An error happened loading 3D model:', error);
-
-        // Step 3: Logging to Screen - Error
-        debugOverlay.style.backgroundColor = 'blue';
-        debugOverlay.textContent = `Error: ${error.message || JSON.stringify(error)}`;
-    });
-
-    // Animation Loop
-    function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    }
-
-    animate();
-
-    // Handle Resize
-    window.addEventListener('resize', () => {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        renderer.setSize(width, height);
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-    });
-}
-
+// --- FUNCTIONS ---
 
 // --- SCROLL REVEAL ---
 function initScrollReveal() {
@@ -446,11 +365,32 @@ function populateData() {
 
     const homeGrid = document.getElementById('home-services-grid');
     if (homeGrid) {
+        // Task 1: Fix the Spacing (Force grid classes)
+        homeGrid.className = 'grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10';
+
         homeGrid.innerHTML = SERVICES.slice(0, 3).map(s => `
-                <a href="#services/${s.id}" data-page="service-detail" class="group bg-black p-12 border border-transparent hover:border-white/50 hover:bg-white/5 transition-colors duration-300 block relative">
-                    <div class="w-12 h-12 border border-white/20 flex items-center justify-center mb-8 group-hover:border-white transition-colors text-white">${ICONS[s.icon] || ICONS.Radio}</div>
-                    <h3 class="text-2xl font-serif mb-4 text-white">${s.title}</h3>
-                    <p class="text-white/50 mb-8 font-light">${s.description}</p>
+                <a href='#services/${s.id}' data-page='service-detail' class='tilt-card group relative overflow-hidden rounded-2xl bg-zinc-950/50 backdrop-blur-md border border-white/10 p-10 transition-all duration-1000 ease-out hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.1)] hover:border-white/20 hover:bg-zinc-900' style='transform-style: preserve-3d; perspective: 1000px;'>
+                    
+                    <!-- Glare Layer -->
+                    <div class='tilt-glare absolute inset-0 w-full h-full bg-gradient-to-tr from-white/0 via-white/5 to-white/0 opacity-0 pointer-events-none transition-opacity duration-300' style='transform: translateZ(1px)'></div>
+                    
+                    <!-- Background Gradient Glow (Hidden by default, appears on hover) -->
+                    <div class='absolute -right-20 -top-20 w-64 h-64 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all duration-700 pointer-events-none' style='transform: translateZ(0px)'></div>
+                    
+                    <!-- Icon -->
+                    <div class='mb-8 text-white/50 group-hover:text-white group-hover:scale-110 transition-all duration-500 origin-left'>
+                        ${ICONS[s.icon] || ICONS.Radio}
+                    </div>
+                    
+                    <!-- Content -->
+                    <h3 class='text-2xl font-serif text-white mb-4 relative z-10'>${s.title}</h3>
+                    <p class='text-sm text-white/60 font-light leading-relaxed mb-8 relative z-10 group-hover:text-white/80 transition-colors'>${s.description}</p>
+                    
+                    <!-- Arrow Button with Pulse Animation on Hover -->
+                    <div class='flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-white/40 group-hover:text-white transition-colors relative z-10'>
+                        <span class='group-hover:animate-pulse'>Explore</span>
+                        <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='group-hover:animate-pulse transition-transform duration-300 group-hover:translate-x-1'><path d='M5 12h14'/><path d='m12 5 7 7-7 7'/></svg>
+                    </div>
                 </a>
             `).join('');
     }
@@ -479,8 +419,8 @@ function toggleMobileMenu() {
 function renderServicesPage() {
     const list = document.getElementById('services-list');
     if (!list) return;
-    list.innerHTML = SERVICES.map(s => `
-            <a href="#services/${s.id}" data-page="service-detail" class="group relative flex items-center gap-8 p-8 border border-white/10 bg-transparent transition-all duration-500 hover:border-white/40 hover:bg-white/[0.03] rounded-xl overflow-hidden">
+    list.innerHTML = SERVICES.map((s, index) => `
+            <a href="#services/${s.id}" style="animation-delay: ${index * 100}ms" data-page="service-detail" class="animate-fade-in-up group relative flex items-center gap-8 p-8 border border-white/10 bg-transparent transition-all duration-500 hover:border-white/40 hover:bg-white/[0.03] rounded-xl overflow-hidden">
                 <div class="w-16 h-16 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-white/50 transition-all duration-500 group-hover:bg-white group-hover:text-black group-hover:scale-110">
                     ${ICONS[s.icon] || ICONS.Radio}
                 </div>
@@ -590,15 +530,25 @@ function renderTalentsGrid() {
     const grid = document.getElementById('talents-grid');
     if (!grid) return;
     const filtered = currentFilter === 'All' ? ARTISTS : ARTISTS.filter(a => a.categories.includes(currentFilter));
-    grid.innerHTML = filtered.map(a => `
-            <a href="#talents/${a.id}" data-page="talent-detail" class="group block border border-white/10 bg-neutral-900 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.1)]">
-                <div class="aspect-[3/4] overflow-hidden"><img src="${a.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-transform duration-700 ease-out group-hover:scale-105" /></div>
+    grid.innerHTML = filtered.map((a, index) => `
+            <a href="#talents/${a.id}" style="animation-delay: ${index * 100}ms; transform-style: preserve-3d; perspective: 1000px" data-page="talent-detail" class="tilt-card group relative block rounded-3xl bg-zinc-950/50 border border-white/10 overflow-hidden transition-all duration-1000 ease-out hover:border-white/30 hover:bg-white/[0.03] hover:shadow-2xl animate-fade-in-up">
+                <!-- Glare Layer (Crucial: First Child) -->
+                <div class='tilt-glare absolute inset-0 w-full h-full bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 pointer-events-none transition-opacity duration-300 z-20'></div>
+
+                <div class="aspect-[3/4] w-full overflow-hidden border-b border-white/5">
+                    <div class="parallax-img w-full h-full"> <!-- Wrapper for Parallax -->
+                        <img src="${a.image}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out group-hover:scale-105" />
+                    </div>
+                </div>
                 <div class="p-6">
-                    <h3 class="font-serif text-2xl text-white mb-2">${a.name}</h3>
-                    <p class="text-xs font-bold uppercase tracking-widest text-white/40">${a.role}</p>
+                    <h3 class="font-serif text-2xl text-white mb-1">${a.name}</h3>
+                    <p class="text-xs font-bold uppercase tracking-widest text-white/40 group-hover:text-white/70 transition-colors">${a.role}</p>
                 </div>
             </a>
         `).join('');
+
+    // Initialize 3D Tilt for Talent cards after DOM update
+    setTimeout(() => init3DTilt(), 100);
 }
 
 function renderTalentDetail(id) {
@@ -612,7 +562,7 @@ function renderTalentDetail(id) {
                     BACK TO TALENTS
                 </a>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                    <div><img src="${a.image}" class="w-full h-auto" /></div>
+                    <div><img src="${a.image}" loading="lazy" decoding="async" class="w-full h-auto" /></div>
                     <div>
                         <h1 class="font-serif text-6xl text-white mb-4">${a.name}</h1>
                         <p class="text-sm font-bold uppercase tracking-widest text-white/50 mb-8">${a.role}</p>
@@ -622,7 +572,7 @@ function renderTalentDetail(id) {
                             <div><div class="text-xs uppercase text-white/40 mb-2">Package Rate</div><div class="text-2xl font-serif">₱${a.packageRate}</div></div>
                         </div>
                         <h3 class="font-serif text-2xl mb-6">Gallery</h3>
-                        <div class="grid grid-cols-2 gap-4">${a.gallery.map(img => `<img src="${img}" class="w-full h-auto" />`).join('')}</div>
+                        <div class="grid grid-cols-2 gap-4">${a.gallery.map(img => `<img src="${img}" loading="lazy" decoding="async" class="w-full h-auto" />`).join('')}</div>
                     </div>
                 </div>
             </div>
@@ -657,7 +607,7 @@ function renderGalleryView(folderName) {
                 <div class="flex flex-col items-center gap-24">
                     ${folder.images.map(img => `
                         <div class="w-full max-w-4xl">
-                            <img src="${img}" class="w-full h-auto shadow-2xl" />
+                            <img src="${img}" loading="lazy" decoding="async" class="w-full h-auto shadow-2xl" />
                         </div>
                     `).join('')}
                 </div>
@@ -681,7 +631,9 @@ function renderCaseStudies() {
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
                     <!-- Image Side -->
                     <div class="h-[500px] w-full overflow-hidden rounded-2xl relative group">
-                        <img src="${s.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        <div class="parallax-img w-full h-full"> <!-- Wrapper for Parallax -->
+                            <img src="${s.image}" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        </div>
                         <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
                     </div>
 
@@ -708,7 +660,6 @@ function renderCaseStudies() {
 
 // --- PRELOADER ---
 function initPreloader() {
-    console.log("Initializing Cinematic Preloader (The Swap)...");
 
     const top = document.getElementById('curtain-top');
     const bottom = document.getElementById('curtain-bottom');
@@ -772,18 +723,29 @@ function initPreloader() {
 function initScrollEffects() {
     const navbar = document.getElementById('navbar');
     const logo = document.getElementById('main-logo');
+    const progressBar = document.getElementById('scroll-progress');
 
     window.addEventListener('scroll', () => {
+        // 1. Scroll Progress Bar
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        if (progressBar) progressBar.style.width = scrolled + '%';
+
+        // 2. Navbar Logic
         if (!navbar) return;
 
+        const isLight = document.documentElement.classList.contains('light-theme');
+
         if (window.scrollY > 50) {
-            navbar.classList.add('bg-black/90', 'backdrop-blur-md');
+            navbar.classList.add(isLight ? 'bg-white/90' : 'bg-black/90', 'backdrop-blur-md');
+            navbar.classList.remove(isLight ? 'bg-black/90' : 'bg-white/90');
             if (logo) {
                 logo.classList.remove('h-20', 'md:h-40');
                 logo.classList.add('h-16');
             }
         } else {
-            navbar.classList.remove('bg-black/90', 'backdrop-blur-md');
+            navbar.classList.remove('bg-white/90', 'bg-black/90', 'backdrop-blur-md');
             if (logo) {
                 logo.classList.remove('h-16');
                 logo.classList.add('h-20', 'md:h-40');
@@ -792,40 +754,179 @@ function initScrollEffects() {
     });
 }
 
-function initMouseSpotlight() {
-    const s = document.getElementById('mouse-spotlight');
-    if (s) window.addEventListener('mousemove', (e) => s.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(255,255,255,0.06), transparent 80%)`);
+function initMagneticButtons() {
+    // Select primary action buttons: Navbar 'Let's Talk', Hero Buttons, Form Submit
+    const buttons = document.querySelectorAll('#navbar a.reveal, .group, button[type="submit"]');
+
+    buttons.forEach(btn => {
+        // Add elastic snap-back transition
+        btn.style.transition = 'transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)';
+
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            // Magnetic Pull (Clamped to 10px)
+            // Use 0.3 strength
+            const moveX = Math.max(-10, Math.min(10, x * 0.3));
+            const moveY = Math.max(-10, Math.min(10, y * 0.3));
+
+            // Remove transition during move for instant response
+            btn.style.transition = 'none';
+            btn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            // Restore elastic and snap back
+            btn.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+            btn.style.transform = 'translate(0px, 0px)';
+        });
+    });
+}
+
+function initParallax() {
+    const images = document.getElementsByClassName('parallax-img');
+
+    function animate() {
+        for (let i = 0; i < images.length; i++) {
+            const wrapper = images[i];
+            const rect = wrapper.parentElement.getBoundingClientRect(); // Use container position
+
+            // Check if visible in viewport
+            if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                const center = rect.top + rect.height / 2;
+                const winCenter = window.innerHeight / 2;
+                const dist = center - winCenter;
+                const y = dist * 0.1; // 10% speed relative to scroll
+
+                // Scale 1.15 to ensure no gaps (User asked for ~1.25, 1.15 is clearer)
+                // Use style.transform directly
+                wrapper.style.transform = `scale(1.15) translateY(${y}px)`;
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+}
+
+function initKineticText() {
+    const el = document.getElementById('kinetic-text');
+    if (!el) return;
+
+    let currentX = 0;
+    let speed = 2; // Base speed
+    let targetSpeed = 2;
+    let scrollSpeed = 0;
+
+    // React to scroll
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        const delta = Math.abs(window.scrollY - lastScrollY);
+        scrollSpeed = delta; // Boost speed based on scroll speed
+        lastScrollY = window.scrollY;
+    });
+
+    function animate() {
+        // Decay scroll boost
+        scrollSpeed *= 0.9;
+
+        // Final speed = base + boost
+        // Direction: Moving Left (-x)
+        const finalSpeed = speed + (scrollSpeed * 0.5);
+
+        currentX -= finalSpeed;
+
+        // Infinite Scroll Reset
+        // If moved more than 50% (approx width of one repeat), reset slightly to loop
+        // Assuming text is very long. Better: Check width.
+        // For simplicity with this repeating string: Reset when x < -1000? 
+        // Let's use specific logic: if currentX < -el.offsetWidth / 3, reset.
+        if (currentX < -el.offsetWidth / 3) {
+            currentX = 0;
+        }
+
+        el.style.transform = `translateX(${currentX}px)`;
+        requestAnimationFrame(animate);
+    }
+    animate();
+}
+
+function init3DTilt() {
+    const cards = document.querySelectorAll('.tilt-card:not(.js-tilt-initialized)');
+
+    cards.forEach(card => {
+        card.classList.add('js-tilt-initialized');
+        const glare = card.querySelector('.tilt-glare');
+
+        // Apply Physics Smoothing
+        card.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -15;
+            const rotateY = ((x - centerX) / centerX) * 15;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+
+            if (glare) {
+                glare.style.opacity = '1';
+                const glareX = (x / rect.width) * 100;
+                const glareY = (y / rect.height) * 100;
+                glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.1), transparent)`;
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            if (glare) {
+                glare.style.opacity = '0';
+            }
+        });
+    });
 }
 
 function initParticles() {
+    // Original Lightweight Particle System
     const canvas = document.getElementById('particle-canvas');
     if (!canvas) return;
+
+    // Ensure visibility
+    canvas.style.display = 'block';
 
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     let particles = [];
-    const particleCount = 50;
+    const particleCount = 20; // Subtle count
 
     class Particle {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2;
+            this.size = Math.random() * 2 + 1;
             this.speedX = Math.random() * 0.5 - 0.25;
             this.speedY = Math.random() * 0.5 - 0.25;
+            this.opacity = Math.random() * 0.5 + 0.1;
         }
         update() {
             this.x += this.speedX;
             this.y += this.speedY;
+
             if (this.x > canvas.width) this.x = 0;
             if (this.x < 0) this.x = canvas.width;
             if (this.y > canvas.height) this.y = 0;
             if (this.y < 0) this.y = canvas.height;
         }
         draw() {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
@@ -858,6 +959,10 @@ function initParticles() {
     });
 }
 
+
+
+
+
 // --- LENIS SMOOTH SCROLL ---
 function initLenis() {
     if (typeof Lenis !== 'undefined') {
@@ -881,7 +986,6 @@ function initLenis() {
 
         // Connect Lenis to ScrollTrigger if you use GSAP, otherwise just global exposure if needed
         window.lenis = lenis;
-        console.log("Lenis initialized");
     } else {
         console.warn("Lenis library not found.");
     }
@@ -890,28 +994,19 @@ function initLenis() {
 // --- CHAT WIDGET ---
 function initChatWidget() {
     const msgs = document.getElementById('chat-messages');
+
+    // Initialize Replies State if empty (Show only 1 at a time to save space)
+    if (activeChatReplies.length === 0) {
+        activeChatReplies = CHAT_QUICK_REPLIES.slice(0, 1);
+        chatReplyPool = CHAT_QUICK_REPLIES.slice(1);
+    }
+
     if (msgs && msgs.children.length === 0) {
         const div = document.createElement('div');
         div.className = "flex justify-start animate-fade-in-up";
         div.innerHTML = `<div class="bg-white/10 px-5 py-3 rounded-2xl text-sm text-white">Hi! How can I help you?</div>`;
         msgs.appendChild(div);
-
-        const quick = document.getElementById('quick-replies');
-        if (quick) {
-            quick.innerHTML = ["What are your rates?", "Do you have influencers?", "How do livestreams work?", "Where is your studio?"].map(r => `<button class="quick-reply-btn whitespace-nowrap px-4 py-2 rounded-full border border-white/20 bg-white/5 text-xs text-white/70 hover:bg-white hover:text-black transition-all">${r}</button>`).join('');
-
-            // Add Event Delegation for Quick Replies
-            quick.addEventListener('click', (e) => {
-                const btn = e.target.closest('.quick-reply-btn');
-                if (btn) {
-                    const input = document.getElementById('chat-input');
-                    if (input) {
-                        input.value = btn.textContent;
-                        handleChatSend();
-                    }
-                }
-            });
-        }
+        renderQuickReplies();
     }
 
     const input = document.getElementById('chat-input');
@@ -920,6 +1015,47 @@ function initChatWidget() {
             if (e.key === 'Enter') handleChatSend();
         };
     }
+}
+
+function renderQuickReplies() {
+    const quick = document.getElementById('quick-replies');
+    if (!quick) return;
+
+    quick.innerHTML = activeChatReplies.map(r => `
+        <button class="quick-reply-btn whitespace-nowrap px-4 py-2 rounded-full border border-white/20 bg-white/5 text-xs text-white/70 hover:bg-white hover:text-black transition-all">
+            ${r}
+        </button>
+    `).join('');
+
+    // Remove old listener if any and add new delegation
+    quick.onclick = (e) => {
+        const btn = e.target.closest('.quick-reply-btn');
+        if (btn) {
+            const text = btn.textContent.trim();
+            const input = document.getElementById('chat-input');
+            if (input) {
+                input.value = text;
+                handleChatSend();
+
+                // DYNAMIC SWAP LOGIC
+                // 1. Find index of clicked item
+                const index = activeChatReplies.indexOf(text);
+                if (index !== -1) {
+                    // 2. Remove from active
+                    activeChatReplies.splice(index, 1);
+                    // 3. Cycle clicked item back to pool
+                    chatReplyPool.push(text);
+                    // 4. Pull new one from pool
+                    if (chatReplyPool.length > 0) {
+                        const next = chatReplyPool.shift();
+                        activeChatReplies.splice(index, 0, next);
+                    }
+                    // 5. Re-render
+                    renderQuickReplies();
+                }
+            }
+        }
+    };
 }
 
 function toggleChat(e) {
@@ -987,7 +1123,9 @@ function initCustomCursor() {
         cursorX += (mouseX - cursorX) * speed;
         cursorY += (mouseY - cursorY) * speed;
 
-        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+        const scale = cursor.classList.contains('hovered') ? 2.5 : 1;
+        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) scale(${scale})`;
+
         requestAnimationFrame(animateCursor);
     }
     animateCursor();
@@ -1009,3 +1147,156 @@ function initCustomCursor() {
 }
 
 // 3D V2 removed (Replaced by Sanity Check version)
+
+// --- THEME TOGGLE (Day/Night Switch) ---
+function initThemeToggle() {
+    const toggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+    const html = document.documentElement;
+
+    if (!toggle || !sunIcon || !moonIcon) {
+        console.warn('Theme toggle elements not found');
+        return;
+    }
+
+    // Check for saved theme preference or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Apply initial theme
+    if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
+        enableLightMode(true);
+    } else {
+        enableDarkMode(true);
+    }
+
+    // Toggle click handler
+    toggle.addEventListener('click', () => {
+        if (html.classList.contains('light-theme')) {
+            enableDarkMode();
+            localStorage.setItem('theme', 'dark');
+        } else {
+            enableLightMode();
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    function enableLightMode(isInitial = false) {
+        html.classList.add('light-theme');
+        // Animate icons: hide sun, show moon
+        sunIcon.style.opacity = '0';
+        sunIcon.style.transform = 'rotate(180deg) scale(0.5)';
+        moonIcon.style.opacity = '1';
+        moonIcon.style.transform = 'rotate(0deg) scale(1)';
+
+        // Update dynamic elements for light theme
+        updateDynamicElements('light', isInitial);
+    }
+
+    function enableDarkMode(isInitial = false) {
+        html.classList.remove('light-theme');
+        // Animate icons: show sun, hide moon
+        sunIcon.style.opacity = '1';
+        sunIcon.style.transform = 'rotate(0deg) scale(1)';
+        moonIcon.style.opacity = '0';
+        moonIcon.style.transform = 'rotate(-180deg) scale(0.5)';
+
+        // Update dynamic elements for dark theme
+        updateDynamicElements('dark', isInitial);
+    }
+
+    function updateDynamicElements(theme, isInitial = false) {
+        const isLight = theme === 'light';
+
+        // Update logo images - CRITICAL for theme switch
+        const logos = [
+            document.getElementById('main-logo'),
+            document.getElementById('footer-logo'),
+            document.getElementById('preloader-logo')
+        ];
+
+        // Dark mode uses logo.png (white), Light mode uses day_logo.png (black)
+        const darkLogoSrc = 'assets/images/logo.png';
+        const preloaderDarkLogoSrc = 'assets/images/new_logo.png';
+        const lightLogoSrc = 'assets/images/day_logo.png';
+        const currentThemeLogoSrc = isLight ? lightLogoSrc : darkLogoSrc;
+
+        logos.forEach(logo => {
+            if (logo) {
+                const currentDarkSrc = logo.id === 'preloader-logo' ? preloaderDarkLogoSrc : darkLogoSrc;
+                const logoSrc = isLight ? lightLogoSrc : currentDarkSrc;
+
+                if (isInitial) {
+                    logo.src = logoSrc;
+                } else {
+                    // Smooth transition for logo swap
+                    logo.style.transition = 'opacity 0.3s ease-in-out';
+                    logo.style.opacity = '0';
+                    setTimeout(() => {
+                        logo.src = logoSrc;
+                        logo.style.opacity = '1';
+                    }, 300);
+                }
+            }
+        });
+
+        // Update Favicon and SEO Meta Images
+        const favicon = document.querySelector('link[rel="icon"]');
+        const ogImage = document.querySelector('meta[property="og:image"]');
+        const twitterImage = document.querySelector('meta[name="twitter:image"]');
+
+        if (favicon) favicon.href = currentThemeLogoSrc;
+        if (ogImage) ogImage.setAttribute('content', window.location.origin + '/' + currentThemeLogoSrc);
+        if (twitterImage) twitterImage.setAttribute('content', window.location.origin + '/' + currentThemeLogoSrc);
+
+        // Update navbar background on scroll
+        const navbar = document.getElementById('navbar');
+        if (navbar) {
+            if (window.scrollY > 50) {
+                if (isLight) {
+                    navbar.classList.add('bg-white/90', 'backdrop-blur-md');
+                    navbar.classList.remove('bg-black/90');
+                } else {
+                    navbar.classList.add('bg-black/90', 'backdrop-blur-md');
+                    navbar.classList.remove('bg-white/90');
+                }
+            } else {
+                // At top, should be transparent
+                navbar.classList.remove('bg-white/90', 'bg-black/90', 'backdrop-blur-md');
+            }
+        }
+
+        // Update curtains for preloader
+        const curtainTop = document.getElementById('curtain-top');
+        const curtainBottom = document.getElementById('curtain-bottom');
+        const preloaderH1 = document.querySelector('#preloader-text h1');
+        const preloaderSpan = document.querySelector('#preloader-text span');
+
+        if (curtainTop) curtainTop.style.backgroundColor = isLight ? '#f8f8f8' : '#000';
+        if (curtainBottom) curtainBottom.style.backgroundColor = isLight ? '#f8f8f8' : '#000';
+
+        if (preloaderH1) preloaderH1.style.color = isLight ? '#1a1a1a' : '#ffffff';
+        if (preloaderSpan) {
+            preloaderSpan.style.color = isLight ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.6)';
+        }
+
+        // Update background blobs
+        const blobElements = document.querySelectorAll('.animate-blob');
+        blobElements.forEach(blob => {
+            blob.style.backgroundColor = isLight ? 'rgba(100, 100, 255, 0.08)' : 'rgba(255, 255, 255, 0.05)';
+        });
+
+        // Update kinetic text color
+        const kineticText = document.getElementById('kinetic-text');
+        if (kineticText) {
+            kineticText.style.color = isLight ? '#1a1a1a' : '#ffffff';
+        }
+
+        // Update scroll progress bar
+        const progressBar = document.getElementById('scroll-progress');
+        if (progressBar) {
+            progressBar.style.backgroundColor = isLight ? '#1a1a1a' : '#ffffff';
+        }
+    }
+}

@@ -1,7 +1,50 @@
+/* ========== Theme Variables ========== */
+:root {
+    /* Dark Theme (Default - Night) */
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-card: rgba(9, 9, 11, 0.5);
+    --bg-overlay: rgba(0, 0, 0, 0.8);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.6);
+    --text-muted: rgba(255, 255, 255, 0.4);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-hover: rgba(255, 255, 255, 0.3);
+    --accent-bg: #ffffff;
+    --accent-text: #000000;
+    --blob-color: rgba(255, 255, 255, 0.05);
+    --shadow-glow: rgba(255, 255, 255, 0.1);
+    --scrollbar-track: #000;
+    --scrollbar-thumb: #333;
+    --scrollbar-hover: #555;
+}
+
+html.light-theme {
+    /* Light Theme (Day) */
+    --bg-primary: #f8f8f8;
+    --bg-secondary: #ffffff;
+    --bg-card: rgba(255, 255, 255, 0.7);
+    --bg-overlay: rgba(255, 255, 255, 0.9);
+    --text-primary: #1a1a1a;
+    --text-secondary: rgba(0, 0, 0, 0.6);
+    --text-muted: rgba(0, 0, 0, 0.4);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --border-hover: rgba(0, 0, 0, 0.2);
+    --accent-bg: #1a1a1a;
+    --accent-text: #ffffff;
+    --blob-color: rgba(100, 100, 255, 0.08);
+    --shadow-glow: rgba(0, 0, 0, 0.1);
+    --scrollbar-track: #f0f0f0;
+    --scrollbar-thumb: #ccc;
+    --scrollbar-hover: #aaa;
+}
+
+/* ========== Base Styles ========== */
 body {
-    background-color: #000000;
-    color: white;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     overflow-x: hidden;
+    transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 /* Custom Scrollbar */
@@ -10,16 +53,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: #000;
+    background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #333;
+    background: var(--scrollbar-thumb);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: var(--scrollbar-hover);
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -110,7 +153,7 @@ body {
         background-color: white;
         border-radius: 50%;
         pointer-events: none;
-        z-index: 9999;
+        z-index: 100000;
         mix-blend-mode: difference;
         transform: translate(-50%, -50%);
         transition: width 0.3s, height 0.3s, background-color 0.3s;
@@ -122,5 +165,260 @@ body {
         height: 48px;
         background-color: rgba(255, 255, 255, 0.1);
         border: 1px solid white;
+    }
+}
+
+/* ========== Light Theme Overrides ========== */
+html.light-theme {
+
+    /* Background elements */
+    .bg-black {
+        background-color: var(--bg-primary) !important;
+    }
+
+    /* Text colors */
+    .text-white {
+        color: var(--text-primary) !important;
+    }
+
+    .text-white\/50,
+    .text-white\/60,
+    .text-white\/40,
+    .text-white\/70,
+    .text-white\/80 {
+        color: var(--text-secondary) !important;
+    }
+
+    /* Borders */
+    .border-white\/10,
+    .border-white\/5,
+    .border-white\/20 {
+        border-color: var(--border-color) !important;
+    }
+
+    /* Primary buttons - invert */
+    .bg-white.text-black {
+        background-color: var(--accent-bg) !important;
+        color: var(--accent-text) !important;
+    }
+
+    /* Cards and overlays */
+    .bg-black\/90,
+    .bg-black\/80,
+    .bg-black\/60 {
+        background-color: var(--bg-overlay) !important;
+    }
+
+    .bg-white\/5,
+    .bg-white\/\[0\.03\],
+    .bg-zinc-950\/50 {
+        background-color: rgba(0, 0, 0, 0.03) !important;
+    }
+
+    /* Footer */
+    footer {
+        background-color: rgba(255, 255, 255, 0.6) !important;
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+    }
+
+    /* Mobile menu */
+    #mobile-menu {
+        background-color: var(--bg-primary) !important;
+    }
+
+    /* Custom cursor */
+    #custom-cursor {
+        background-color: #1a1a1a !important;
+        border-color: #1a1a1a !important;
+    }
+
+    /* Chat widget */
+    #chat-window {
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        border-color: var(--border-color) !important;
+    }
+
+    #chat-window .text-white {
+        color: var(--text-primary) !important;
+    }
+
+    /* Gradients */
+    .bg-gradient-to-r.from-white {
+        --tw-gradient-from: var(--text-primary) !important;
+    }
+
+    /* Selection */
+    ::selection {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
+    /* Forms */
+    input,
+    textarea {
+        color: var(--text-primary) !important;
+        border-color: var(--border-color) !important;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: var(--text-muted) !important;
+    }
+
+    /* Preloader text */
+    #preloader-text h1,
+    #preloader-text span {
+        color: var(--text-primary) !important;
+    }
+
+    /* Hero gradient text - CRITICAL FIX */
+    .bg-gradient-to-b.from-white.via-white.to-white\/50,
+    .text-transparent.bg-clip-text {
+        background-image: linear-gradient(to bottom, #1a1a1a, #1a1a1a, rgba(26, 26, 26, 0.5)) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+    }
+
+    /* Navigation links contrast fix */
+    .nav-link {
+        color: rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .nav-link:hover {
+        color: #1a1a1a !important;
+    }
+
+    /* Mobile links */
+    .mobile-link {
+        color: var(--text-primary) !important;
+    }
+
+    /* Ticker text */
+    #client-ticker span {
+        color: rgba(0, 0, 0, 0.4) !important;
+    }
+
+    #client-ticker span:hover {
+        color: #1a1a1a !important;
+    }
+
+    /* Service cards */
+    .tilt-card {
+        background-color: rgba(255, 255, 255, 0.7) !important;
+        border-color: var(--border-color) !important;
+    }
+
+    .tilt-card:hover {
+        border-color: var(--border-hover) !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Toggle button in light mode */
+    #theme-toggle {
+        border-color: rgba(0, 0, 0, 0.1) !important;
+        background-color: rgba(0, 0, 0, 0.03) !important;
+    }
+
+    #theme-toggle:hover {
+        border-color: rgba(0, 0, 0, 0.2) !important;
+        background-color: rgba(0, 0, 0, 0.08) !important;
+    }
+
+    /* Filter buttons */
+    [data-filter] {
+        color: rgba(0, 0, 0, 0.5) !important;
+        border-color: rgba(0, 0, 0, 0.2) !important;
+    }
+
+    [data-filter].bg-white {
+        background-color: #1a1a1a !important;
+        color: white !important;
+    }
+
+    /* Accent badge */
+    .border.border-white\/20 {
+        border-color: rgba(0, 0, 0, 0.2) !important;
+        color: rgba(0, 0, 0, 0.8) !important;
+    }
+
+    /* Hero description paragraph - CRITICAL */
+    #home-view p.text-xl,
+    #home-view p.text-white\/50,
+    section p {
+        color: rgba(0, 0, 0, 0.7) !important;
+    }
+
+    /* Explore Services button */
+    #home-view a[href="#services-view"].border-white\/20,
+    a.border-white\/20 {
+        border-color: rgba(0, 0, 0, 0.3) !important;
+        color: #1a1a1a !important;
+    }
+
+    #home-view a[href="#services-view"]:hover,
+    a.border-white\/20:hover {
+        border-color: rgba(0, 0, 0, 0.5) !important;
+        background-color: rgba(0, 0, 0, 0.05) !important;
+    }
+
+    /* Section headers and descriptions */
+    section h2,
+    section h3 {
+        color: var(--text-primary) !important;
+    }
+
+    /* Kinetic typography background */
+    #kinetic-container span {
+        color: rgba(0, 0, 0, 0.04) !important;
+    }
+
+    /* Blob backgrounds - softer for light mode */
+    .blob {
+        opacity: 0.4 !important;
+        filter: blur(120px) !important;
+    }
+
+    /* Scroll progress bar */
+    #scroll-progress {
+        background: linear-gradient(to right, #1a1a1a, #444) !important;
+    }
+
+    /* Services section text */
+    #home-services p,
+    .text-gray-400 {
+        color: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    /* Card descriptions */
+    .tilt-card p {
+        color: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    /* Footer text */
+    footer p,
+    footer span,
+    footer a {
+        color: rgba(0, 0, 0, 0.7) !important;
+    }
+
+    footer a:hover {
+        color: #1a1a1a !important;
+    }
+
+    /* Talent grid cards */
+    .talent-card {
+        background-color: rgba(255, 255, 255, 0.8) !important;
+        border-color: var(--border-color) !important;
+    }
+
+    /* Case study cards */
+    .case-study-card {
+        background-color: rgba(255, 255, 255, 0.7) !important;
+    }
+
+    /* Glare effect - reduce for light mode */
+    .tilt-glare {
+        opacity: 0.3 !important;
     }
 }

@@ -36,16 +36,44 @@
             }
         }
     </script>
+    <!-- Theme Detection for 404 Page (Self-Invoking for first paint) -->
+    <script>
+            (function () {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const isLight = savedTheme === 'light' || (!savedTheme && !prefersDark);
+
+                if (isLight) {
+                    document.documentElement.classList.add('light-theme');
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const logo = document.getElementById('error-logo');
+                        const favicon = document.querySelector('link[rel="icon"]');
+                        if (logo) logo.src = 'assets/images/day_logo.png';
+                        if (favicon) favicon.href = 'assets/images/day_logo.png';
+                        document.body.classList.replace('bg-black', 'bg-white');
+                        document.body.classList.replace('text-white', 'text-black');
+                    });
+                } else {
+                    // Night mode is default, but ensure correct logo
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const logo = document.getElementById('error-logo');
+                        if (logo) logo.src = 'assets/images/new_logo.png';
+                    });
+                }
+            })();
+    </script>
 </head>
 
-<body class="bg-black text-white min-h-screen flex items-center justify-center relative overflow-hidden">
+<body
+    class="bg-black text-white min-h-screen flex items-center justify-center relative overflow-hidden transition-colors duration-500">
     <!-- Background Noise -->
     <div class="absolute inset-0 opacity-[0.05] pointer-events-none z-0 bg-noise-custom">
     </div>
 
     <div class="container mx-auto px-6 text-center relative z-10">
         <div class="mb-8 flex justify-center">
-            <img src="assets/images/logo.png" alt="The Aura Creatives" class="h-24 object-contain opacity-50" />
+            <img id="error-logo" src="assets/images/logo.png" alt="The Aura Creatives"
+                class="h-24 object-contain opacity-50 transition-all duration-500" />
         </div>
 
         <h1

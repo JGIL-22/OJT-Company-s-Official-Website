@@ -5,7 +5,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Aura Creatives</title>
-    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <link rel="icon" type="image/png" href="assets/images/logo.png" id="favicon-link">
+
+    <!-- Early Theme Detection: Prevent Flickering -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isLight = savedTheme === 'light' || (!savedTheme && !prefersDark);
+
+            if (isLight) {
+                document.documentElement.classList.add('light-theme');
+            }
+
+            // Set initial logo sources to prevent flicker
+            const logoPath = isLight ? 'assets/images/day_logo.png' : 'assets/images/logo.png';
+            const preloaderPath = isLight ? 'assets/images/day_logo.png' : 'assets/images/new_logo.png';
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const mainLogo = document.getElementById('main-logo');
+                const footerLogo = document.getElementById('footer-logo');
+                const preloaderLogo = document.getElementById('preloader-logo');
+
+                if (mainLogo) mainLogo.src = logoPath;
+                if (footerLogo) footerLogo.src = logoPath;
+                if (preloaderLogo) preloaderLogo.src = preloaderPath;
+
+                const fav = document.getElementById('favicon-link');
+                if (fav) fav.href = logoPath;
+            });
+        })();
+    </script>
+
+    <!-- SEO & Social Sharing -->
+    <meta name="description" content="The Aura Creatives - Premier Influencer Marketing & Livestream Agency.">
+    <meta property="og:title" content="The Aura Creatives" />
+    <meta property="og:description" content="Turning attention into action. The home of bold ideas." />
+    <meta property="og:image" content="assets/images/logo.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -123,20 +161,23 @@
             })();
     </script>
 
-    <!-- Three.js Global Scripts (Non-Module for Local Compatibility) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- Three.js Removed -->
 </head>
 
 <body class="selection:bg-white selection:text-black overflow-x-hidden">
+
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-white z-[9999] w-0 transition-all duration-100 ease-out">
+    </div>
 
     <!-- Cinematic Preloader -->
     <!-- Text Layer (Highest Z-Index) -->
     <div id="preloader-text"
         class="fixed inset-0 z-[10000] flex flex-col items-center justify-center h-screen opacity-0 pointer-events-none transition-opacity duration-1000">
         <div class="flex flex-col items-center justify-center text-center animate-fade-in-up">
-            <!-- 1. The New Logo -->
-            <img src="assets/images/new_logo.png" alt="Logo" class="h-24 md:h-32 object-contain mb-6 opacity-90" />
+            <!-- 1. The Night/Day Logo -->
+            <img id="preloader-logo" src="assets/images/new_logo.png" alt="Logo"
+                class="h-24 md:h-32 object-contain mb-6 opacity-90" />
 
             <!-- 2. Main Title (Big Serif) -->
             <h1 class="font-serif text-6xl md:text-8xl text-white tracking-tighter leading-none mb-3">
@@ -150,17 +191,26 @@
         </div>
     </div>
 
+    <!-- Kinetic Typography Background -->
+    <div
+        class="fixed top-1/2 left-0 w-full -translate-y-1/2 z-0 pointer-events-none opacity-[0.03] select-none overflow-hidden font-serif leading-none">
+        <div id="kinetic-text"
+            class="whitespace-nowrap text-[20vh] font-bold text-white tracking-tighter will-change-transform">
+            THE AURA • BOLD IDEAS • CREATORS • THE AURA • BOLD IDEAS • CREATORS • THE AURA • BOLD IDEAS • CREATORS •
+        </div>
+    </div>
+
     <!-- Curtains -->
     <div id="curtain-top"
-        class="fixed top-0 left-0 w-full h-[50vh] bg-black z-[9999] transition-transform will-change-transform origin-top">
+        class="fixed top-0 left-0 w-full h-[50vh] bg-[var(--bg-primary)] z-[9999] transition-transform will-change-transform origin-top">
     </div>
     <div id="curtain-bottom"
-        class="fixed bottom-0 left-0 w-full h-[50vh] bg-black z-[9999] transition-transform will-change-transform origin-bottom">
+        class="fixed bottom-0 left-0 w-full h-[50vh] bg-[var(--bg-primary)] z-[9999] transition-transform will-change-transform origin-bottom">
     </div>
 
     <!-- ================= Background Elements ================= -->
     <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div class="absolute inset-0 bg-black"></div>
+        <div class="absolute inset-0 bg-[var(--bg-primary)]"></div>
         <!-- Blobs -->
         <div
             class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-white/5 rounded-full mix-blend-screen filter blur-[80px] animate-blob will-change-transform">
@@ -184,6 +234,11 @@
     <!-- Cinematic Texture Overlay -->
     <div class="fixed inset-0 z-[1] pointer-events-none opacity-5 bg-noise"></div>
 
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"
+        class="fixed top-0 left-0 w-6 h-6 border border-white rounded-full z-[9999] pointer-events-none mix-blend-difference transition-transform duration-100 ease-out -translate-x-1/2 -translate-y-1/2">
+    </div>
+
     <!-- ================= Navigation ================= -->
     <nav id="navbar" class="fixed top-0 w-full z-[1000] transition-all duration-500 py-12 bg-transparent">
         <div class="container mx-auto px-6 grid grid-cols-3 items-center">
@@ -200,21 +255,23 @@
             <!-- Col 2: Desktop Menu -->
             <div class="hidden md:flex justify-center items-center gap-12">
                 <a href="#home"
-                    class="nav-link text-base font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider hover:-translate-y-0.5"
+                    class="nav-link relative px-4 py-2 text-base font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-1 will-change-transform"
                     data-page="home">Home</a>
                 <a href="#services"
-                    class="nav-link text-base font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider hover:-translate-y-0.5"
+                    class="nav-link relative px-4 py-2 text-base font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-1 will-change-transform"
                     data-page="services">Services</a>
                 <a href="#talents"
-                    class="nav-link text-base font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider hover:-translate-y-0.5"
+                    class="nav-link relative px-4 py-2 text-base font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-1 will-change-transform"
                     data-page="talents">Talents</a>
                 <a href="#case-studies"
-                    class="nav-link text-base font-medium tracking-wide transition-all duration-300 hover:text-white text-white/50 hover:tracking-wider hover:-translate-y-0.5"
+                    class="nav-link relative px-4 py-2 text-base font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-1 will-change-transform whitespace-nowrap"
                     data-page="case-studies">Case Studies</a>
             </div>
 
             <!-- Col 3: Call to Action & Mobile Toggle -->
             <div class="flex justify-end items-center gap-4">
+
+
                 <div class="hidden md:block">
                     <a href="#contact"
                         class="reveal px-8 py-3 bg-white text-black text-xs font-bold tracking-widest uppercase hover:bg-zinc-400 active:scale-95 transition-all duration-100 ease-in-out">Let's
@@ -252,9 +309,7 @@
         <!-- HOME PAGE -->
         <div id="view-home" class="page-view active">
             <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-                <!-- 3D Background (Sanity Check Stage) -->
-                <!-- 3D Background (Diagnostic Mode) -->
-                <div id="hero-3d-stage" class="absolute inset-0 z-0 w-full h-full pointer-events-none"></div>
+                <!-- 3D Background Removed -->
 
                 <div class="container mx-auto px-6 text-center relative z-10 pt-10 animate-fade-in-up">
                     <span
@@ -353,12 +408,12 @@
             <!-- Services Preview -->
             <section class="py-32 border-t border-white/5">
                 <div class="container mx-auto px-6">
-                    <div class="mb-16">
+                    <div class="mb-20 text-center">
                         <span
                             class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">What
                             We Do</span>
                         <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Our Core Services</h2>
-                        <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
+                        <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8 mx-auto"></div>
                     </div>
                     <div id="home-services-grid"
                         class="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
@@ -431,7 +486,7 @@
                 <div class="container mx-auto px-6">
                     <div class="mb-20 text-center">
                         <span
-                            class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">Case
+                            class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase whitespace-nowrap">Case
                             Studies</span>
                         <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Proven Results</h2>
                         <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8 mx-auto"></div>
@@ -533,7 +588,8 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <div class="col-span-1 md:col-span-2">
                     <div class="mb-8">
-                        <img src="assets/images/logo.png" alt="The Aura Creatives" class="h-32 object-contain mb-6" />
+                        <img id="footer-logo" src="assets/images/logo.png" alt="The Aura Creatives"
+                            class="h-32 object-contain mb-6" />
                     </div>
                     <p class="text-white/50 max-w-md mb-8 font-light" id="footer-description"></p>
                     <div class="flex gap-4">
@@ -571,9 +627,36 @@
         </div>
     </footer>
 
-    <!-- ================= Chat Widget ================= -->
-    <div class="fixed bottom-8 right-8 z-[9999] flex flex-col items-end gap-4 font-sans pointer-events-none">
+    <!-- ================= Fixed Interactive Layers ================= -->
+    <!-- Theme Toggle (Bottom Left) -->
+    <div class="fixed bottom-8 left-8 z-[9999] pointer-events-none">
+        <button id="theme-toggle"
+            class="pointer-events-auto w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all duration-300 bg-white/5 border border-white/10 text-white hover:scale-110 hover:bg-white hover:text-black group"
+            aria-label="Toggle day/night theme">
+            <!-- Sun Icon (shown in dark mode) -->
+            <svg id="sun-icon" class="w-6 h-6 text-yellow-400 transition-all duration-300 absolute" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <!-- Moon Icon (shown in light mode) -->
+            <svg id="moon-icon" class="w-6 h-6 text-indigo-400 transition-all duration-300 absolute opacity-0 scale-50"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </div>
 
+    <!-- Chat Widget (Bottom Right) -->
+    <div class="fixed bottom-8 right-8 z-[9999] flex flex-col items-end gap-4 font-sans pointer-events-none">
         <!-- Chat Window -->
         <div id="chat-window"
             class="hidden pointer-events-auto w-[360px] h-[550px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden relative transition-all duration-300 origin-bottom-right">
@@ -631,8 +714,8 @@
                 </div>
             </div>
 
-            <!-- Quick Replies -->
-            <div id="quick-replies" class="relative z-10 px-5 pb-2 flex gap-2 overflow-x-auto hide-scrollbar">
+            <!-- Quick Replies (Single Chip to Save Space) -->
+            <div id="quick-replies" class="relative z-10 px-5 pb-2 flex flex-wrap gap-2">
                 <!-- Injected JS -->
             </div>
 
@@ -653,6 +736,7 @@
             </div>
         </div>
 
+        <!-- Chat Trigger -->
         <div class="relative group pointer-events-auto">
             <div id="chat-tooltip"
                 class="absolute right-20 top-1/2 -translate-y-1/2 mr-2 whitespace-nowrap bg-white text-black px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-xl transition-opacity duration-300">
@@ -677,16 +761,13 @@
     </div>
 
     <!-- ================= Scripts ================= -->
-    <!-- ================= Scripts ================= -->
     <!-- Firebase (Global/CDN or Compat if needed later) -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
 
-    <!-- Custom Cursor -->
-    <div id="custom-cursor"></div>
 
     <!-- Main App Script (Reverted to standard for local compatibility) -->
-    <script src="assets/js/app.js"></script>
+    <script src="assets/js/app.js?v=2"></script>
 </body>
 
 </html>
