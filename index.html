@@ -525,39 +525,70 @@
                         <div class="border border-white/10 p-10 bg-black">
                             <h3 class="font-serif text-3xl mb-8">Send a Message</h3>
                             <form class="space-y-8" onsubmit="event.preventDefault(); alert('Message sent!');">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div>
-                                        <label
-                                            class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">First
-                                            Name</label>
-                                        <input type="text"
-                                            class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
-                                            placeholder="Jane" />
-                                    </div>
-                                    <div>
-                                        <label
-                                            class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Last
-                                            Name</label>
-                                        <input type="text"
-                                            class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
-                                            placeholder="Doe" />
-                                    </div>
+                                <!-- Name Field (Merged) -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Full
+                                        Name</label>
+                                    <input type="text" id="contact-name"
+                                        class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
+                                        placeholder="Jane Doe" required />
                                 </div>
+
+                                <!-- Email -->
                                 <div>
                                     <label
                                         class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Email
                                         Address</label>
-                                    <input type="email"
+                                    <input type="email" id="contact-email"
                                         class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
-                                        placeholder="jane@company.com" />
+                                        placeholder="jane@company.com" required />
                                 </div>
+
+                                <!-- Brand Name (New) -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Brand
+                                        / Company Name</label>
+                                    <input type="text" id="contact-brand"
+                                        class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
+                                        placeholder="Aura Inc." />
+                                </div>
+
+                                <!-- Category Selection (Chips) -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-4">Category</label>
+                                    <input type="hidden" id="contact-category" name="category" value="" />
+                                    <div id="category-chips" class="flex flex-wrap gap-3">
+                                        <button type="button"
+                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
+                                            data-value="Electronics">Electronics</button>
+                                        <button type="button"
+                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
+                                            data-value="Beauty">Beauty</button>
+                                        <button type="button"
+                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
+                                            data-value="Fashion">Fashion</button>
+                                        <button type="button"
+                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
+                                            data-value="Lifestyle">Lifestyle</button>
+                                        <button type="button"
+                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
+                                            data-value="Other">Other</button>
+                                    </div>
+                                </div>
+
+                                <!-- Message -->
                                 <div>
                                     <label
                                         class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Message</label>
-                                    <textarea rows="4"
+                                    <textarea id="contact-message" rows="4"
                                         class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
                                         placeholder="Tell us about your project..."></textarea>
                                 </div>
+
+                                <!-- Submit -->
                                 <button type="submit"
                                     class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 active:scale-95 duration-100 w-full justify-center">
                                     <span class="relative z-10 flex items-center gap-3 justify-center">Send Inquiry <svg
@@ -585,26 +616,31 @@
     <!-- ================= Footer ================= -->
     <footer class="relative z-10 border-t border-white/5 bg-black/60 backdrop-blur-md pt-20 pb-10">
         <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                <div class="col-span-1 md:col-span-2">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 items-start">
+                <!-- Col 1: Logo & Description -->
+                <div class="col-span-1">
                     <div class="mb-8">
                         <img id="footer-logo" src="assets/images/logo.png" alt="The Aura Creatives"
                             class="h-32 object-contain mb-6" />
                     </div>
-                    <p class="text-white/50 max-w-md mb-8 font-light" id="footer-description"></p>
+                    <p class="text-white/50 text-sm font-light leading-relaxed" id="footer-description"></p>
+                </div>
+
+                <!-- Col 2: Social Icons (Centered) -->
+                <div class="flex flex-col items-center justify-start pt-4">
+                    <h4 class="font-serif font-bold mb-6 text-white text-lg">Connect</h4>
                     <div class="flex gap-4">
-                        <div
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold">
-                            IG</div>
-                        <div
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold">
-                            FB</div>
-                        <div
-                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold">
-                            TK</div>
+                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold"
+                            onclick="window.open('https://instagram.com', '_blank')">IG</div>
+                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold"
+                            onclick="window.open('https://facebook.com', '_blank')">FB</div>
+                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold"
+                            onclick="window.open('https://tiktok.com', '_blank')">TK</div>
                     </div>
                 </div>
-                <div>
+
+                <!-- Col 3: Company Links -->
+                <div class="pt-4">
                     <h4 class="font-serif font-bold mb-6 text-white text-lg">Company</h4>
                     <ul class="space-y-4 text-white/50 text-sm">
                         <li><a href="#talents" class="hover:text-white transition-colors">Talents</a></li>
@@ -612,10 +648,62 @@
                         <li><a href="#case-studies" class="hover:text-white transition-colors">Case Studies</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h4 class="font-serif font-bold mb-6 text-white text-lg">Contact</h4>
-                    <ul class="space-y-4 text-white/50 text-sm" id="footer-contact">
-                        <!-- Injected JS -->
+
+                <!-- Col 4: Contact Info (Copyable) -->
+                <div class="pt-4">
+                    <h4 class="font-serif font-bold mb-6 text-white text-lg">Contact Us</h4>
+                    <ul class="space-y-6 text-white/50 text-sm">
+                        <li class="group cursor-pointer"
+                            onclick="copyToClipboard(this, 'hello@theauracreatives.co', 'Email')">
+                            <span
+                                class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">Email</span>
+                            <div class="flex items-center gap-2 relative">
+                                <span
+                                    class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">hello@theauracreatives.co</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span
+                                    class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
+                            </div>
+                        </li>
+                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '+1 234 567 890', 'Phone')">
+                            <span
+                                class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">Phone</span>
+                            <div class="flex items-center gap-2 relative">
+                                <span
+                                    class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">+1
+                                    234 567 890</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span
+                                    class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
+                            </div>
+                        </li>
+                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '+1 987 654 321', 'WhatsApp')">
+                            <span
+                                class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">WhatsApp</span>
+                            <div class="flex items-center gap-2 relative">
+                                <span
+                                    class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">+1
+                                    987 654 321</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span
+                                    class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -739,7 +827,7 @@
         <!-- Chat Trigger -->
         <div class="relative group pointer-events-auto">
             <div id="chat-tooltip"
-                class="absolute right-20 top-1/2 -translate-y-1/2 mr-2 whitespace-nowrap bg-white text-black px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-xl transition-opacity duration-300">
+                class="absolute right-20 top-1/2 -translate-y-1/2 mr-2 whitespace-nowrap bg-white text-black px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-xl transition-opacity duration-300 opacity-0">
                 Need help? Chat with us!
                 <div class="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
             </div>
@@ -767,6 +855,7 @@
 
 
     <!-- Main App Script (Reverted to standard for local compatibility) -->
+    <script src="assets/js/data.js"></script>
     <script src="assets/js/app.js?v=2"></script>
 </body>
 
