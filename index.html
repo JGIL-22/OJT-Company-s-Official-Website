@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Aura Creatives</title>
-    <link rel="icon" type="image/png" href="assets/images/logo.png" id="favicon-link">
+    <link rel="icon" type="image/png" href="assets/images/new_logo.png" id="favicon-link">
 
-    <!-- Early Theme Detection: Prevent Flickering -->
     <script>
         (function () {
             const savedTheme = localStorage.getItem('theme');
@@ -19,17 +18,19 @@
             }
 
             // Set initial logo sources to prevent flicker
-            const logoPath = isLight ? 'assets/images/day_logo.png' : 'assets/images/logo.png';
-            const preloaderPath = isLight ? 'assets/images/day_logo.png' : 'assets/images/new_logo.png';
+            const logoPath = 'assets/images/new_logo.png';
+            const preloaderPath = 'assets/images/new_logo.png';
 
             document.addEventListener('DOMContentLoaded', () => {
                 const mainLogo = document.getElementById('main-logo');
                 const footerLogo = document.getElementById('footer-logo');
                 const preloaderLogo = document.getElementById('preloader-logo');
+                const preloaderLogoPixel = document.getElementById('preloader-logo-pixel');
 
                 if (mainLogo) mainLogo.src = logoPath;
                 if (footerLogo) footerLogo.src = logoPath;
                 if (preloaderLogo) preloaderLogo.src = preloaderPath;
+                if (preloaderLogoPixel) preloaderLogoPixel.src = preloaderPath;
 
                 const fav = document.getElementById('favicon-link');
                 if (fav) fav.href = logoPath;
@@ -37,25 +38,21 @@
         })();
     </script>
 
-    <!-- SEO & Social Sharing -->
     <meta name="description" content="The Aura Creatives - Premier Influencer Marketing & Livestream Agency.">
     <meta property="og:title" content="The Aura Creatives" />
     <meta property="og:description" content="Turning attention into action. The home of bold ideas." />
-    <meta property="og:image" content="assets/images/logo.png" />
+    <meta property="og:image" content="assets/images/new_logo.png" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
         rel="stylesheet">
 
-    <!-- Lenis Smooth Scroll -->
     <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -109,7 +106,6 @@
         }
     </script>
 
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
 
     <style>
@@ -129,11 +125,11 @@
             overflow: hidden;
         }
 
-        /* Scroll Reveal Animation */
+        /* UPDATED: Scroll Reveal Animation for cinematic easing */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.8s ease-out;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.active {
@@ -142,56 +138,55 @@
         }
     </style>
 
-    <!-- Emergency Rescue Script (QA-PROVED) -->
     <script>
-            (function () {
-                window.rescueActive = true;
-                setTimeout(function () {
-                    if (!window.appReady) {
-                        console.warn("Rescue: Site taking too long to load. Forcing visibility.");
-                        var top = document.getElementById('curtain-top');
-                        var bottom = document.getElementById('curtain-bottom');
-                        var text = document.getElementById('preloader-text');
-                        if (top) top.style.transform = 'translateY(-100%)';
-                        if (bottom) bottom.style.transform = 'translateY(100%)';
-                        if (text) text.style.opacity = '0';
-                        document.body.style.overflow = 'auto';
-                    }
-                }, 3000); // 3 second safety window
-            })();
+        setTimeout(() => {
+            document.body.style.overflow = '';
+            const top = document.getElementById('curtain-top');
+            const bottom = document.getElementById('curtain-bottom');
+            const preloader = document.getElementById('preloader');
+            const htitle = document.getElementById('hero-title');
+            if (top) top.style.transform = 'translateY(-100%)';
+            if (bottom) bottom.style.transform = 'translateY(100%)';
+            if (preloader) preloader.style.display = 'none';
+            if (htitle) htitle.style.opacity = '1';
+        }, 6200);
     </script>
-
-    <!-- Three.js Removed -->
 </head>
 
 <body class="selection:bg-white selection:text-black overflow-x-hidden">
 
-    <!-- Scroll Progress Bar -->
-    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-white z-[9999] w-0 transition-all duration-100 ease-out">
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-white z-[9999] w-0">
     </div>
 
-    <!-- Cinematic Preloader -->
-    <!-- Text Layer (Highest Z-Index) -->
-    <div id="preloader-text"
-        class="fixed inset-0 z-[10000] flex flex-col items-center justify-center h-screen opacity-0 pointer-events-none transition-opacity duration-1000">
-        <div class="flex flex-col items-center justify-center text-center animate-fade-in-up">
-            <!-- 1. The Night/Day Logo -->
-            <img id="preloader-logo" src="assets/images/new_logo.png" alt="Logo"
-                class="h-24 md:h-32 object-contain mb-6 opacity-90" />
+    <div id="preloader"
+        class="fixed inset-0 z-[10000] flex items-center justify-center h-screen pointer-events-none">
+        <div id="intro-pixel" class="intro-stage is-active text-center">
+            <div class="intro-logo-shine mb-6 mx-auto" aria-hidden="true">
+                <img id="preloader-logo-pixel" src="assets/images/new_logo.png" alt="TA"
+                    class="intro-logo h-24 md:h-32 object-contain" />
+            </div>
+            <h1 class="intro-title font-serif text-5xl md:text-7xl text-white tracking-tighter leading-none mb-3">
+                PIXEL REACH
+            </h1>
+            <span class="intro-tagline font-sans text-sm md:text-xl text-white/60 tracking-[0.5em] uppercase font-bold pl-2">
+                INC.
+            </span>
+        </div>
 
-            <!-- 2. Main Title (Big Serif) -->
-            <h1 class="font-serif text-6xl md:text-8xl text-white tracking-tighter leading-none mb-3">
+        <div id="intro-aura" class="intro-stage text-center" aria-hidden="true">
+            <div class="intro-logo-wrap mb-6 mx-auto">
+                <img id="preloader-logo" src="assets/images/new_logo.png" alt="TA"
+                    class="intro-logo h-24 md:h-32 object-contain" />
+            </div>
+            <h1 class="intro-title font-serif text-6xl md:text-8xl text-white tracking-tighter leading-none mb-3">
                 THE AURA
             </h1>
-
-            <!-- 3. Subtitle (Small Sans & Spaced) -->
-            <span class="font-sans text-sm md:text-xl text-white/60 tracking-[0.5em] uppercase font-bold pl-2">
+            <span class="intro-tagline font-sans text-sm md:text-xl text-white/60 tracking-[0.5em] uppercase font-bold pl-2">
                 CREATIVES
             </span>
         </div>
     </div>
 
-    <!-- Kinetic Typography Background -->
     <div
         class="fixed top-1/2 left-0 w-full -translate-y-1/2 z-0 pointer-events-none opacity-[0.03] select-none overflow-hidden font-serif leading-none">
         <div id="kinetic-text"
@@ -200,404 +195,413 @@
         </div>
     </div>
 
-    <!-- Curtains -->
     <div id="curtain-top"
-        class="fixed top-0 left-0 w-full h-[50vh] bg-[var(--bg-primary)] z-[9999] transition-transform will-change-transform origin-top">
+        class="fixed top-0 left-0 w-full h-[50vh] bg-[var(--bg-primary)] z-[9999] transition-transform duration-[1500ms] ease-[cubic-bezier(0.77,0,0.175,1)] will-change-transform origin-top">
     </div>
     <div id="curtain-bottom"
-        class="fixed bottom-0 left-0 w-full h-[50vh] bg-[var(--bg-primary)] z-[9999] transition-transform will-change-transform origin-bottom">
+        class="fixed bottom-0 left-0 w-full h-[50vh] bg-[var(--bg-primary)] z-[9999] transition-transform duration-[1500ms] ease-[cubic-bezier(0.77,0,0.175,1)] will-change-transform origin-bottom">
     </div>
 
-    <!-- ================= Background Elements ================= -->
     <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div class="absolute inset-0 bg-[var(--bg-primary)]"></div>
-        <!-- Blobs -->
-        <div
-            class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-white/5 rounded-full mix-blend-screen filter blur-[80px] animate-blob will-change-transform">
-        </div>
-        <div
-            class="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-gray-600/10 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000 will-change-transform">
-        </div>
-        <div
-            class="absolute bottom-[-20%] left-[20%] w-[600px] h-[600px] bg-white/5 rounded-full mix-blend-screen filter blur-[120px] animate-blob animation-delay-4000 will-change-transform">
-        </div>
-        <!-- Noise -->
+        <div class="absolute inset-0 bg-[var(--bg-primary)] transition-colors duration-500"></div>
+        <div class="absolute inset-0 textile-wave transition-colors duration-500"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[var(--blob-color)] rounded-full mix-blend-screen filter blur-[80px] animate-blob will-change-transform transition-colors duration-500"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-[var(--blob-color)] rounded-full mix-blend-screen filter blur-[100px] animate-blob [animation-delay:2s] will-change-transform transition-colors duration-500"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-[600px] h-[600px] bg-[var(--blob-color)] rounded-full mix-blend-screen filter blur-[120px] animate-blob [animation-delay:4s] will-change-transform transition-colors duration-500"></div>
         <div class="absolute inset-0 opacity-[0.05] bg-noise"></div>
     </div>
 
-    <!-- Mouse Spotlight -->
     <div id="mouse-spotlight" class="pointer-events-none fixed inset-0 z-0 bg-spotlight"></div>
-
-    <!-- Particles -->
     <canvas id="particle-canvas" class="fixed inset-0 z-0 pointer-events-none"></canvas>
-
-    <!-- Cinematic Texture Overlay -->
+    <canvas id="cloth-canvas" class="fixed inset-0 z-0 pointer-events-none opacity-0 transition-opacity duration-700"></canvas>
     <div class="fixed inset-0 z-[1] pointer-events-none opacity-5 bg-noise"></div>
 
-    <!-- Custom Cursor -->
     <div id="custom-cursor"
-        class="fixed top-0 left-0 w-6 h-6 border border-white rounded-full z-[9999] pointer-events-none mix-blend-difference transition-transform duration-100 ease-out -translate-x-1/2 -translate-y-1/2">
+        class="fixed top-0 left-0 w-6 h-6 border border-white/50 rounded-full z-[9999] pointer-events-none transition-all duration-300 ease-out -translate-x-1/2 -translate-y-1/2 shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
     </div>
 
-    <!-- ================= Navigation ================= -->
-    <nav id="navbar" class="fixed top-0 w-full z-[1000] transition-all duration-500 py-12 bg-transparent">
+    <nav id="navbar" class="navbar-glass fixed top-0 w-full z-[1000]">
         <div class="container mx-auto px-6 grid grid-cols-3 items-center">
-            <!-- Col 1: Logo -->
             <div class="flex justify-start">
-                <a href="#home" class="relative group cursor-pointer" data-route="home">
+                <a href="#home" class="relative group cursor-pointer no-magnetic no-cursor-react" data-route="home">
                     <div class="flex flex-col items-center select-none">
-                        <img id="main-logo" src="assets/images/logo.png" alt="The Aura Creatives"
-                            class="h-20 md:h-40 object-contain transition-all duration-500 ease-in-out" />
+                        <img id="main-logo" src="assets/images/new_logo.png" alt="The Aura Creatives"
+                            class="nav-logo object-contain" />
                     </div>
                 </a>
             </div>
 
-            <!-- Col 2: Desktop Menu -->
             <div class="hidden md:flex justify-center items-center gap-12">
                 <a href="#home"
-                    class="nav-link relative px-4 py-2 text-base font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-1 will-change-transform"
+                    class="nav-link inline-block whitespace-nowrap relative px-3 py-1 text-sm font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-0.5 will-change-transform"
                     data-page="home">Home</a>
                 <a href="#services"
-                    class="nav-link relative px-4 py-2 text-base font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-1 will-change-transform"
+                    class="nav-link inline-block whitespace-nowrap relative px-3 py-1 text-sm font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-0.5 will-change-transform"
                     data-page="services">Services</a>
                 <a href="#talents"
-                    class="nav-link relative px-4 py-2 text-base font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-1 will-change-transform"
+                    class="nav-link inline-block whitespace-nowrap relative px-3 py-1 text-sm font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-0.5 will-change-transform"
                     data-page="talents">Talents</a>
                 <a href="#case-studies"
-                    class="nav-link relative px-4 py-2 text-base font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-1 will-change-transform whitespace-nowrap"
-                    data-page="case-studies">Case Studies</a>
+                    class="nav-link inline-block whitespace-nowrap relative px-3 py-1 text-sm font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-0.5 will-change-transform"
+                    data-page="case-studies">Events</a>
             </div>
 
-            <!-- Col 3: Call to Action & Mobile Toggle -->
             <div class="flex justify-end items-center gap-4">
-
-
-                <div class="hidden md:block">
-                    <a href="#contact"
-                        class="reveal px-8 py-3 bg-white text-black text-xs font-bold tracking-widest uppercase hover:bg-zinc-400 active:scale-95 transition-all duration-100 ease-in-out">Let's
-                        Talk</a>
-                </div>
-
-                <!-- Mobile Toggle -->
-                <button id="mobile-menu-btn" class="md:hidden text-white z-50 relative" aria-label="Toggle mobile menu">
-                    <!-- Icon injected by JS -->
+                <button type="button" id="theme-toggle" class="theme-switch hidden md:flex" data-theme="dark" aria-pressed="false" aria-label="Switch to light mode">
+                    <span class="theme-switch__track">
+                        <span class="theme-switch__glow" aria-hidden="true"></span>
+                        <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                        </span>
+                        <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                        </span>
+                        <span class="theme-switch__thumb" id="theme-switch-thumb" aria-hidden="true"></span>
+                    </span>
                 </button>
+                <div class="hidden md:block">
+                    <a href="#contact" class="nav-cta reveal px-6 py-2 bg-white text-black text-[10px] font-bold tracking-widest uppercase hover:bg-zinc-400 active:scale-95 transition-all duration-100 ease-in-out">Get in Touch</a>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-white z-50 relative" aria-label="Toggle mobile menu"></button>
             </div>
         </div>
 
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu"
-            class="fixed inset-0 w-full h-[100dvh] bg-black z-[999] flex flex-col justify-center items-center gap-8 transition-transform duration-300 ease-in-out translate-x-full md:hidden">
-            <a href="#home"
-                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Home</a>
-            <a href="#services"
-                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Services</a>
-            <a href="#talents"
-                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Talents</a>
-            <a href="#case-studies"
-                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Case
-                Studies</a>
-            <a href="#contact"
-                class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Let's
-                Talk</a>
+        <div id="mobile-menu" class="fixed inset-0 w-full h-[100dvh] bg-black z-[999] flex flex-col justify-center items-center gap-8 transition-transform duration-300 ease-in-out translate-x-full md:hidden">
+            <a href="#home" class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Home</a>
+            <a href="#services" class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Services</a>
+            <a href="#talents" class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Talents</a>
+            <a href="#events" class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Events</a>
+            <a href="#contact" class="mobile-link font-sans font-bold uppercase tracking-[0.2em] text-2xl text-white hover:text-zinc-400 transition-colors">Get in Touch</a>
         </div>
     </nav>
+    <main class="relative z-10 pt-[5.5rem] md:pt-24 min-h-screen">
 
-    <!-- ================= Main Content ================= -->
-    <main class="relative z-10 pt-40 min-h-screen">
-
-        <!-- HOME PAGE -->
         <div id="view-home" class="page-view active">
             <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-                <!-- 3D Background Removed -->
-
                 <div class="container mx-auto px-6 text-center relative z-10 pt-10 animate-fade-in-up">
-                    <span
-                        class="inline-block px-4 py-1 border border-white/20 text-white/80 text-xs font-bold tracking-[0.3em] mb-10 backdrop-blur-sm uppercase">Est.
-                        April 2025</span>
-                    <h1
-                        class="reveal font-serif text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-8 leading-[0.85]">
+                    <span class="inline-block px-4 py-1 border border-white/20 text-white/80 text-xs font-bold tracking-[0.3em] mb-10 backdrop-blur-sm uppercase">Est. April 2025</span>
+                    <h1 id="hero-title" class="reveal font-serif text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-8 leading-[0.85]">
                         THE HOME OF <br />
-                        <span
-                            class="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50">BOLD
-                            IDEAS</span>
+                        <span class="text-transparent bg-clip-text hero-gradient-text">BOLD IDEAS</span>
                     </h1>
-                    <p
-                        class="reveal text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-16 font-light leading-relaxed">
-                        Turning attention into action. The premier agency for high-converting livestreams and viral
-                        short-form content.
+                    <p class="reveal text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-16 font-light leading-relaxed">
+                        Turning attention into action. The premier agency for high-converting livestreams and viral short-form content.
                     </p>
                     <div class="reveal flex flex-col md:flex-row gap-6 justify-center">
-                        <a href="#talents"
-                            class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 active:scale-95 duration-100 flex items-center justify-center gap-3">
-                            <span class="relative z-10 flex items-center gap-3">View Talents <svg width="16" height="16"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="group-hover:translate-x-1 transition-transform">
-                                    <path d="M5 12h14" />
-                                    <path d="m12 5 7 7-7 7" />
-                                </svg></span>
+                        <a href="#talents" class="group no-magnetic relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 duration-100 flex items-center justify-center gap-3">
+                            <span class="relative z-10 flex items-center gap-3">View Talents <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></span>
                         </a>
-                        <a href="#services"
-                            class="px-8 py-4 border border-white/20 text-white text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all flex items-center justify-center">
+                        <a href="#services" class="px-8 py-4 border border-white/20 text-white text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all flex items-center justify-center">
                             Explore Services
                         </a>
                     </div>
                 </div>
             </section>
 
-            <!-- Ticker -->
             <div class="w-full bg-black border-y border-white/10 py-10 overflow-hidden relative">
-                <div
-                    class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none">
-                </div>
-                <div
-                    class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none">
-                </div>
-                <div id="client-ticker"
-                    class="flex gap-20 animate-marquee whitespace-nowrap items-center w-max hover:[animation-play-state:paused]">
-                    <!-- Clients injected via JS -->
+                <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+                <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+                <div id="client-ticker" class="relative flex gap-20 animate-marquee whitespace-nowrap items-center w-max hover:[animation-play-state:paused]">
                 </div>
             </div>
 
-            <!-- About Preview -->
             <section class="py-32 container mx-auto px-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
                     <div>
                         <div class="mb-16">
-                            <span
-                                class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">Who
-                                We Are</span>
-                            <h2 class="reveal font-serif text-4xl md:text-6xl text-white leading-tight">Shaping the
-                                Future of
-                                Digital Marketing</h2>
+                            <span class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">Who We Are</span>
+                            <h2 class="reveal font-serif text-4xl md:text-6xl text-white leading-tight">Shaping the Future of Digital Marketing</h2>
                             <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
                         </div>
                         <p class="reveal text-white/60 text-lg leading-relaxed mb-10 font-light">
-                            The Aura is a dynamic multimedia marketing and talent management agency built for the
-                            digital age.
-                            Operating across multiple digital platforms—with TikTok at the forefront—we drive brand
-                            growth through storytelling that engages.
+                            The Aura is a dynamic multimedia marketing and talent management agency built for the digital age. Operating across multiple digital platforms—with TikTok at the forefront—we drive brand growth through storytelling that engages.
                         </p>
                         <ul class="reveal space-y-6 mb-10">
-                            <li class="flex items-center gap-4 text-white/80 font-medium">
-                                <div class="w-1.5 h-1.5 rounded-full bg-white"></div>Access to Top Tier Talent
-                            </li>
-                            <li class="flex items-center gap-4 text-white/80 font-medium">
-                                <div class="w-1.5 h-1.5 rounded-full bg-white"></div>Data-Driven Campaign Strategies
-                            </li>
-                            <li class="flex items-center gap-4 text-white/80 font-medium">
-                                <div class="w-1.5 h-1.5 rounded-full bg-white"></div>High-Converting Livestreams
-                            </li>
-                            <li class="flex items-center gap-4 text-white/80 font-medium">
-                                <div class="w-1.5 h-1.5 rounded-full bg-white"></div>End-to-End Creative Direction
-                            </li>
+                            <li class="flex items-center gap-4 text-white/80 font-medium"><div class="w-1.5 h-1.5 rounded-full bg-white"></div>Access to Top Tier Talent</li>
+                            <li class="flex items-center gap-4 text-white/80 font-medium"><div class="w-1.5 h-1.5 rounded-full bg-white"></div>Data-Driven Campaign Strategies</li>
+                            <li class="flex items-center gap-4 text-white/80 font-medium"><div class="w-1.5 h-1.5 rounded-full bg-white"></div>High-Converting Livestreams</li>
+                            <li class="flex items-center gap-4 text-white/80 font-medium"><div class="w-1.5 h-1.5 rounded-full bg-white"></div>End-to-End Creative Direction</li>
                         </ul>
                     </div>
                     <div class="relative">
-                        <div class="aspect-[4/5] overflow-hidden border border-white/10 p-2">
-                            <video autoplay loop muted
-                                class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000">
+                        <div class="aspect-[4/5] overflow-hidden border border-white/10 p-2 relative group/hero-video" id="hero-video-wrap">
+                            <video id="hero-reel-video" loop muted playsinline preload="auto"
+                                class="w-full h-full object-cover grayscale group-hover/hero-video:grayscale-0 transition-all duration-1000">
                                 <source src="assets/videos/hero_reel.mp4" type="video/mp4">
                             </video>
+                            <button type="button" id="hero-video-sound" class="hero-video-sound" aria-pressed="false"
+                                aria-label="Unmute hero video">
+                                <span class="hero-video-sound__icon hero-video-sound__icon--off" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                                </span>
+                                <span class="hero-video-sound__icon hero-video-sound__icon--on hidden" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                                </span>
+                                <span class="hero-video-sound__label">Sound on</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Services Preview -->
             <section class="py-32 border-t border-white/5">
                 <div class="container mx-auto px-6">
                     <div class="mb-20 text-center">
-                        <span
-                            class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">What
-                            We Do</span>
+                        <span class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">What We Do</span>
                         <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Our Core Services</h2>
                         <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8 mx-auto"></div>
                     </div>
-                    <div id="home-services-grid"
-                        class="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
-                        <!-- Injected via JS -->
-                    </div>
+                    <div id="home-services-grid" class="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+                        </div>
                 </div>
             </section>
         </div>
 
-        <!-- SERVICES PAGE -->
         <div id="view-services" class="page-view">
             <div class="min-h-screen pb-20">
-                <div class="container mx-auto px-6 pt-48">
+                <div class="container mx-auto px-6 pt-32 md:pt-36">
                     <div class="mb-16 text-center mx-auto max-w-3xl">
-                        <span
-                            class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">What
-                            We Offer</span>
+                        <span class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">What We Offer</span>
                         <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Digital Solutions</h2>
-                        <div
-                            class="h-[1px] w-24 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-8">
-                        </div>
+                        <div class="h-[1px] w-24 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-8"></div>
                     </div>
-
                     <div id="services-list" class="max-w-5xl mx-auto flex flex-col gap-6">
-                        <!-- Injected via JS -->
-                    </div>
+                        </div>
                 </div>
             </div>
         </div>
 
-        <!-- SERVICE DETAIL PAGE -->
         <div id="view-service-detail" class="page-view">
-            <!-- Content injected via JS -->
-        </div>
+            </div>
 
-        <!-- TALENTS PAGE -->
         <div id="view-talents" class="page-view">
-            <div class="min-h-screen pb-20">
-                <div class="container mx-auto px-6 pt-32">
-                    <div
-                        class="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-white/10 pb-10">
-                        <div>
-                            <span
-                                class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">Talents
-                                & Influencers</span>
-                            <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Our Roster</h2>
-                            <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
-                        </div>
-
-                        <div id="talent-filters" class="flex flex-wrap gap-4 mb-4 md:mb-0">
-                            <!-- Filters injected JS -->
+            <div class="min-h-screen pb-24">
+                <header class="talents-page-hero relative border-b border-white/10">
+                    <div class="container mx-auto px-6 pt-28 pb-14 md:pt-32 md:pb-20">
+                        <div class="max-w-2xl">
+                            <span class="block text-white/50 font-sans font-bold tracking-[0.25em] text-[10px] md:text-xs mb-5 uppercase">Talents &amp; influencers</span>
+                            <h2 class="font-serif text-4xl md:text-6xl lg:text-7xl text-white leading-[1.05] mb-6">Content Creators</h2>
+                            <p class="text-white/55 text-base md:text-lg leading-relaxed font-light max-w-xl">
+                                Creators we represent across short-form and social. Filter by niche, then open a profile for bios, galleries, and platform reach.
+                            </p>
+                            <div class="h-px w-20 bg-gradient-to-r from-amber-200/80 to-transparent mt-10"></div>
                         </div>
                     </div>
-
-                    <div id="talents-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        <!-- Injected via JS -->
-                    </div>
+                </header>
+                <div class="container mx-auto px-6 pt-12 md:pt-16">
+                    <div id="talents-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
                 </div>
             </div>
         </div>
 
-        <!-- TALENT DETAIL PAGE -->
         <div id="view-talent-detail" class="page-view">
-            <!-- Content injected via JS -->
-        </div>
+            </div>
 
-        <!-- CASE STUDIES PAGE -->
         <div id="view-case-studies" class="page-view">
-            <div class="min-h-screen pt-48 pb-20">
+            <div class="min-h-screen pt-32 md:pt-36 pb-20">
                 <div class="container mx-auto px-6">
                     <div class="mb-20 text-center">
-                        <span
-                            class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase whitespace-nowrap">Case
-                            Studies</span>
-                        <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Proven Results</h2>
+                        <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Notable Events</h2>
                         <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8 mx-auto"></div>
                     </div>
+                    <div id="case-studies-list" class="flex flex-col gap-20 max-w-5xl mx-auto w-full" data-static-events>
+                        <article class="w-full" data-event="team-building">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                                <div class="event-album" data-event-album
+                                    data-event-title="Team Building 2026"
+                                    data-event-images='["assets/images/Events/TeamBldg2026%20(1).jpg","assets/images/Events/TeamBldg2026%20(2).jpg","assets/images/Events/TeamBldg2026%20(3).jpg","assets/images/Events/TeamBldg2026%20(4).jpg","assets/images/Events/TeamBldg2026%20(5).jpg"]'>
+                                    <p class="event-album-hint">Tap a card to open the album</p>
+                                    <button type="button" class="event-album-card" data-index="0" aria-label="View TeamBldg photo 1">
+                                        <span class="event-album-card__frame">
+                                            <img src="assets/images/Events/TeamBldg2026%20(1).jpg" alt="TeamBldg photo 1" class="event-album-card__img" loading="lazy" decoding="async" />
+                                        </span>
+                                        <span class="event-album-card__shine" aria-hidden="true"></span>
+                                        <span class="event-album-card__meta">
+                                            <span class="event-album-card__tag">01</span>
+                                            <span class="event-album-card__cta">View photo</span>
+                                        </span>
+                                    </button>
+                                    <button type="button" class="event-album-card event-album-card--offset" data-index="1" aria-label="View TeamBldg photo 2">
+                                        <span class="event-album-card__frame">
+                                            <img src="assets/images/Events/TeamBldg2026%20(2).jpg" alt="TeamBldg photo 2" class="event-album-card__img" loading="lazy" decoding="async" />
+                                        </span>
+                                        <span class="event-album-card__shine" aria-hidden="true"></span>
+                                        <span class="event-album-card__meta">
+                                            <span class="event-album-card__tag">02</span>
+                                            <span class="event-album-card__cta">View photo</span>
+                                        </span>
+                                    </button>
+                                    <button type="button" class="event-album-card" data-index="2" aria-label="View TeamBldg photo 3">
+                                        <span class="event-album-card__frame">
+                                            <img src="assets/images/Events/TeamBldg2026%20(3).jpg" alt="TeamBldg photo 3" class="event-album-card__img" loading="lazy" decoding="async" />
+                                        </span>
+                                        <span class="event-album-card__shine" aria-hidden="true"></span>
+                                        <span class="event-album-card__meta">
+                                            <span class="event-album-card__tag">03</span>
+                                            <span class="event-album-card__cta">View photo</span>
+                                        </span>
+                                    </button>
+                                    <button type="button" class="event-album-card" data-index="3" aria-label="View TeamBldg photo 4">
+                                        <span class="event-album-card__frame">
+                                            <img src="assets/images/Events/TeamBldg2026%20(4).jpg" alt="TeamBldg photo 4" class="event-album-card__img" loading="lazy" decoding="async" />
+                                        </span>
+                                        <span class="event-album-card__shine" aria-hidden="true"></span>
+                                        <span class="event-album-card__meta">
+                                            <span class="event-album-card__tag">04</span>
+                                            <span class="event-album-card__cta">View photo</span>
+                                        </span>
+                                    </button>
+                                    <button type="button" class="event-album-card event-album-card--offset" data-index="4" aria-label="View TeamBldg photo 5">
+                                        <span class="event-album-card__frame">
+                                            <img src="assets/images/Events/TeamBldg2026%20(5).jpg" alt="TeamBldg photo 5" class="event-album-card__img" loading="lazy" decoding="async" />
+                                        </span>
+                                        <span class="event-album-card__shine" aria-hidden="true"></span>
+                                        <span class="event-album-card__meta">
+                                            <span class="event-album-card__tag">05</span>
+                                            <span class="event-album-card__cta">View photo</span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="bg-white/5 backdrop-blur-md p-10 rounded-2xl border border-white/10 flex flex-col justify-center lg:sticky lg:top-32">
+                                    <span class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">May 2026</span>
+                                    <h3 class="font-serif text-4xl md:text-6xl text-white mb-8 leading-tight">Team Building 2026</h3>
+                                    <p class="text-white/60 text-lg font-light mb-8 max-w-xl">
+                                        The Aura Creatives united for a team-building retreat focused on collaboration,
+                                        wellness, and strengthening bonds across our talent and operations family.
+                                    </p>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-white/50 shrink-0 mt-0.5" aria-hidden="true">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        </span>
+                                        <p class="text-white/70 text-sm md:text-base font-light leading-relaxed">
+                                            Destino Beach Resort, Bauan, Batangas
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
 
-                    <div id="case-studies-list" class="space-y-32">
-                        <!-- Injected via JS -->
+                        <article class="w-full" data-event="tiktok-shop-summit-2026">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                                <div class="event-album" data-event-album
+                                    data-event-title="TikTok Shop Summit 2026"
+                                    data-event-images='["assets/images/Events/tiktok-summit-2026-placeholder.svg","assets/images/Events/tiktok-summit-2026-placeholder.svg"]'>
+                                    <p class="event-album-hint">Tap a card to open the album</p>
+                                    <button type="button" class="event-album-card" data-index="0" aria-label="View TikTok Summit photo 1">
+                                        <span class="event-album-card__frame">
+                                            <img src="assets/images/Events/tiktok-summit-2026-placeholder.svg" alt="TikTok Shop Summit 2026 placeholder image 1" class="event-album-card__img" loading="lazy" decoding="async" />
+                                        </span>
+                                        <span class="event-album-card__shine" aria-hidden="true"></span>
+                                        <span class="event-album-card__meta">
+                                            <span class="event-album-card__tag">01</span>
+                                            <span class="event-album-card__cta">View photo</span>
+                                        </span>
+                                    </button>
+                                    <button type="button" class="event-album-card event-album-card--offset" data-index="1" aria-label="View TikTok Summit photo 2">
+                                        <span class="event-album-card__frame">
+                                            <img src="assets/images/Events/tiktok-summit-2026-placeholder.svg" alt="TikTok Shop Summit 2026 placeholder image 2" class="event-album-card__img" loading="lazy" decoding="async" />
+                                        </span>
+                                        <span class="event-album-card__shine" aria-hidden="true"></span>
+                                        <span class="event-album-card__meta">
+                                            <span class="event-album-card__tag">02</span>
+                                            <span class="event-album-card__cta">View photo</span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="bg-white/5 backdrop-blur-md p-10 rounded-2xl border border-white/10 flex flex-col justify-center lg:sticky lg:top-32">
+                                    <span class="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">2026</span>
+                                    <div class="flex items-center gap-4 mb-8">
+                                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-black/40 border border-white/10 text-white">
+                                            <svg viewBox="0 0 256 256" width="24" height="24" fill="currentColor" aria-hidden="true">
+                                                <path d="M192 33.8a95.5 95.5 0 0 1-28 7.8v63a64 64 0 1 1-64-64 63.2 63.2 0 0 1 26.4 5.8V54.8a96 96 0 1 0 65.6 28.9V33.8Z"/>
+                                            </svg>
+                                        </span>
+                                        <div>
+                                            <h3 class="font-serif text-4xl md:text-6xl text-white mb-2 leading-tight">TikTok Shop Summit 2026</h3>
+                                            <p class="text-white/60 text-sm uppercase tracking-[0.2em] font-bold">BGC, Taguig City</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-white/60 text-lg font-light mb-8 max-w-xl">
+                                        Design concept and coverage for the TikTok Shop Summit 2026. Placeholder images are ready for upload.
+                                    </p>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-white/50 shrink-0 mt-0.5" aria-hidden="true">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        </span>
+                                        <p class="text-white/70 text-sm md:text-base font-light leading-relaxed">
+                                            BGC, Taguig City
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CONTACT PAGE -->
-        <div id="view-contact" class="page-view">
-            <div class="min-h-screen pb-20 flex items-center">
+        <div id="view-contact" class="page-view" style="position:relative;">
+            <div class="min-h-screen pb-20 pt-12 md:pt-20 flex items-center" style="position:relative;z-index:1;">
                 <div class="container mx-auto px-6">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
                         <div>
                             <div class="mb-16">
-                                <span
-                                    class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase">Get
-                                    In Touch</span>
-                                <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Let's Create
-                                    Something Bold</h2>
+                                <span class="block text-white/60 font-sans font-bold tracking-[0.2em] text-xs mb-4 uppercase mt-8 md:mt-12">Get In Touch</span>
+                                <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight">Let's Create Something Bold</h2>
                                 <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
                             </div>
                             <p class="text-white/60 text-lg font-light mb-12 max-w-md leading-relaxed">
-                                Ready to take your brand to the next level? Whether you need a full livestream setup or
-                                a roster of top-tier influencers, The Aura is here to help.
+                                Ready to take your brand to the next level? Whether you need a full livestream setup or a roster of top-tier influencers, The Aura is here to help.
                             </p>
                             <div class="space-y-6" id="contact-info">
-                                <!-- Injected JS -->
-                            </div>
+                                </div>
                         </div>
 
-                        <div class="border border-white/10 p-10 bg-black">
-                            <h3 class="font-serif text-3xl mb-8">Send a Message</h3>
-                            <form class="space-y-8" onsubmit="event.preventDefault(); alert('Message sent!');">
-                                <!-- Name Field (Merged) -->
-                                <div>
-                                    <label
-                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Full
-                                        Name</label>
-                                    <input type="text" id="contact-name"
-                                        class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
-                                        placeholder="Jane Doe" required />
-                                </div>
+                        <div class="contact-glass-card border border-white/10 p-10 bg-black relative overflow-hidden">
+                            <h3 class="font-serif text-3xl mb-8">Send us a message</h3>
 
-                                <!-- Email -->
-                                <div>
-                                    <label
-                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Email
-                                        Address</label>
-                                    <input type="email" id="contact-email"
-                                        class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
-                                        placeholder="jane@company.com" required />
+                            <div id="contact-success" class="hidden absolute top-0 left-0 w-full h-full bg-black/90 backdrop-blur border border-white/20 flex flex-col items-center justify-center p-10 text-center z-50">
+                                <div class="w-16 h-16 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center mb-6">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m9 12 2 2 4-4" />
+                                        <circle cx="12" cy="12" r="10" />
+                                    </svg>
                                 </div>
+                                <h4 class="font-serif text-3xl text-white mb-4">Message Sent</h4>
+                                <p class="text-white/60 mb-8">Thank you for reaching out. Our team will get back to you shortly.</p>
+                                <button type="button" onclick="document.getElementById('contact-success').classList.add('hidden'); document.getElementById('contact-form').reset();" class="px-8 py-3 border border-white/20 text-white text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all">Send Another</button>
+                            </div>
 
-                                <!-- Brand Name (New) -->
+                            <form id="contact-form" class="space-y-8 relative" onsubmit="event.preventDefault(); document.getElementById('contact-success').classList.remove('hidden');">
                                 <div>
-                                    <label
-                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Brand
-                                        / Company Name</label>
-                                    <input type="text" id="contact-brand"
-                                        class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
-                                        placeholder="Aura Inc." />
+                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Full Name</label>
+                                    <input type="text" id="contact-name" class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20" placeholder="" required />
                                 </div>
-
-                                <!-- Category Selection (Chips) -->
                                 <div>
-                                    <label
-                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-4">Category</label>
+                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Email Address</label>
+                                    <input type="email" id="contact-email" class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20" placeholder="" required />
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Brand / Company Name</label>
+                                    <input type="text" id="contact-brand" class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20" placeholder="Aura Inc." />
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-4">Category</label>
                                     <input type="hidden" id="contact-category" name="category" value="" />
                                     <div id="category-chips" class="flex flex-wrap gap-3">
-                                        <button type="button"
-                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
-                                            data-value="Electronics">Electronics</button>
-                                        <button type="button"
-                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
-                                            data-value="Beauty">Beauty</button>
-                                        <button type="button"
-                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
-                                            data-value="Fashion">Fashion</button>
-                                        <button type="button"
-                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
-                                            data-value="Lifestyle">Lifestyle</button>
-                                        <button type="button"
-                                            class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300"
-                                            data-value="Other">Other</button>
+                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Electronics">Electronics</button>
+                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Beauty">Beauty</button>
+                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Fashion">Fashion</button>
+                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Lifestyle">Lifestyle</button>
+                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Other">Other</button>
                                     </div>
                                 </div>
-
-                                <!-- Message -->
                                 <div>
-                                    <label
-                                        class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Message</label>
-                                    <textarea id="contact-message" rows="4"
-                                        class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20"
-                                        placeholder="Tell us about your project..."></textarea>
+                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Message</label>
+                                    <textarea id="contact-message" rows="4" class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20" placeholder="Tell us about your project..."></textarea>
                                 </div>
-
-                                <!-- Submit -->
-                                <button type="submit"
-                                    class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 active:scale-95 duration-100 w-full justify-center">
-                                    <span class="relative z-10 flex items-center gap-3 justify-center">Send Inquiry <svg
-                                            width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="group-hover:translate-x-1 transition-transform">
-                                            <path d="M5 12h14" />
-                                            <path d="m12 5 7 7-7 7" />
-                                        </svg></span>
+                                <button type="submit" class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 active:scale-95 duration-100 w-full justify-center">
+                                    <span class="relative z-10 flex items-center gap-3 justify-center">Send Inquiry <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></span>
                                 </button>
                             </form>
                         </div>
@@ -606,257 +610,159 @@
             </div>
         </div>
 
-        <!-- GALLERY PAGE -->
         <div id="view-gallery" class="page-view bg-black min-h-screen z-[100] relative">
-            <!-- Injected content -->
-        </div>
+            </div>
 
     </main>
 
-    <!-- ================= Footer ================= -->
     <footer class="relative z-10 border-t border-white/5 bg-black/60 backdrop-blur-md pt-20 pb-10">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 items-start">
-                <!-- Col 1: Logo & Description -->
                 <div class="col-span-1">
                     <div class="mb-8">
-                        <img id="footer-logo" src="assets/images/logo.png" alt="The Aura Creatives"
-                            class="h-32 object-contain mb-6" />
+                        <img id="footer-logo" src="assets/images/TAC.png" alt="The Aura Creatives" class="h-32 object-contain mb-6" />
                     </div>
                     <p class="text-white/50 text-sm font-light leading-relaxed" id="footer-description"></p>
                 </div>
 
-                <!-- Col 2: Social Icons (Centered) -->
                 <div class="flex flex-col items-center justify-start pt-4">
                     <h4 class="font-serif font-bold mb-6 text-white text-lg">Connect</h4>
                     <div class="flex gap-4">
-                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold"
-                            onclick="window.open('https://instagram.com', '_blank')">IG</div>
-                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold"
-                            onclick="window.open('https://facebook.com', '_blank')">FB</div>
-                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all cursor-pointer text-xs font-bold"
-                            onclick="window.open('https://tiktok.com', '_blank')">TK</div>
+                        <a href="https://www.instagram.com/theaura_creatives/" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=61577130454901&sk=about" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                        </a>
+                        <a href="https://www.tiktok.com/@ta_collectives" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white hover:text-black transition-all">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+                        </a>
                     </div>
                 </div>
 
-                <!-- Col 3: Company Links -->
                 <div class="pt-4">
                     <h4 class="font-serif font-bold mb-6 text-white text-lg">Company</h4>
                     <ul class="space-y-4 text-white/50 text-sm">
                         <li><a href="#talents" class="hover:text-white transition-colors">Talents</a></li>
                         <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
-                        <li><a href="#case-studies" class="hover:text-white transition-colors">Case Studies</a></li>
+                        <li><a href="#events" class="hover:text-white transition-colors">Events</a></li>
                     </ul>
                 </div>
 
-                <!-- Col 4: Contact Info (Copyable) -->
                 <div class="pt-4">
                     <h4 class="font-serif font-bold mb-6 text-white text-lg">Contact Us</h4>
                     <ul class="space-y-6 text-white/50 text-sm">
-                        <li class="group cursor-pointer"
-                            onclick="copyToClipboard(this, 'hello@theauracreatives.co', 'Email')">
-                            <span
-                                class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">Email</span>
+                        <li class="group cursor-pointer" onclick="copyToClipboard(this, 'hello@theauracreatives.co', 'Email')">
+                            <span class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">Email</span>
                             <div class="flex items-center gap-2 relative">
-                                <span
-                                    class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">hello@theauracreatives.co</span>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                    class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                                <span
-                                    class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
+                                <span class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">hello@theauracreatives.co</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
                             </div>
                         </li>
-                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '+1 234 567 890', 'Phone')">
-                            <span
-                                class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">Phone</span>
+                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '09219715546', 'Phone')">
+                            <span class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">Phone</span>
                             <div class="flex items-center gap-2 relative">
-                                <span
-                                    class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">+1
-                                    234 567 890</span>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                    class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                                <span
-                                    class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
+                                <span class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">09219715546</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
                             </div>
                         </li>
-                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '+1 987 654 321', 'WhatsApp')">
-                            <span
-                                class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">WhatsApp</span>
+                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '09219715546', 'WhatsApp')">
+                            <span class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">WhatsApp</span>
                             <div class="flex items-center gap-2 relative">
-                                <span
-                                    class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">+1
-                                    987 654 321</span>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                    class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                                <span
-                                    class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
+                                <span class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">09219715546</span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div
-                class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 text-xs text-white/30 uppercase tracking-widest">
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 text-xs text-white/30 uppercase tracking-widest">
                 <p>&copy; 2025 The Aura Creatives. All rights reserved.</p>
-                <p>The Home of Bold Ideas.</p>
+                <p class="footer-tagline-shine">The Home of Bold Ideas.</p>
             </div>
         </div>
     </footer>
 
-    <!-- ================= Fixed Interactive Layers ================= -->
-    <!-- Theme Toggle (Bottom Left) -->
-    <div class="fixed bottom-8 left-8 z-[9999] pointer-events-none">
-        <button id="theme-toggle"
-            class="pointer-events-auto w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all duration-300 bg-white/5 border border-white/10 text-white hover:scale-110 hover:bg-white hover:text-black group"
-            aria-label="Toggle day/night theme">
-            <!-- Sun Icon (shown in dark mode) -->
-            <svg id="sun-icon" class="w-6 h-6 text-yellow-400 transition-all duration-300 absolute" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-            <!-- Moon Icon (shown in light mode) -->
-            <svg id="moon-icon" class="w-6 h-6 text-indigo-400 transition-all duration-300 absolute opacity-0 scale-50"
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-        </button>
-    </div>
-
-    <!-- Chat Widget (Bottom Right) -->
     <div class="fixed bottom-8 right-8 z-[9999] flex flex-col items-end gap-4 font-sans pointer-events-none">
-        <!-- Chat Window -->
-        <div id="chat-window"
-            class="hidden pointer-events-auto w-[360px] h-[550px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden relative transition-all duration-300 origin-bottom-right">
-
-            <!-- Background Noise -->
+        <div id="chat-window" class="hidden pointer-events-auto w-[360px] h-[550px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden relative transition-all duration-300 origin-bottom-right">
             <div class="absolute inset-0 opacity-[0.03] pointer-events-none z-0 bg-noise"></div>
-
-            <!-- Header -->
             <div class="relative z-10 flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
                 <div class="flex items-center gap-3">
                     <div class="relative">
                         <div class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div>
-                        <div class="absolute inset-0 w-2.5 h-2.5 rounded-full bg-green-500 animate-ping opacity-75">
-                        </div>
+                        <div class="absolute inset-0 w-2.5 h-2.5 rounded-full bg-green-500 animate-ping opacity-75"></div>
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-white tracking-widest uppercase">Aura Assistant</h3>
                         <p class="text-[10px] text-white/50">Online & Ready</p>
                     </div>
                 </div>
-                <button id="close-chat-btn" aria-label="Close chat"
-                    class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+                <button id="close-chat-btn" aria-label="Close chat" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
-
-            <!-- Messages -->
-            <div id="chat-messages" class="relative z-10 flex-1 overflow-y-auto p-5 space-y-6 hide-scrollbar">
-                <!-- Messages injected here -->
-            </div>
-
-            <!-- Typing Indicator -->
+            <div id="chat-messages" class="relative z-10 flex-1 overflow-y-auto p-5 space-y-6 hide-scrollbar"></div>
             <div id="typing-indicator" class="hidden px-5 pb-2 relative z-10">
                 <div class="flex items-end gap-3">
-                    <div
-                        class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2v0a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" />
-                            <path d="M12 22v-8" />
-                            <path d="M16 10a4 4 0 0 1 4 4v4" />
-                            <path d="M8 10a4 4 0 0 0-4 4v4" />
-                        </svg>
+                    <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2v0a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" /><path d="M12 22v-8" /><path d="M16 10a4 4 0 0 1 4 4v4" /><path d="M8 10a4 4 0 0 0-4 4v4" /></svg>
                     </div>
-                    <div
-                        class="bg-white/5 border border-white/10 p-4 rounded-2xl rounded-bl-none flex gap-1.5 w-16 items-center justify-center h-10">
+                    <div class="bg-white/5 border border-white/10 p-4 rounded-2xl rounded-bl-none flex gap-1.5 w-16 items-center justify-center h-10">
                         <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce delay-0"></span>
                         <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce delay-150"></span>
                         <span class="w-1.5 h-1.5 bg-white/50 rounded-full animate-bounce delay-300"></span>
                     </div>
                 </div>
             </div>
-
-            <!-- Quick Replies (Single Chip to Save Space) -->
-            <div id="quick-replies" class="relative z-10 px-5 pb-2 flex flex-wrap gap-2">
-                <!-- Injected JS -->
-            </div>
-
-            <!-- Input -->
+            <div id="quick-replies" class="relative z-10 px-5 pb-2 flex flex-wrap gap-2"></div>
             <div class="relative z-10 p-4 border-t border-white/10 bg-white/[0.02]">
                 <div class="flex gap-3 relative">
-                    <input type="text" id="chat-input" placeholder="Type a message..."
-                        class="flex-1 bg-black/30 border border-white/10 rounded-full px-5 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-black/50 transition-all">
-                    <button id="send-btn" aria-label="Send message"
-                        class="w-11 h-11 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
+                    <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-black/30 border border-white/10 rounded-full px-5 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-black/50 transition-all">
+                    <button id="send-btn" aria-label="Send message" class="w-11 h-11 rounded-full bg-white text-black flex items-center justify-center hover:bg-gray-200 transition-all shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </button>
                 </div>
             </div>
         </div>
-
-        <!-- Chat Trigger -->
         <div class="relative group pointer-events-auto">
-            <div id="chat-tooltip"
-                class="absolute right-20 top-1/2 -translate-y-1/2 mr-2 whitespace-nowrap bg-white text-black px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-xl transition-opacity duration-300 opacity-0">
-                Need help? Chat with us!
+            <div id="chat-tooltip" class="absolute right-20 top-1/2 -translate-y-1/2 mr-2 whitespace-nowrap bg-white text-black px-4 py-2 rounded-lg text-xs font-bold tracking-wide shadow-xl transition-opacity duration-300 opacity-0">
+                Welcome, chat with us!
                 <div class="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
             </div>
-
-            <button id="toggle-chat-btn" aria-label="Open chat assistant" onclick="toggleChat(event)"
-                class="pointer-events-auto w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 bg-white text-black hover:scale-110">
-                <svg id="chat-icon-open" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="none"
-                    class="block">
-                    <path
-                        d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
-                    </path>
-                </svg>
-                <svg id="chat-icon-close" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
+            <button id="toggle-chat-btn" aria-label="Open chat assistant" onclick="toggleChat(event)" class="pointer-events-auto w-14 h-14 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 bg-white text-black hover:scale-110">
+                <svg id="chat-icon-open" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="none" class="block"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                <svg id="chat-icon-close" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
         </div>
     </div>
 
-    <!-- ================= Scripts ================= -->
-    <!-- Firebase (Global/CDN or Compat if needed later) -->
+    <div id="event-lightbox" class="event-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Event photo viewer">
+        <div class="event-lightbox__backdrop" data-lightbox-close></div>
+        <div class="event-lightbox__panel">
+            <button type="button" class="event-lightbox__close" data-lightbox-close aria-label="Close gallery">&times;</button>
+            <button type="button" class="event-lightbox__nav event-lightbox__nav--prev" data-lightbox-prev aria-label="Previous photo">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <div class="event-lightbox__stage">
+                <img id="event-lightbox-img" src="" alt="" class="event-lightbox__img" />
+            </div>
+            <button type="button" class="event-lightbox__nav event-lightbox__nav--next" data-lightbox-next aria-label="Next photo">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <p id="event-lightbox-caption" class="event-lightbox__caption"></p>
+            <p id="event-lightbox-counter" class="event-lightbox__counter"></p>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
-
-
-    <!-- Main App Script (Reverted to standard for local compatibility) -->
     <script src="assets/js/data.js"></script>
-    <script src="assets/js/app.js?v=2"></script>
+    <script src="assets/js/app.js?v=6"></script>
+    <!-- Aura Chatbot Module — must load after app.js -->
+    <script src="assets/js/chatbot.js"></script>
 </body>
 
 </html>

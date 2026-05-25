@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "ritwickdey.LiveServer",
+        "ms-vscode.live-server",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode"
+    ]
+}

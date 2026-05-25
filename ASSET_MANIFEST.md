@@ -1,81 +1,34 @@
-# Asset Manifest - Replacement TODO List
+# Asset Manifest & Shopping List
 
-This document lists every placeholder image derived from `picsum.photos` and other temporary sources. Each entry includes its context and a suggested filename for the real asset.
+This document lists all image assets required to replace the current placeholders.
 
-## Required Assets Strategy
-
-All real assets should be placed in `assets/images/` or the corresponding subfolder.
-
----
-
-### 1. KOL & Artist Livestreaming
-
-| Usage | Suggested Filename | Dimensions |
+| Context | Required Logic | New File Path |
 | :--- | :--- | :--- |
-| Stream Banner 1 | `service-livestream-01.jpg` | 800x600 |
-| Stream Banner 2 | `service-livestream-02.jpg` | 800x600 |
-| Talent 1 | `talent-kol-01.jpg` | 400x500 |
-| Talent 2 | `talent-kol-02.jpg` | 400x500 |
-| Talent 3 | `talent-kol-03.jpg` | 400x500 |
-| Talent 4 | `talent-kol-04.jpg` | 400x500 |
-| Live Preview 1-6 | `live-setup-01.jpg` to `06.jpg` | 800x600 |
-
-### 2. Short-Form Video Production
-
-| Usage | Suggested Filename | Dimensions |
-| :--- | :--- | :--- |
-| TikTok Ads 1-4 | `ad-tiktok-01.mp4` / `.jpg` | 400x700 (Vert) |
-| IG Reels 1-4 | `ad-reels-01.mp4` / `.jpg` | 400x700 (Vert) |
-| UGC Content 1-4 | `ugc-creatives-01.jpg` | 400x700 (Vert) |
-| Event Highlights 1-4 | `event-highlight-01.jpg` | 400x700 (Vert) |
-
-### 3. Studio & Management
-
-| Usage | Suggested Filename | Dimensions |
-| :--- | :--- | :--- |
-| Studio Rental 1 | `studio-main-01.jpg` | 800x600 |
-| Studio Rental 2 | `studio-main-02.jpg` | 800x600 |
-| Artist Management 1 | `mgmt-bts-01.jpg` | 800x600 |
-| Artist Management 2 | `mgmt-bts-02.jpg` | 800x600 |
-
-### 4. Marketing Video Production
-
-| Usage | Suggested Filename | Dimensions |
-| :--- | :--- | :--- |
-| Corporate Videos 1-4 | `corp-prod-01.jpg` | 800x600 |
-| Commercials 1-4 | `commercial-spot-01.jpg` | 800x600 |
-| Social Media 1-4 | `social-marketing-01.jpg` | 400x700 |
-| Event Coverage 1-4 | `event-coverage-01.jpg` | 800x600 |
-
-### 5. Shoppable Pictures (E-commerce)
-
-| Usage | Suggested Filename | Dimensions |
-| :--- | :--- | :--- |
-| Electronics 1-4 | `shop-elec-01.jpg` | 600x600 |
-| Gold/Jewelry 1-5 | `shop-gold-01.jpg` | 600x600 |
-| Lifestyle 1-4 | `shop-life-01.jpg` | 600x600 |
-| Fashion 1-5 | `shop-fashion-01.jpg` | 600x600 |
-| Health 1-4 | `shop-health-01.jpg` | 600x600 |
-| Mom & Baby 1-6 | `shop-baby-01.jpg` | 600x600 |
-
-### 6. Artist Galleries (Individual Portraits)
-
-| Usage | Suggested Filename | Dimensions |
-| :--- | :--- | :--- |
-| IGIBOY Gallery | `igiboy-port-01.jpg`, `02.jpg` | 400x500 |
-| SOFI Gallery | `sofi-port-01.jpg`, `02.jpg` | 400x500 |
-| MIRO Gallery | `miro-port-01.jpg`, `02.jpg` | 400x500 |
-| JAJA Gallery | `jaja-port-01.jpg`, `02.jpg` | 400x500 |
-| CRISELDA Gallery | `cris-port-01.jpg`, `02.jpg` | 400x500 |
-| BUGOY Gallery | `bugoy-port-01.jpg`, `02.jpg` | 400x500 |
-
-### 7. Case Studies
-
-| Usage | Suggested Filename | Dimensions |
-| :--- | :--- | :--- |
-| Bingo Plus Festival | `case-bingoplus.jpg` | 800x600 |
-
----
-
-> [!TIP]
-> Use optimized WebP or high-quality JPG for these assets to maintain site performance. For vertical content (400x700), ensure the subject is centered.
+| **Service: Livestreaming** | Main service showcase (Wide, High Quality) | `assets/images/services/livestreaming/main-1.jpg` |
+| | Secondary showcase | `assets/images/services/livestreaming/main-2.jpg` |
+| **Service: Livestreaming (Talents)** | Portrait/Action shots of talents | `assets/images/services/livestreaming/talents/talent-1.jpg` (x4) |
+| **Service: Livestreaming (Live)** | Screenshots of live streams | `assets/images/services/livestreaming/live/stream-1.jpg` (x6) |
+| **Service: Short-Form (TikTok Ads)** | Vertical (9:16) high energy | `assets/images/services/shortform/tiktok/ad-1.jpg` (x4) |
+| **Service: Short-Form (Reels)** | Vertical (9:16) aesthetic | `assets/images/services/shortform/reels/reel-1.jpg` (x4) |
+| **Service: Short-Form (UGC)** | Vertical, authentic user content | `assets/images/services/shortform/ugc/ugc-1.jpg` (x4) |
+| **Service: Short-Form (Events)** | Vertical, event coverage | `assets/images/services/shortform/events/event-1.jpg` (x4) |
+| **Service: Studio Rental** | Wide angle, showing equipment/space | `assets/images/services/studio/studio-1.jpg` |
+| | Different angle or lighting setup | `assets/images/services/studio/studio-2.jpg` |
+| **Service: Artist Mgmt** | Professional group or lifestyle shots | `assets/images/services/management/mgmt-1.jpg` (x2) |
+| **Service: Marketing Video** | Corporate/Professional (16:9) | `assets/images/services/marketing/corporate/corp-1.jpg` (x4) |
+| | Commercial/Product focus | `assets/images/services/marketing/commercial/comm-1.jpg` (x4) |
+| | Social Media snippets | `assets/images/services/marketing/social/social-1.jpg` (x4) |
+| | Event coverage (High energy) | `assets/images/services/marketing/event/event-1.jpg` (x4) |
+| **Service: Shoppable (Electronics)** | Product photography (Clean) | `assets/images/services/shoppable/electronics/elec-1.jpg` (x4) |
+| **Service: Shoppable (Gold)** | Jewelry/Luxury, high detail | `assets/images/services/shoppable/gold/gold-1.jpg` (x5) |
+| **Service: Shoppable (Lifestyle)** | Products in use | `assets/images/services/shoppable/lifestyle/life-1.jpg` (x4) |
+| **Service: Shoppable (Fashion)** | Model/Clothing shots | `assets/images/services/shoppable/fashion/fashion-1.jpg` (x5) |
+| **Service: Shoppable (Health)** | Wellness/Supplement products | `assets/images/services/shoppable/health/health-1.jpg` (x4) |
+| **Service: Shoppable (Baby)** | Mom & Baby products | `assets/images/services/shoppable/baby/baby-1.jpg` (x6) |
+| **Artist: Igiboy** | Gallery/Lifestyle shots | `assets/images/artists/igiboy/gallery-1.jpg` (x2) |
+| **Artist: Sofi** | Gallery/Fashion shots | `assets/images/artists/sofi/gallery-1.jpg` (x2) |
+| **Artist: Miro** | Gallery/Model shots | `assets/images/artists/miro/gallery-1.jpg` (x2) |
+| **Artist: Jaja** | Gallery/Creator shots | `assets/images/artists/jaja/gallery-1.jpg` (x2) |
+| **Artist: Criselda** | Gallery/Fitness shots | `assets/images/artists/criselda/gallery-1.jpg` (x2) |
+| **Artist: Bugoi** | Gallery/Artist shots | `assets/images/artists/bugoi/gallery-1.jpg` (x2) |
+| **Case Study: BingoPlus** | Concert/Event Crowd (Wide, Neon, Dark) | `https://images.unsplash.com/photo-1459749411177-d4a428c3e867?q=80&w=2664&auto=format&fit=crop` (Unsplash Keyword: Concert Festival) |
