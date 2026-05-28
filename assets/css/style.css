@@ -3152,10 +3152,14 @@ a[href="#talents"].group:hover::after {
   overflow: hidden;
 }
 
-.wwu-hub-logo img {
-  height: 56px;
+/* Dark mode: new_logo.png is gold/transparent — display as-is with slight boost */
+.wwu-hub-img {
+  height: 72px;
+  width: 72px;
   object-fit: contain;
-  opacity: 0.92;
+  opacity: 0.95;
+  filter: brightness(1.1) drop-shadow(0 0 8px rgba(200,162,39,0.35));
+  transition: filter 0.3s ease;
 }
 
 .wwu-hub-logo span {
@@ -3208,9 +3212,16 @@ html.light-theme .wwu-node {
   color: var(--text-secondary);
 }
 html.light-theme .wwu-hub-logo {
-  background: radial-gradient(circle at 38% 32%, #fffdf5, #f0ede4);
+  background: radial-gradient(circle at 38% 32%, #b8880e, #c9a227);
+  box-shadow: 0 0 50px rgba(200,162,39,0.30), inset 0 0 20px rgba(255,255,255,0.15);
+  border-color: #a07d1a;
 }
-html.light-theme .wwu-hub-logo img  { filter: invert(1) brightness(0.1); }
+/* Light mode: invert logo to white so it pops on gold background */
+html.light-theme .wwu-hub-img {
+  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255,255,255,0.3));
+}
+html.light-theme .wwu-hub-logo span { color: rgba(255,255,255,0.85); }
+html.light-theme .wwu-hub-logo small { color: rgba(255,255,255,0.70); }
 html.light-theme .wwu-sub           { color: rgba(26,22,8,0.6); }
 
 

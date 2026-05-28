@@ -366,7 +366,7 @@ function renderServicesPage() {
                             <div class="wwu-hub-ring wwu-hub-ring--outer"></div>
                             <div class="wwu-hub-ring wwu-hub-ring--inner"></div>
                             <div class="wwu-hub-logo">
-                                <img class="theme-logo" src="assets/images/TAC.png" alt="The Aura Creatives" />
+                                <img class="wwu-hub-img" src="assets/images/new_logo.png" alt="The Aura Creatives" />
                                 <span>THE AURA<br><small>CREATIVES</small></span>
                             </div>
                         </div>
