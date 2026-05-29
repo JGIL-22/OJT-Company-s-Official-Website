@@ -229,6 +229,11 @@
                             class="nav-logo object-contain" />
                     </div>
                 </a>
+                <!-- Tagline that flies in from hero on scroll -->
+                <div id="nav-tagline" aria-hidden="true">
+                    <span class="nav-tagline-line1">THE HOME OF</span>
+                    <span class="nav-tagline-line2">BOLD IDEAS</span>
+                </div>
             </div>
 
             <div class="hidden md:flex justify-center items-center gap-12">
@@ -241,9 +246,9 @@
                 <a href="#talents"
                     class="nav-link inline-block whitespace-nowrap relative px-3 py-1 text-sm font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-0.5 will-change-transform"
                     data-page="talents">Talents</a>
-                <a href="#case-studies"
+                <a href="#events"
                     class="nav-link inline-block whitespace-nowrap relative px-3 py-1 text-sm font-medium tracking-wide text-white/50 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:text-white hover:-translate-y-0.5 will-change-transform"
-                    data-page="case-studies">Events</a>
+                    data-page="events">Events</a>
             </div>
 
             <div class="flex justify-end items-center gap-4">
@@ -280,7 +285,7 @@
             <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
                 <div class="container mx-auto px-6 text-center relative z-10 pt-10 animate-fade-in-up">
                     <span class="inline-block px-4 py-1 border border-white/20 text-white/80 text-xs font-bold tracking-[0.3em] mb-10 backdrop-blur-sm uppercase">Est. April 2025</span>
-                    <h1 id="hero-title" class="reveal font-serif text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-8 leading-[0.85]">
+                    <h1 id="hero-title" class="reveal font-serif text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter mb-8 leading-[0.85]" style="font-weight:900;-webkit-text-stroke:1px rgba(255,255,255,0.15);letter-spacing:-0.04em;">
                         THE HOME OF <br />
                         <span class="text-transparent bg-clip-text hero-gradient-text">BOLD IDEAS</span>
                     </h1>
@@ -314,7 +319,7 @@
                             <div class="h-[1px] w-24 bg-gradient-to-r from-white to-transparent mt-8"></div>
                         </div>
                         <p class="reveal text-white/60 text-lg leading-relaxed mb-10 font-light">
-                            The Aura is a dynamic multimedia marketing and talent management agency built for the digital age. Operating across multiple digital platforms—with TikTok at the forefront—we drive brand growth through storytelling that engages.
+                            The Aura is a dynamic multimedia marketing and talent management agency built for the digital age. Operating across multiple digital platforms with TikTok at the forefront. We drive brand growth through storytelling that engages.
                         </p>
                         <ul class="reveal space-y-6 mb-10">
                             <li class="flex items-center gap-4 text-white/80 font-medium"><div class="w-1.5 h-1.5 rounded-full bg-white"></div>Access to Top Tier Talent</li>
@@ -560,45 +565,36 @@
                         <div class="contact-glass-card border border-white/10 p-10 bg-black relative overflow-hidden">
                             <h3 class="font-serif text-3xl mb-8">Send us a message</h3>
 
-                            <div id="contact-success" class="hidden absolute top-0 left-0 w-full h-full bg-black/90 backdrop-blur border border-white/20 flex flex-col items-center justify-center p-10 text-center z-50">
-                                <div class="w-16 h-16 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center mb-6">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m9 12 2 2 4-4" />
-                                        <circle cx="12" cy="12" r="10" />
-                                    </svg>
-                                </div>
-                                <h4 class="font-serif text-3xl text-white mb-4">Message Sent</h4>
-                                <p class="text-white/60 mb-8">Thank you for reaching out. Our team will get back to you shortly.</p>
-                                <button type="button" onclick="document.getElementById('contact-success').classList.add('hidden'); document.getElementById('contact-form').reset();" class="px-8 py-3 border border-white/20 text-white text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all">Send Another</button>
-                            </div>
-
-                            <form id="contact-form" class="space-y-8 relative" onsubmit="event.preventDefault(); document.getElementById('contact-success').classList.remove('hidden');">
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Full Name</label>
-                                    <input type="text" id="contact-name" class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20" placeholder="" required />
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Email Address</label>
-                                    <input type="email" id="contact-email" class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20" placeholder="" required />
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Brand / Company Name</label>
-                                    <input type="text" id="contact-brand" class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20" placeholder="Aura Inc." />
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-4">Category</label>
-                                    <input type="hidden" id="contact-category" name="category" value="" />
-                                    <div id="category-chips" class="flex flex-wrap gap-3">
-                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Electronics">Electronics</button>
-                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Beauty">Beauty</button>
-                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Fashion">Fashion</button>
-                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Lifestyle">Lifestyle</button>
-                                        <button type="button" class="category-chip px-6 py-2 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Other">Other</button>
+                            <form id="contact-form" class="space-y-7 relative">
+                                <!-- Row 1: Name + Email side by side -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-[11px] uppercase font-bold text-white/40 tracking-widest mb-3">Full Name</label>
+                                        <input type="text" id="contact-name" class="w-full bg-transparent border-b border-white/14 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/14" placeholder="Enter your full name" required />
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] uppercase font-bold text-white/40 tracking-widest mb-3">Email Address</label>
+                                        <input type="email" id="contact-email" class="w-full bg-transparent border-b border-white/14 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/14" placeholder="Enter your working email" required />
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] uppercase font-bold text-white/40 tracking-widest mb-3">Message</label>
-                                    <textarea id="contact-message" rows="4" class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20" placeholder="Tell us about your project..."></textarea>
+                                    <label class="block text-[11px] uppercase font-bold text-white/40 tracking-widest mb-3">Brand / Company Name</label>
+                                    <input type="text" id="contact-brand" class="w-full bg-transparent border-b border-white/14 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/14" placeholder="Your brand or company" required />
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] uppercase font-bold text-white/40 tracking-widest mb-4">Category</label>
+                                    <input type="hidden" id="contact-category" name="category" value="" />
+                                    <div id="category-chips" class="flex flex-wrap gap-3">
+                                        <button type="button" class="category-chip px-6 py-1 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Electronics">Electronics</button>
+                                        <button type="button" class="category-chip px-6 py-1 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Beauty">Beauty & Fashion</button>
+                                        <button type="button" class="category-chip px-6 py-1 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Fashion">Health</button>
+                                        <button type="button" class="category-chip px-6 py-1 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Lifestyle">Lifestyle</button>
+                                        <button type="button" class="category-chip px-6 py-1 border border-white/20 text-white/50 text-sm font-medium rounded-full hover:border-white hover:text-white transition-all duration-300" data-value="Other">Other</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] uppercase font-bold text-white/40 tracking-widest mb-3">Message</label>
+                                    <textarea id="contact-message" rows="2" class="w-full bg-transparent border-b border-white/20 py-3 focus:outline-none focus:border-white transition-colors text-white font-serif text-lg placeholder-white/20" placeholder="Write your message here..."></textarea>
                                 </div>
                                 <button type="submit" class="group relative px-8 py-4 bg-white text-black text-sm font-bold tracking-widest uppercase overflow-hidden transition-all hover:bg-gray-200 active:scale-95 duration-100 w-full justify-center">
                                     <span class="relative z-10 flex items-center gap-3 justify-center">Send Inquiry <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></span>
@@ -646,32 +642,33 @@
                         <li><a href="#talents" class="hover:text-white transition-colors">Talents</a></li>
                         <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
                         <li><a href="#events" class="hover:text-white transition-colors">Events</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors"><b>Get in Touch</b></a></li>
                     </ul>
                 </div>
 
                 <div class="pt-4">
                     <h4 class="font-serif font-bold mb-6 text-white text-lg">Contact Us</h4>
                     <ul class="space-y-6 text-white/50 text-sm">
-                        <li class="group cursor-pointer" onclick="copyToClipboard(this, 'hello@theauracreatives.co', 'Email')">
+                        <li class="group cursor-pointer" onclick="copyToClipboard(this, 'business@theauracreatives.co', 'Email')">
                             <span class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">Email</span>
                             <div class="flex items-center gap-2 relative">
-                                <span class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">hello@theauracreatives.co</span>
+                                <span class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">business@theauracreatives.co</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                                 <span class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
                             </div>
                         </li>
-                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '09219715546', 'Phone')">
+                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '09192022438', 'Phone')">
                             <span class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">Phone</span>
                             <div class="flex items-center gap-2 relative">
-                                <span class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">09219715546</span>
+                                <span class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">09192022438</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                                 <span class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
                             </div>
                         </li>
-                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '09219715546', 'WhatsApp')">
-                            <span class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">WhatsApp</span>
+                        <li class="group cursor-pointer" onclick="copyToClipboard(this, '09192022438', 'Telegram')">
+                            <span class="block text-[10px] uppercase font-bold text-white/30 tracking-widest mb-1 group-hover:text-white transition-colors">Telegram</span>
                             <div class="flex items-center gap-2 relative">
-                                <span class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">09219715546</span>
+                                <span class="text-white group-hover:underline decoration-white/30 underline-offset-4 transition-all">09192022438</span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="opacity-0 group-hover:opacity-100 transition-opacity" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                                 <span class="copy-feedback absolute -right-16 top-0 bg-white text-black text-[10px] px-2 py-1 rounded opacity-0 transition-opacity font-bold">Copied!</span>
                             </div>
@@ -686,7 +683,7 @@
         </div>
     </footer>
 
-    <div class="fixed bottom-8 right-8 z-[9999] flex flex-col items-end gap-4 font-sans pointer-events-none">
+    <div class="fixed bottom-16 right-8 z-[9999] flex flex-col items-end gap-4 font-sans pointer-events-none">
         <div id="chat-window" class="hidden pointer-events-auto w-[360px] h-[550px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden relative transition-all duration-300 origin-bottom-right">
             <div class="absolute inset-0 opacity-[0.03] pointer-events-none z-0 bg-noise"></div>
             <div class="relative z-10 flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
@@ -763,6 +760,9 @@
     <script src="assets/js/app.js?v=6"></script>
     <!-- Aura Chatbot Module — must load after app.js -->
     <script src="assets/js/chatbot.js"></script>
+    <!-- ── Toast Notification System ── -->
+    <div id="ta-toast-container" aria-live="polite" aria-atomic="true"></div>
+
 </body>
 
 </html>

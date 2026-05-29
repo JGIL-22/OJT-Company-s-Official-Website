@@ -199,7 +199,7 @@ function handleHashChange() {
     else if (route.startsWith('services/')) { renderServiceDetail(route.split('/')[1]); activeViewId = 'view-service-detail'; }
     else if (route === 'talents') { renderTalentsPage(); activeViewId = 'view-talents'; }
     else if (route.startsWith('talents/')) { renderTalentDetail(route.split('/')[1]); activeViewId = 'view-talent-detail'; }
-    else if (route === 'case-studies') { activeViewId = 'view-case-studies'; }
+    else if (route === 'events' || route === 'case-studies') { activeViewId = 'view-case-studies'; }
     else if (route === 'contact') { activeViewId = 'view-contact'; }
     else if (route.startsWith('gallery/')) {
         renderGalleryView(decodeURIComponent(route.split('/')[1]));
@@ -216,7 +216,7 @@ function handleHashChange() {
     }
 
     // Keep desktop + mobile navigation in sync
-    const activeRoute = ['home', 'services', 'talents', 'case-studies', 'contact'].includes(routeSegment)
+    const activeRoute = ['home', 'services', 'talents', 'case-studies', 'events', 'contact'].includes(routeSegment)
         ? routeSegment
         : (routeSegment === 'services' ? 'services' : (routeSegment === 'talents' ? 'talents' : 'home'));
     document.querySelectorAll('.nav-link, .mobile-link').forEach(link => {
@@ -431,21 +431,19 @@ function renderServiceDetail(id) {
     const c = document.getElementById('view-service-detail');
     if (!s || !c) return;
 
-    const hero = (s.images && s.images[0]) ? s.images[0] : '';
-
     c.innerHTML = `
-            <div class="relative h-[50vh] flex items-center border-b border-white/10 mb-20 overflow-hidden">
-                <div class="absolute inset-0 z-0"><img src="${hero}" class="w-full h-full object-cover opacity-30 grayscale" /></div>
+            <div class="svc-detail-hero">
+                <div class="svc-detail-hero__bg" aria-hidden="true"></div>
+                <div class="svc-detail-hero__grain" aria-hidden="true"></div>
                 <div class="container mx-auto px-6 relative z-10 pt-20">
-                    <a href="#services" class="js-back-btn text-white/50 hover:text-white uppercase text-xs font-bold tracking-widest mb-8 block" data-route="services">← Back to Services</a>
-                    <h1 class="font-serif text-5xl md:text-7xl text-white mb-6">${s.title}</h1>
+                    <a href="#services" class="js-back-btn svc-back-btn" data-route="services">← Back to Services</a>
+                    <h1 class="font-serif svc-detail-title">${s.title}</h1>
                 </div>
             </div>
             <div class="container mx-auto px-6 pb-20">
                 <p class="text-white/70 text-lg leading-relaxed font-light mb-16 max-w-4xl">${s.longDescription}</p>
                 <h3 class="font-serif text-3xl mb-8">Features</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16">${s.features.map(f => `<div class="flex items-center gap-3 text-white/80">${ICONS.CheckCircle2} ${f}</div>`).join('')}</div>
-                ${renderFolders(s.folders, s.images)}
                 <div class="mt-20 pt-10 border-t border-white/10 text-center">
                     <a href="#contact" data-page="contact" class="inline-block px-10 py-4 bg-white text-black font-bold uppercase tracking-widest hover:bg-gray-200">Inquire Now</a>
                 </div>
@@ -453,22 +451,7 @@ function renderServiceDetail(id) {
         `;
 }
 
-function renderFolders(folders, flatImages) {
-    if (!folders || folders.length === 0) {
-        if (!flatImages || flatImages.length === 0) return '';
-        return `<div class="grid grid-cols-1 md:grid-cols-2 gap-8">${flatImages.map(img => `<img src="${img}" class="w-full h-auto grayscale hover:grayscale-0 transition-all duration-500" />`).join('')}</div>`;
-    }
-    return `<div class="grid grid-cols-1 gap-16">${folders.map(f => `
-            <div>
-                <a href="${f.link || '#gallery/' + f.name}" data-page="gallery" class="block group">
-                    <h4 class="font-serif text-3xl text-white mb-6 group-hover:text-zinc-400 transition-colors">${f.name} <span class="text-sm align-middle opacity-50 ml-2">(${f.images.length})</span></h4>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        ${f.images.slice(0, 4).map(img => `<div class="aspect-[4/5] overflow-hidden"><img src="${img}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" /></div>`).join('')}
-                    </div>
-                </a>
-            </div>
-        `).join('')}</div>`;
-}
+function renderFolders() { return ''; } // Folders removed per design
 
 function renderTalentsPage() {
     renderTalentsGrid();
@@ -829,10 +812,14 @@ function initScrollEffects() {
         if (navScrolled === isScrolled) return;
         navScrolled = isScrolled;
 
+        const heroTitle = document.getElementById('hero-title');
+
         if (isScrolled) {
             navbar.classList.add('navbar-glass--scrolled');
+            if (heroTitle) heroTitle.classList.add('hero-title--scrolled');
         } else {
             navbar.classList.remove('navbar-glass--scrolled');
+            if (heroTitle) heroTitle.classList.remove('hero-title--scrolled');
         }
     });
 }
@@ -1288,9 +1275,79 @@ function toggleChat(e) {
     }
 }
 
+// ── Toast Notification System ──────────────────────────────────────────
+// showToast(options) — flexible, themed, animated top-screen notifications
+// options: { type: 'success'|'error'|'info'|'warning', title, message, duration }
+function showToast({ type = 'success', title = '', message = '', duration = 5000 } = {}) {
+    const container = document.getElementById('ta-toast-container');
+    if (!container) return;
+
+    const icons = {
+        success: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>`,
+        error:   `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`,
+        info:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`,
+        warning: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+    };
+
+    const toast = document.createElement('div');
+    toast.className = `ta-toast ta-toast--${type}`;
+    toast.setAttribute('role', 'alert');
+    toast.innerHTML = `
+        <div class="ta-toast__icon">${icons[type]}</div>
+        <div class="ta-toast__body">
+            ${title ? `<p class="ta-toast__title">${title}</p>` : ''}
+            ${message ? `<p class="ta-toast__msg">${message}</p>` : ''}
+        </div>
+        <div class="ta-toast__progress"><div class="ta-toast__progress-bar" style="animation-duration:${duration}ms"></div></div>
+        <button class="ta-toast__close" aria-label="Dismiss" onclick="this.closest('.ta-toast').classList.add('ta-toast--out')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Trigger entrance (next frame)
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => toast.classList.add('ta-toast--in'));
+    });
+
+    // Auto-dismiss
+    const timer = setTimeout(() => dismissToast(toast), duration);
+    toast.addEventListener('mouseenter', () => clearTimeout(timer));
+    toast.addEventListener('mouseleave', () => {
+        const remaining = parseInt(toast.querySelector('.ta-toast__progress-bar').style.animationDuration);
+        setTimeout(() => dismissToast(toast), remaining * 0.3);
+    });
+}
+
+function dismissToast(toast) {
+    toast.classList.add('ta-toast--out');
+    toast.addEventListener('animationend', () => toast.remove(), { once: true });
+    setTimeout(() => toast.remove(), 600);
+}
+
+function showContactToast() {
+    const form = document.getElementById('contact-form');
+    if (form) form.reset();
+    // Reset category chips
+    document.querySelectorAll('.category-chip').forEach(c => {
+        c.classList.remove('border-white', 'text-white', 'bg-white/10');
+        c.classList.add('border-white/20', 'text-white/50');
+    });
+    const catInput = document.getElementById('contact-category');
+    if (catInput) catInput.value = '';
+    showToast({
+        type: 'success',
+        title: 'Message Sent! 🎉',
+        message: 'Thank you for reaching out. Our team will get back to you within 24 hours.',
+        duration: 6000
+    });
+}
+
 function handleChatSend() {
     const input = document.getElementById('chat-input');
     const msgs = document.getElementById('chat-messages');
+
     if (!input || !msgs || !input.value.trim()) return;
 
     const txt = input.value.trim();
@@ -1607,10 +1664,13 @@ function initThemeToggle() {
 
         const navbar = document.getElementById('navbar');
         if (navbar) {
+            const heroTitle = document.getElementById('hero-title');
             if (ScrollRuntime.scrollY > 50) {
                 navbar.classList.add('navbar-glass--scrolled');
+                if (heroTitle) heroTitle.classList.add('hero-title--scrolled');
             } else {
                 navbar.classList.remove('navbar-glass--scrolled');
+                if (heroTitle) heroTitle.classList.remove('hero-title--scrolled');
             }
         }
 
@@ -1648,23 +1708,83 @@ function initThemeToggle() {
 
 // --- CONTACT FORM LOGIC ---
 function initContactForm() {
+    // --- Chip selection ---
     const chips = document.querySelectorAll('.category-chip');
     const hiddenInput = document.getElementById('contact-category');
+    if (hiddenInput) {
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chips.forEach(c => {
+                    c.classList.remove('bg-white', 'text-black', 'border-white');
+                    c.classList.add('border-white/20', 'text-white/50');
+                });
+                chip.classList.remove('border-white/20', 'text-white/50');
+                chip.classList.add('bg-white', 'text-black', 'border-white');
+                hiddenInput.value = chip.dataset.value;
+            });
+        });
+    }
 
-    if (!hiddenInput) return;
+    // --- Formspree submission ---
+    const form = document.getElementById('contact-form');
+    if (!form) return;
 
-    chips.forEach(chip => {
-        chip.addEventListener('click', () => {
-            chips.forEach(c => {
-                c.classList.remove('bg-white', 'text-black', 'border-white');
-                c.classList.add('border-white/20', 'text-white/50');
+    form.removeAttribute('onsubmit');
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const btn = form.querySelector('button[type="submit"]');
+        const originalHTML = btn ? btn.innerHTML : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="relative z-10 flex items-center gap-3 justify-center"><svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>Sending...</span>';
+        }
+
+        const data = {
+            name: document.getElementById('contact-name')?.value || '',
+            email: document.getElementById('contact-email')?.value || '',
+            brand: document.getElementById('contact-brand')?.value || '',
+            category: document.getElementById('contact-category')?.value || '',
+            message: document.getElementById('contact-message')?.value || '',
+        };
+
+        try {
+            const res = await fetch('https://formspree.io/f/xbdbweky', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(data)
             });
 
-            chip.classList.remove('border-white/20', 'text-white/50');
-            chip.classList.add('bg-white', 'text-black', 'border-white');
-
-            hiddenInput.value = chip.dataset.value;
-        });
+            if (res.ok) {
+                showContactToast();
+                // Reset chips visually
+                chips.forEach(c => {
+                    c.classList.remove('bg-white', 'text-black', 'border-white');
+                    c.classList.add('border-white/20', 'text-white/50');
+                });
+                if (hiddenInput) hiddenInput.value = '';
+            } else {
+                const json = await res.json().catch(() => ({}));
+                showToast({
+                    type: 'error',
+                    title: 'Submission Failed',
+                    message: json?.errors?.[0]?.message || 'Something went wrong. Please try again or email us directly.',
+                    duration: 6000
+                });
+            }
+        } catch (err) {
+            showToast({
+                type: 'error',
+                title: 'Network Error',
+                message: 'Could not send your message. Please check your connection and try again.',
+                duration: 6000
+            });
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
     });
 }
 
@@ -1704,36 +1824,40 @@ function initImageReveal() {
 
 // --- UTILS ---
 function copyToClipboard(element, text, label) {
+    const doFeedback = () => {
+        // Show branded toast notification
+        showToast({
+            type: 'success',
+            title: 'Copied!',
+            message: (label ? label + ': ' : '') + text,
+            duration: 2500
+        });
+        // Also briefly animate the inline feedback span for extra polish
+        const feedback = element.querySelector('.copy-feedback');
+        if (feedback) {
+            feedback.style.opacity = '1';
+            feedback.style.transform = 'translateY(-4px)';
+            setTimeout(() => {
+                feedback.style.opacity = '0';
+                feedback.style.transform = '';
+            }, 1800);
+        }
+    };
+
     if (!navigator.clipboard) {
         const textArea = document.createElement("textarea");
         textArea.value = text;
         document.body.appendChild(textArea);
         textArea.select();
-        try {
-            document.execCommand('copy');
-            showCopyFeedback(element);
-        } catch (err) {
-            console.error('Fallback: Oops, unable to copy', err);
-        }
+        try { document.execCommand('copy'); doFeedback(); }
+        catch (err) { console.error('Fallback: unable to copy', err); }
         document.body.removeChild(textArea);
         return;
     }
 
-    navigator.clipboard.writeText(text).then(function () {
-        showCopyFeedback(element);
-    }, function (err) {
-        console.error('Async: Could not copy text: ', err);
+    navigator.clipboard.writeText(text).then(doFeedback, err => {
+        console.error('Could not copy text:', err);
     });
-}
-
-function showCopyFeedback(element) {
-    const feedback = element.querySelector('.copy-feedback');
-    if (feedback) {
-        feedback.classList.remove('opacity-0');
-        setTimeout(() => {
-            feedback.classList.add('opacity-0');
-        }, 2000);
-    }
 }
 
 // --- SIDEBAR LOGIC ---

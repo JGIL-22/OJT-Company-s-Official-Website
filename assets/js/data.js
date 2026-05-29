@@ -24,7 +24,7 @@ const COMPANY_INFO = {
     name: "THE AURA CREATIVES",
     description: "Founded in April 2025, The Aura is a dynamic multimedia marketing and talent management agency built for the digital age. We specialize in short-form video content and high-converting livestreaming.",
     contactEmail: "business@theauracreatives.co",
-    contactPhone: "09219715546",
+    contactPhone: "09192022438",
     website: "www.theauracreatives.co"
 };
 
